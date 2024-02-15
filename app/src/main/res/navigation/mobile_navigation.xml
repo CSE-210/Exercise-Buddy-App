@@ -3,23 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_matches">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_matches"
         android:name="com.example.activeamigo.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_matches"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_calender"
         android:name="com.example.activeamigo.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_calender"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_preferences"
         android:name="com.example.activeamigo.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_preferences"
+        tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.activeamigo.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_settings"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>
