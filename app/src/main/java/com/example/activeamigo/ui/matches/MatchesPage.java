@@ -1,4 +1,4 @@
-package com.example.activeamigo.ui.gallery;
+package com.example.activeamigo.ui.matches;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.activeamigo.databinding.FragmentGalleryBinding;
+import com.example.activeamigo.databinding.FragmentMatchesBinding;
 
-public class GalleryFragment extends Fragment {
+public class MatchesPage extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentMatchesBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        MatchesViewModel homeViewModel =
+                new ViewModelProvider(this).get(MatchesViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentMatchesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textHome;
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
