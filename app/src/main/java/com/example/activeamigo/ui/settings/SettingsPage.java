@@ -1,4 +1,4 @@
-package com.example.activeamigo.ui.calendar;
+package com.example.activeamigo.ui.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,21 +11,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.activeamigo.databinding.FragmentCalendarBinding;
+import com.example.activeamigo.databinding.FragmentSettingsBinding;
 
-public class CalendarPage extends Fragment {
+public class SettingsPage extends Fragment {
 
-    private FragmentCalendarBinding binding;
+    private FragmentSettingsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        CalendarViewModel calendarViewModel =
-                new ViewModelProvider(this).get(CalendarViewModel.class);
+        SettingsViewModel settingsViewModel =
+                new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        binding = FragmentCalendarBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textCalendar;
-        calendarViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textSettings;
+        settingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

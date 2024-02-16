@@ -12,20 +12,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.activeamigo.databinding.FragmentPreferencesBinding;
 
-public class SlideshowFragment extends Fragment {
+public class PreferencesPage extends Fragment {
 
     private FragmentPreferencesBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        PreferencesViewModel preferencesViewModel =
+                new ViewModelProvider(this).get(PreferencesViewModel.class);
 
         binding = FragmentPreferencesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textPreferences;
+        preferencesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
