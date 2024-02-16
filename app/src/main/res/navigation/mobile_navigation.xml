@@ -19,13 +19,13 @@
 
     <fragment
         android:id="@+id/nav_preferences"
-        android:name="com.example.activeamigo.ui.preferences.SlideshowFragment"
+        android:name="com.example.activeamigo.ui.preferences.PreferencesPage"
         android:label="@string/menu_preferences"
         tools:layout="@layout/fragment_preferences" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.activeamigo.ui.preferences.SlideshowFragment"
+        android:name="com.example.activeamigo.ui.settings.SettingsPage"
         android:label="@string/menu_settings"
-        tools:layout="@layout/fragment_preferences" />
+        tools:layout="@layout/fragment_settings" />
 </navigation>
