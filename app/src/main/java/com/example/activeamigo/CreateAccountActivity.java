@@ -4,13 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.view.View;
-
-import com.google.android.material.snackbar.Snackbar;
 
 public class CreateAccountActivity extends AppCompatActivity {
     String inputError = "Must fill out all sections";
@@ -22,51 +16,48 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        findViewById(R.id.buttonCreateAccount).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Find the EditText views by their IDs
-                EditText editTextName = findViewById(R.id.editTextName);
-                EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
-                EditText editTextPassword = findViewById(R.id.editTextPassword);
-                EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
+        findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
+            // Find the EditText views by their IDs
+            EditText editTextName = findViewById(R.id.editTextName);
+            EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
+            EditText editTextPassword = findViewById(R.id.editTextPassword);
+            EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
 
-                // Get the text from the EditText fields
-                String name = editTextName.getText().toString();
-                String emailAddress = editTextEmailAddress.getText().toString();
-                String password = editTextPassword.getText().toString();
-                String passwordConfirm = editTextPasswordConfirm.getText().toString();
+            // Get the text from the EditText fields
+            String name = editTextName.getText().toString();
+            String emailAddress = editTextEmailAddress.getText().toString();
+            String password = editTextPassword.getText().toString();
+            String passwordConfirm = editTextPasswordConfirm.getText().toString();
 
-                int domainPos = emailAddress.indexOf("@");
+            int domainPos = emailAddress.indexOf("@");
 
-                // If a section is left empty
-                if(name.isEmpty() || emailAddress.isEmpty() ||
-                        password.isEmpty() || passwordConfirm.isEmpty()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                    builder.setMessage(inputError)
-                            .setTitle("Warning")
-                            .setPositiveButton("OK", null); // No action on click
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-                // Bad email or non ucsd email
-                else if(domainPos == -1 || !emailAddress.substring(domainPos+1).equals(ucsdDomain)){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                    builder.setMessage(emailError)
-                            .setTitle("Warning")
-                            .setPositiveButton("OK", null); // No action on click
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-                // If the password do not match
-                else if(!password.equals(passwordConfirm)){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                    builder.setMessage(passwordError)
-                            .setTitle("Warning")
-                            .setPositiveButton("OK", null); // No action on click
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
+            // If a section is left empty
+            if(name.isEmpty() || emailAddress.isEmpty() ||
+                    password.isEmpty() || passwordConfirm.isEmpty()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
+                builder.setMessage(inputError)
+                        .setTitle("Warning")
+                        .setPositiveButton("OK", null); // No action on click
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            // Bad email or non ucsd email
+            else if(domainPos == -1 || !emailAddress.substring(domainPos+1).equals(ucsdDomain)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
+                builder.setMessage(emailError)
+                        .setTitle("Warning")
+                        .setPositiveButton("OK", null); // No action on click
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            // If the password do not match
+            else if(!password.equals(passwordConfirm)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
+                builder.setMessage(passwordError)
+                        .setTitle("Warning")
+                        .setPositiveButton("OK", null); // No action on click
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
