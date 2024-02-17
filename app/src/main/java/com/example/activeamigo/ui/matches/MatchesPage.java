@@ -1,5 +1,4 @@
 package com.example.activeamigo.ui.matches;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +17,14 @@ public class MatchesPage extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MatchesViewModel homeViewModel =
+        MatchesViewModel matchesViewModel =
                 new ViewModelProvider(this).get(MatchesViewModel.class);
 
         binding = FragmentMatchesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textMatches;
+        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
