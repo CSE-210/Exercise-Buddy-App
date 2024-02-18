@@ -21,4 +21,8 @@
     <string name="createAccountErrorBadEmail">Must be a valid UCSD email</string>
     <string name="createAccountErrorMismatchPassword">Passwords do not match</string>
     <string name="ucsdDomain">ucsd.edu</string>
+    <string name="accountCreationFailed">Failed to create account</string>
+    <string name="accountCreationSuccess">Account created</string>
+    <string name="accountCreationEmailExists">An account is already associated with this email</string>
+    <string name="queryError">bad query call</string>
 </resources>

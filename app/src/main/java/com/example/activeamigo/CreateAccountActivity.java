@@ -5,12 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 
-public class CreateAccountActivity extends AppCompatActivity {
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+public class CreateAccountActivity extends AppCompatActivity {
+    
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+        
+        db = FirebaseFirestore.getInstance();
 
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
             // Find the EditText views by their IDs
@@ -25,14 +36,17 @@ public class CreateAccountActivity extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
             String passwordConfirm = editTextPasswordConfirm.getText().toString();
 
-            // Call validateInformation function
-            validateInformation(name, emailAddress, password, passwordConfirm);
+            // Call validateInformation function before adding account to database
+            if(validateInformation(name, emailAddress, password, passwordConfirm)){
+                dbCalls(name, emailAddress, password);
+            }
         });
     }
 
-    private void validateInformation(String name, String emailAddress, String password, String passwordConfirm) {
+    private boolean validateInformation(String name, String emailAddress, String password, String passwordConfirm) {
         int domainPos = emailAddress.indexOf("@");
         String domain = emailAddress.substring(domainPos + 1);
+        boolean res = false;
 
         // If a section is left empty
         if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
@@ -46,6 +60,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         else if (!password.equals(passwordConfirm)) {
             showAlert(R.string.createAccountErrorMismatchPassword);
         }
+        else res = true;
+        return res;
     }
 
     private void showAlert(int messageId) {
@@ -55,5 +71,41 @@ public class CreateAccountActivity extends AppCompatActivity {
                 .setPositiveButton("OK", null);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void dbCalls(String name, String emailAddress, String password) {
+        Query query = db.collection("mockAccounts").whereEqualTo("Email", emailAddress);
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    // An account with this email address already exists
+                    showAlert(R.string.accountCreationEmailExists);
+                } else {
+                    // Create a Map to store the account data
+                    Map<String, Object> accountData = new HashMap<>();
+                    accountData.put("Name", name);
+                    accountData.put("Email", emailAddress);
+                    accountData.put("Password", password);
+
+                    // Add the account data to Firestore
+                    db.collection("mockAccounts").document().set(accountData, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> {
+                                // Account data added successfully
+                                // You can perform any additional actions here if needed
+                                // For example, show a success message to the user
+                                showAlert(R.string.accountCreationSuccess);
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle any errors that occurred while adding the account data
+                                // For example, show an error message to the user
+                                showAlert(R.string.accountCreationFailed);
+                            });
+                }
+            } else {
+                // Handle errors while querying the database
+                showAlert(R.string.queryError);
+            }
+        });
     }
 }
