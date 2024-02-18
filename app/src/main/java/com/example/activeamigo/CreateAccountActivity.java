@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -73,42 +72,36 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     void dbCalls(String name, String emailAddress, String password, String dbName) {
-        Query query = db.collection(dbName).whereEqualTo("Email", emailAddress);
+        db.collection(dbName)
+                .whereEqualTo("Email", emailAddress)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
 
-        query.get().addOnCompleteListener(task -> {
+                        // An account with this email address already exists
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            showAlert(R.string.accountCreationEmailExists);
+                        } else {
+                            HashMap<String, Object> accountData = new HashMap<>();
+                            accountData.put("Name", name);
+                            accountData.put("Email", emailAddress);
+                            accountData.put("Password", password);
 
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-
-                // An account with this email address already exists
-                if (querySnapshot != null && !querySnapshot.isEmpty()) {
-
-                    showAlert(R.string.accountCreationEmailExists);
-                }
-
-                else {
-                    HashMap<String, Object> accountData = new HashMap<>();
-                    accountData.put("Name", name);
-                    accountData.put("Email", emailAddress);
-                    accountData.put("Password", password);
-
-                    // Add the account data to db
-                    db.collection(dbName).document().set(accountData, SetOptions.merge())
-                            // Success!
-                            .addOnSuccessListener(aVoid ->{
-                                showAlert(R.string.accountCreationSuccess);
-                            })
-                            // Failure :(
-                            .addOnFailureListener(e -> {
-
-                                showAlert(R.string.accountCreationFailed);
-                            });
-                }
-            }
-            // db query failed
-            else {
-                showAlert(R.string.queryError);
-            }
-        });
+                            // Add the account data to db
+                            db.collection(dbName)
+                                    .document()
+                                    .set(accountData, SetOptions.merge())
+                                    // Success!
+                                    .addOnSuccessListener(aVoid -> showAlert(R.string.accountCreationSuccess))
+                                    // Failure :(
+                                    .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
+                        }
+                    } else {
+                        // db query failed
+                        showAlert(R.string.queryError);
+                    }
+                });
     }
+
 }
