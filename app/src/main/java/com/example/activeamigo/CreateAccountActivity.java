@@ -11,16 +11,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class CreateAccountActivity extends AppCompatActivity {
-    
-    private FirebaseFirestore db;
+
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        
+        String fSName = getResources().getString(R.string.dbAccounts);
         db = FirebaseFirestore.getInstance();
 
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
@@ -38,7 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // Call validateInformation function before adding account to database
             if(validateInformation(name, emailAddress, password, passwordConfirm)){
-                dbCalls(name, emailAddress, password);
+                dbCalls(name, emailAddress, password, fSName);
             }
         });
     }
@@ -73,8 +72,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void dbCalls(String name, String emailAddress, String password) {
-        Query query = db.collection("mockAccounts").whereEqualTo("Email", emailAddress);
+    void dbCalls(String name, String emailAddress, String password, String dbName) {
+        Query query = db.collection(dbName).whereEqualTo("Email", emailAddress);
 
         query.get().addOnCompleteListener(task -> {
 
@@ -88,15 +87,15 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
 
                 else {
-                    Map<String, Object> accountData = new HashMap<>();
+                    HashMap<String, Object> accountData = new HashMap<>();
                     accountData.put("Name", name);
                     accountData.put("Email", emailAddress);
                     accountData.put("Password", password);
 
                     // Add the account data to db
-                    db.collection("mockAccounts").document().set(accountData, SetOptions.merge())
+                    db.collection(dbName).document().set(accountData, SetOptions.merge())
                             // Success!
-                            .addOnSuccessListener(aVoid -> {
+                            .addOnSuccessListener(aVoid ->{
                                 showAlert(R.string.accountCreationSuccess);
                             })
                             // Failure :(
