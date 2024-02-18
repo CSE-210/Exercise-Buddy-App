@@ -17,4 +17,8 @@
     <string name="email">Email</string>
     <string name="name">Name</string>
     <string name="register">Register</string>
+    <string name="createAccountErrorFilledIn">Must fill out all sections</string>
+    <string name="createAccountErrorBadEmail">Must be a valid UCSD email</string>
+    <string name="createAccountErrorMismatchPassword">Passwords do not match</string>
+    <string name="ucsdDomain">ucsd.edu</string>
 </resources>

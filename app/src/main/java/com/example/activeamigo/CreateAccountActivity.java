@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 public class CreateAccountActivity extends AppCompatActivity {
-    String inputError = "Must fill out all sections";
-    String ucsdDomain = "ucsd.edu";
-    String emailError = "Must be a valid UCSD email";
-    String passwordError = "Passwords do not match";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,32 +27,33 @@ public class CreateAccountActivity extends AppCompatActivity {
             String passwordConfirm = editTextPasswordConfirm.getText().toString();
 
             int domainPos = emailAddress.indexOf("@");
+            String domain =emailAddress.substring(domainPos+1);
 
             // If a section is left empty
             if(name.isEmpty() || emailAddress.isEmpty() ||
                     password.isEmpty() || passwordConfirm.isEmpty()){
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                builder.setMessage(inputError)
+                builder.setMessage(R.string.createAccountErrorFilledIn)
                         .setTitle("Warning")
-                        .setPositiveButton("OK", null); // No action on click
+                        .setPositiveButton("OK", null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
             // Bad email or non ucsd email
-            else if(domainPos == -1 || !emailAddress.substring(domainPos+1).equals(ucsdDomain)){
+            else if(domainPos < 1 || !domain.equals(getString(R.string.ucsdDomain))){
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                builder.setMessage(emailError)
+                builder.setMessage(R.string.createAccountErrorBadEmail)
                         .setTitle("Warning")
-                        .setPositiveButton("OK", null); // No action on click
+                        .setPositiveButton("OK", null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
             // If the password do not match
             else if(!password.equals(passwordConfirm)){
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-                builder.setMessage(passwordError)
+                builder.setMessage(R.string.createAccountErrorMismatchPassword)
                         .setTitle("Warning")
-                        .setPositiveButton("OK", null); // No action on click
+                        .setPositiveButton("OK", null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
