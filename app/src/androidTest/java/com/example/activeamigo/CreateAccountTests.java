@@ -371,4 +371,32 @@ public class CreateAccountTests {
         scenario.close();
     }
 
+    @Test
+    public void testClearFormOnPasswordMismatch() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+
+        // Fill out the password fields with mismatched passwords
+        onView(withId(R.id.editTextName)).perform(replaceText("name"));
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("email@ucsd.edu"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password1"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password2"));
+
+        // Click on the create account button
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorMismatchPassword))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorMismatchPassword)));
+        onView(withText("OK")).inRoot(isDialog()).perform(click());
+
+        // Check if the form is cleared after mismatching passwords are entered
+        onView(withId(R.id.editTextName)).check(matches(withText("name")));
+        onView(withId(R.id.editTextEmailAddress)).check(matches(withText("email@ucsd.edu")));
+        onView(withId(R.id.editTextPassword)).check(matches(withText("")));
+        onView(withId(R.id.editTextPasswordConfirm)).check(matches(withText("")));
+
+        scenario.close();
+    }
+
 }
