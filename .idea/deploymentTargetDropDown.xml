@@ -2,7 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CreateAccountTests">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="testDialogShowsOnAtSign()">
+        <State />
+      </entry>
+      <entry key="testDialogShowsOnEmptyFieldsAll()">
+        <State />
+      </entry>
+      <entry key="testDialogShowsOnEmptyFieldsHasName()">
+        <State />
+      </entry>
+      <entry key="testDialogShowsOnPasswordMismatch()">
         <State />
       </entry>
     </value>
