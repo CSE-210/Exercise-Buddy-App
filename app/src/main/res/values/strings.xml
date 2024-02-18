@@ -11,4 +11,18 @@
     <string name="menu_calender">Calendar</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_settings">Settings</string>
+
+    <string-array name="activity_array">
+        <item>Select Activity</item>
+        <item>Other option 1</item>
+        <item>Other option 2</item>
+        <!-- Add more options if needed -->
+    </string-array>
+    <string-array name="location_array">
+        <item>Select Location</item>
+        <item>Other option 1</item>
+        <item>Other option 2</item>
+        <!-- Add more options if needed -->
+    </string-array>
+
 </resources>
