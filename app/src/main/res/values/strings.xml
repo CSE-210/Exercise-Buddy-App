@@ -25,4 +25,5 @@
     <string name="accountCreationSuccess">Account created</string>
     <string name="accountCreationEmailExists">An account is already associated with this email</string>
     <string name="queryError">bad query call</string>
+    <string name="dbAccounts">Accounts</string>
 </resources>
