@@ -21,6 +21,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String fSName = getResources().getString(R.string.dbAccounts);
         db = FirebaseFirestore.getInstance();
 
+        // When the button is clicked
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
             // Find the EditText views by their IDs
             EditText editTextName = findViewById(R.id.editTextName);
@@ -41,6 +42,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    // Makes sure the information in the from is filled in, a good email, matching passwords
     private boolean validateInformation(String name, String emailAddress, String password, String passwordConfirm) {
         int domainPos = emailAddress.indexOf("@");
         String domain = emailAddress.substring(domainPos + 1);
@@ -57,11 +59,13 @@ public class CreateAccountActivity extends AppCompatActivity {
         // If the passwords do not match
         else if (!password.equals(passwordConfirm)) {
             showAlert(R.string.createAccountErrorMismatchPassword);
+            clearForm(true);
         }
         else res = true;
         return res;
     }
 
+    // Shows the dialog boxes based on the status's
     private void showAlert(int messageId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
         builder.setMessage(messageId)
@@ -71,6 +75,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         dialog.show();
     }
 
+
+    // Makes calls to the database to check the email, add an account, or if the query fails
     void dbCalls(String name, String emailAddress, String password, String dbName) {
         db.collection(dbName)
                 .whereEqualTo("Email", emailAddress)
@@ -93,7 +99,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                                     .document()
                                     .set(accountData, SetOptions.merge())
                                     // Success!
-                                    .addOnSuccessListener(aVoid -> showAlert(R.string.accountCreationSuccess))
+                                    .addOnSuccessListener(aVoid -> {
+                                        showAlert(R.string.accountCreationSuccess);
+                                        clearForm(false);
+                                    })
                                     // Failure :(
                                     .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
                         }
@@ -102,6 +111,22 @@ public class CreateAccountActivity extends AppCompatActivity {
                         showAlert(R.string.queryError);
                     }
                 });
+    }
+
+    // Used to clear the text inputs
+    // If true will only clear the passwords
+    private void clearForm(boolean pass){
+        EditText editTextName = findViewById(R.id.editTextName);
+        EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
+        EditText editTextPassword = findViewById(R.id.editTextPassword);
+        EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
+
+        if(!pass) {
+            editTextName.setText("");
+            editTextEmailAddress.setText("");
+        }
+        editTextPassword.setText("");
+        editTextPasswordConfirm.setText("");
     }
 
 }
