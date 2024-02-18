@@ -14,12 +14,6 @@
       <entry key="testDialogShowsOnEmptyFieldsAll()">
         <State />
       </entry>
-      <entry key="testDialogShowsOnEmptyFieldsHasName()">
-        <State />
-      </entry>
-      <entry key="testDialogShowsOnPasswordMismatch()">
-        <State />
-      </entry>
     </value>
   </component>
 </project>

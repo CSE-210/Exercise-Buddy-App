@@ -101,6 +101,190 @@ public class CreateAccountTests {
     }
 
     @Test
+    public void testDialogShowsOnEmptyFieldsHasNameEmail() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name and email
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNamePassword1() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name and password1
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNamePassword2() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name and password2
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasEmailPassword1() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters email and password
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasEmailPassword2() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters email and password2
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasPasswords() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters passwords
+        onView(withId(R.id.editTextPassword)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("Foo Bar"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNoPassword2() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name email, password1
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNoPassword1() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name email, password2
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNoEmail() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name email, password2
+        onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNoName() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+        //Enters name email, password2
+        onView(withId(R.id.editTextEmailAddress)).perform(replaceText("fbar@ucsd.edu"));
+        onView(withId(R.id.editTextPassword)).perform(replaceText("password"));
+        onView(withId(R.id.editTextPasswordConfirm)).perform(replaceText("password"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        scenario.close();
+    }
+
+    @Test
     public void testDialogShowsOnNotAnEmail() {
         ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
         onView(withId(R.id.editTextName)).perform(replaceText("Foo Bar"));
