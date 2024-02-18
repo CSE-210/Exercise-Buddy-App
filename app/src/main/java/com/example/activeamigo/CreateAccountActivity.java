@@ -75,35 +75,39 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void dbCalls(String name, String emailAddress, String password) {
         Query query = db.collection("mockAccounts").whereEqualTo("Email", emailAddress);
+
         query.get().addOnCompleteListener(task -> {
+
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
+
+                // An account with this email address already exists
                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                    // An account with this email address already exists
+
                     showAlert(R.string.accountCreationEmailExists);
-                } else {
-                    // Create a Map to store the account data
+                }
+
+                else {
                     Map<String, Object> accountData = new HashMap<>();
                     accountData.put("Name", name);
                     accountData.put("Email", emailAddress);
                     accountData.put("Password", password);
 
-                    // Add the account data to Firestore
+                    // Add the account data to db
                     db.collection("mockAccounts").document().set(accountData, SetOptions.merge())
+                            // Success!
                             .addOnSuccessListener(aVoid -> {
-                                // Account data added successfully
-                                // You can perform any additional actions here if needed
-                                // For example, show a success message to the user
                                 showAlert(R.string.accountCreationSuccess);
                             })
+                            // Failure :(
                             .addOnFailureListener(e -> {
-                                // Handle any errors that occurred while adding the account data
-                                // For example, show an error message to the user
+
                                 showAlert(R.string.accountCreationFailed);
                             });
                 }
-            } else {
-                // Handle errors while querying the database
+            }
+            // db query failed
+            else {
                 showAlert(R.string.queryError);
             }
         });
