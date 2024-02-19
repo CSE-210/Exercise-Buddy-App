@@ -66,7 +66,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     // Shows the dialog boxes based on the status's
-    private void showAlert(int messageId) {
+    protected void showAlert(int messageId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
         builder.setMessage(messageId)
                 .setTitle("Warning")
@@ -87,11 +87,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             // Email already exists, show error message
                             showAlert(R.string.accountCreationEmailExists);
-                        } else {
+                        }
+                        else {
                             // Email does not exist, proceed with adding the account
                             addAccount(name, emailAddress, password, dbName);
                         }
-                    } else {
+                    }
+                    else {
                         // Error occurred while checking for email existence
                         showAlert(R.string.queryError);
                     }
