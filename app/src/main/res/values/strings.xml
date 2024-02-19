@@ -26,5 +26,4 @@
     <string name="accountCreationEmailExists">An account is already associated with this email</string>
     <string name="queryError">bad query call</string>
     <string name="dbAccounts">Accounts</string>
-    <string name="dbMockAccounts">mockAccounts</string>
 </resources>
