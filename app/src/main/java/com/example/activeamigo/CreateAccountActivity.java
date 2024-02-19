@@ -37,7 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // Call validateInformation function before adding account to database
             if(validateInformation(name, emailAddress, password, passwordConfirm)){
-                dbCalls(name, emailAddress, password, fSName);
+                checkEmail(name, emailAddress, password, fSName);
             }
         });
     }
@@ -75,20 +75,32 @@ public class CreateAccountActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Check if the email already exists in the database
+    protected void checkEmail(String name, String emailAddress, String password, String dbName){
 
-    // Makes calls to the database to check the email, add an account, or if the query fails
-    void dbCalls(String name, String emailAddress, String password, String dbName) {
         db.collection(dbName)
                 .whereEqualTo("Email", emailAddress)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot querySnapshot = task.getResult();
-
-                        // An account with this email address already exists
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Email already exists, show error message
                             showAlert(R.string.accountCreationEmailExists);
                         } else {
+                            // Email does not exist, proceed with adding the account
+                            addAccount(name, emailAddress, password, dbName);
+                        }
+                    } else {
+                        // Error occurred while checking for email existence
+                        showAlert(R.string.queryError);
+                    }
+                });
+    }
+
+    // Adds account to database
+    protected void addAccount(String name, String emailAddress, String password, String dbName) {
+
                             HashMap<String, Object> accountData = new HashMap<>();
                             accountData.put("Name", name);
                             accountData.put("Email", emailAddress);
@@ -105,12 +117,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                     })
                                     // Failure :(
                                     .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
-                        }
-                    } else {
-                        // db query failed
-                        showAlert(R.string.queryError);
-                    }
-                });
+
     }
 
     // Used to clear the text inputs
