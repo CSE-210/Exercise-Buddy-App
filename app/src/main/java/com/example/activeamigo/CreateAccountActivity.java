@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class CreateAccountActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             String passwordConfirm = editTextPasswordConfirm.getText().toString();
 
             // Call validateInformation function before adding account to database
-            if(validateInformation(name, emailAddress, password, passwordConfirm)){
+            if (validateInformation(name, emailAddress, password, passwordConfirm)) {
                 checkEmail(name, emailAddress, password, fSName);
             }
         });
@@ -46,7 +47,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private boolean validateInformation(String name, String emailAddress, String password, String passwordConfirm) {
         int domainPos = emailAddress.indexOf("@");
         String domain = emailAddress.substring(domainPos + 1);
-        boolean res = false;
 
         // If a section is left empty
         if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
@@ -61,8 +61,9 @@ public class CreateAccountActivity extends AppCompatActivity {
             showAlert(R.string.createAccountErrorMismatchPassword);
             clearForm(true);
         }
-        else res = true;
-        return res;
+        else return true;
+
+        return false;
     }
 
     // Shows the dialog boxes based on the status's
@@ -76,8 +77,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     // Check if the email already exists in the database
-    protected void checkEmail(String name, String emailAddress, String password, String dbName){
-
+    protected void checkEmail(String name, String emailAddress, String password, String dbName) {
         db.collection(dbName)
                 .whereEqualTo("Email", emailAddress)
                 .get()
@@ -87,13 +87,11 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             // Email already exists, show error message
                             showAlert(R.string.accountCreationEmailExists);
-                        }
-                        else {
+                        } else {
                             // Email does not exist, proceed with adding the account
                             addAccount(name, emailAddress, password, dbName);
                         }
-                    }
-                    else {
+                    } else {
                         // Error occurred while checking for email existence
                         showAlert(R.string.queryError);
                     }
@@ -102,35 +100,33 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     // Adds account to database
     protected void addAccount(String name, String emailAddress, String password, String dbName) {
+        HashMap<String, Object> accountData = new HashMap<>();
+        accountData.put("Name", name);
+        accountData.put("Email", emailAddress);
+        accountData.put("Password", password);
 
-                            HashMap<String, Object> accountData = new HashMap<>();
-                            accountData.put("Name", name);
-                            accountData.put("Email", emailAddress);
-                            accountData.put("Password", password);
-
-                            // Add the account data to db
-                            db.collection(dbName)
-                                    .document()
-                                    .set(accountData, SetOptions.merge())
-                                    // Success!
-                                    .addOnSuccessListener(aVoid -> {
-                                        showAlert(R.string.accountCreationSuccess);
-                                        clearForm(false);
-                                    })
-                                    // Failure :(
-                                    .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
-
+        // Add the account data to db
+        db.collection(dbName)
+                .document()
+                .set(accountData, SetOptions.merge())
+                // Success!
+                .addOnSuccessListener(aVoid -> {
+                    showAlert(R.string.accountCreationSuccess);
+                    clearForm(false);
+                })
+                // Failure :(
+                .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
     }
 
     // Used to clear the text inputs
     // If true will only clear the passwords
-    private void clearForm(boolean pass){
+    private void clearForm(boolean pass) {
         EditText editTextName = findViewById(R.id.editTextName);
         EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
         EditText editTextPassword = findViewById(R.id.editTextPassword);
         EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
 
-        if(!pass) {
+        if (!pass) {
             editTextName.setText("");
             editTextEmailAddress.setText("");
         }

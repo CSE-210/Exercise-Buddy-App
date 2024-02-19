@@ -8,12 +8,6 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="testDialogShowsOnAtSign()">
-        <State />
-      </entry>
-      <entry key="testDialogShowsOnEmptyFieldsAll()">
-        <State />
-      </entry>
     </value>
   </component>
 </project>
