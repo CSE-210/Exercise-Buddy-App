@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
-    FirebaseFirestore db;
+    protected FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             // Call validateInformation function before adding account to database
             if (validateInformation(name, emailAddress, password, passwordConfirm)) {
-                checkEmail(name, emailAddress, password, fSName);
+                checkEmail(name, emailAddress, password, fSName, this.db);
             }
         });
     }
@@ -70,15 +70,14 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void showAlert(int messageId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
         builder.setMessage(messageId)
-                .setTitle("Warning")
                 .setPositiveButton("OK", null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     // Check if the email already exists in the database
-    protected void checkEmail(String name, String emailAddress, String password, String dbName) {
-        db.collection(dbName)
+    protected void checkEmail(String name, String emailAddress, String password, String dbName, FirebaseFirestore fs) {
+        fs.collection(dbName)
                 .whereEqualTo("Email", emailAddress)
                 .get()
                 .addOnCompleteListener(task -> {
