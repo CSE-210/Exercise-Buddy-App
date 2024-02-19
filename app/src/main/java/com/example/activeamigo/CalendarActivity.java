@@ -12,12 +12,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true); // showing the back button in action bar
 
         // Create the main layout (LinearLayout)
         LinearLayout mainLayout = createMainLayout(this);
@@ -91,20 +94,20 @@ public class CalendarActivity extends AppCompatActivity {
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                1
+                2
         );
 
         Button dayButton = new Button(context);
         dayButton.setLayoutParams(buttonParams);
         dayButton.setText(day);
-        dayButton.setBackgroundColor(Color.LTGRAY);
+        dayButton.setBackgroundColor(Color.WHITE);
 
         // Set onClickListener to handle button clicks (switch between days)
         dayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resetdayColors((LinearLayout) dayButton.getParent());
-                dayButton.setBackgroundColor(Color.YELLOW);
+                dayButton.setBackgroundColor(Color.parseColor("#CCE5FF"));
                 // Implement logic to switch between days here
                 // You can use the 'day' variable to get the selected time slot
                 // Grab the data that matches the week clicked
@@ -119,7 +122,7 @@ public class CalendarActivity extends AppCompatActivity {
         for (int i = 0; i < headerLayout.getChildCount(); i++) {
             View child = headerLayout.getChildAt(i);
             if (child instanceof TextView) {
-                ((TextView) child).setBackgroundColor(Color.LTGRAY);
+                ((TextView) child).setBackgroundColor(Color.WHITE);
             }
         }
     }
@@ -195,7 +198,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // You can use the 'time' variable to get the selected time slot
                 if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
-                    textView.setBackgroundColor(Color.YELLOW);
+                    textView.setBackgroundColor(Color.parseColor("#CCE5FF"));
                     handleTimeSlotClick(time); // add time slot to DB
                 } else {
                     textView.setBackgroundColor(Color.WHITE);
