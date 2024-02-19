@@ -1,15 +1,16 @@
 package com.example.activeamigo.ui.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.activeamigo.CalendarActivity;
 import com.example.activeamigo.databinding.FragmentCalendarBinding;
 
 public class CalendarPage extends Fragment {
@@ -24,8 +25,13 @@ public class CalendarPage extends Fragment {
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textCalendar;
-        calendarViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        // Inside another activity or fragment
+        Intent intent = new Intent(getActivity(), CalendarActivity.class);
+        startActivity(intent);
+
+//        final TextView textView = binding.textCalendar;
+//        calendarViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        
         return root;
     }
 
