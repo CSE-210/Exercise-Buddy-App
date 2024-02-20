@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/editTextNameAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
         android:layout_marginStart="52dp"
@@ -36,7 +36,7 @@
         tools:ignore="TextContrastCheck" />
 
     <EditText
-        android:id="@+id/editTextEmailAddress"
+        android:id="@+id/editTextEmailAddressAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
         android:layout_marginStart="52dp"
@@ -53,7 +53,7 @@
         android:autofillHints="" />
 
     <EditText
-        android:id="@+id/editTextPassword"
+        android:id="@+id/editTextPasswordAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
         android:layout_marginStart="52dp"
@@ -70,7 +70,7 @@
         tools:ignore="TextContrastCheck" />
 
     <EditText
-        android:id="@+id/editTextPasswordConfirm"
+        android:id="@+id/editTextPasswordConfirmAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
         android:layout_marginStart="52dp"

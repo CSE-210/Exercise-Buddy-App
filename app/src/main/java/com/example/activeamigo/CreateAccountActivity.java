@@ -37,10 +37,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         // When the button is clicked
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
             // Find the EditText views by their IDs
-            EditText editTextName = findViewById(R.id.editTextName);
-            EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
-            EditText editTextPassword = findViewById(R.id.editTextPassword);
-            EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
+            EditText editTextName = findViewById(R.id.editTextNameAC);
+            EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
+            EditText editTextPassword = findViewById(R.id.editTextPasswordAC);
+            EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirmAC);
 
             // Get the text from the EditText fields
             String name = editTextName.getText().toString();
@@ -130,10 +130,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     // Used to clear the text inputs
     // If true will only clear the passwords
     private void clearForm(boolean pass) {
-        EditText editTextName = findViewById(R.id.editTextName);
-        EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
-        EditText editTextPassword = findViewById(R.id.editTextPassword);
-        EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirm);
+        EditText editTextName = findViewById(R.id.editTextNameAC);
+        EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
+        EditText editTextPassword = findViewById(R.id.editTextPasswordAC);
+        EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirmAC);
 
         if (!pass) {
             editTextName.setText("");
