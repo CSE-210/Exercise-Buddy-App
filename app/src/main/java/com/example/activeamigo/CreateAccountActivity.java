@@ -12,14 +12,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class CreateAccountActivity extends AppCompatActivity {
-
+    private enum Day {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
     protected FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         String fSName = getResources().getString(R.string.dbAccounts);
@@ -107,11 +111,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     // Adds account to database
     protected void addAccount(String name, String emailAddress, String password, String dbName) {
-        HashMap<String, Object> accountData = new HashMap<>();
-        accountData.put("Name", name);
-        accountData.put("Email", emailAddress);
-        accountData.put("Password", password);
-        accountData.put("Bio", "");
+        HashMap<String, Object> accountData = makeAccount(name, emailAddress, password);
+
 
         // Add the account data to db
         db.collection(dbName)
@@ -152,6 +153,24 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private HashMap<String, Object> makeAccount(String name, String emailAddress, String password){
+        HashMap<String, Object> res = new HashMap<>();
+
+        res.put("Name", name);
+        res.put("Email", emailAddress);
+        res.put("Password", password);
+        res.put("Bio", "");
+        Day[] days = Day.values();
+        int numOfDays = 7;
+        for (int i = 0; i < numOfDays && i < days.length; i++) {
+            int numOfHours = 24;
+            res.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
+        }
+
+        return res;
+    }
+
 
 
 }
