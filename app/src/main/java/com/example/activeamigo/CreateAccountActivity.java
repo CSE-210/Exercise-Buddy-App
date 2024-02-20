@@ -111,6 +111,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         accountData.put("Name", name);
         accountData.put("Email", emailAddress);
         accountData.put("Password", password);
+        accountData.put("Bio", "");
 
         // Add the account data to db
         db.collection(dbName)
