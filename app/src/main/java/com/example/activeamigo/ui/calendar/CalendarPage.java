@@ -27,10 +27,6 @@ public class CalendarPage extends Fragment {
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Inside another activity or fragment
-//        Intent intent = new Intent(getActivity(), CalendarActivity.class);
-//        startActivity(intent);
-
         root.findViewById(R.id.edit_calendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
