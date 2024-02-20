@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -44,6 +47,22 @@ public class MatchesPage extends Fragment {
 
         binding = FragmentMatchesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        Button filterButton = root.findViewById(R.id.filterButton);
+        LinearLayout filtersLayout = root.findViewById(R.id.filtersLayout);
+
+        filterButton.setOnClickListener(v -> {
+            if (filtersLayout.getVisibility() == View.GONE) {
+                filtersLayout.setVisibility(View.VISIBLE);
+            } else {
+                filtersLayout.setVisibility(View.GONE);
+            }
+        });
+
+        setUpSpinner(root.findViewById(R.id.locationSpinner), new String[]{"Location 1", "Location 2"});
+        setUpSpinner(root.findViewById(R.id.exerciseTypeSpinner), new String[]{"Yoga", "Running"});
+        setUpSpinner(root.findViewById(R.id.genderSpinner), new String[]{"Male", "Female", "Other"});
+        setUpSpinner(root.findViewById(R.id.daySpinner), new String[]{"Monday", "Tuesday", "Wednesday","Thursday", "Friday"});
+
 //
 //        final TextView textView = binding.textMatches;
 //        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
@@ -93,16 +112,17 @@ public class MatchesPage extends Fragment {
         matchesViewModel.setList(matches);
         return root;
     }
+    private void setUpSpinner(Spinner spinner, String[] options) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
     public ArrayList<String> findMatches(String user1, List<String> users, Map<String, List<Object>> data){
         ArrayList<String> rankedUsers = new ArrayList<String>();
         Log.d("Start","Start userList creation");
         List<List<Object>> userList = findSimilarSchedulesForUser(user1,users,data);
         Log.d("Success","Passed userList creation");
         int j=20;
-//        for(int i=0;i<100;i++){
-//            rankedUsers.add("Rahul");
-//            System.out.println("Rahul");
-//        }
         for(List<Object> u: userList){
             String s = u.get(1).toString();
             System.out.println(s);
@@ -111,6 +131,10 @@ public class MatchesPage extends Fragment {
             if(j==0){
                 break;
             }
+        }
+        for(int i=0;i<100;i++){
+            rankedUsers.add("Rahul");
+            System.out.println("Rahul");
         }
         return rankedUsers;
     }
