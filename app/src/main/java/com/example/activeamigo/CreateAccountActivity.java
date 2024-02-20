@@ -1,8 +1,11 @@
 package com.example.activeamigo;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,6 +24,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
         String fSName = getResources().getString(R.string.dbAccounts);
         db = FirebaseFirestore.getInstance();
+
+        // Setting up action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // When the button is clicked
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
@@ -132,5 +139,18 @@ public class CreateAccountActivity extends AppCompatActivity {
         editTextPassword.setText("");
         editTextPasswordConfirm.setText("");
     }
+
+    /** Back button: function is not to save edited data to firebase **/
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
