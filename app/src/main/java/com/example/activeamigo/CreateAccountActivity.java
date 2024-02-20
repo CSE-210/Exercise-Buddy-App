@@ -156,6 +156,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private HashMap<String, Object> makeAccount(String name, String emailAddress, String password){
         HashMap<String, Object> res = new HashMap<>();
+        HashMap<String, Object> calendar = new HashMap<>();
 
         res.put("Name", name);
         res.put("Email", emailAddress);
@@ -165,8 +166,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         int numOfDays = 7;
         for (int i = 0; i < numOfDays && i < days.length; i++) {
             int numOfHours = 24;
-            res.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
+            calendar.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
         }
+        res.put("Calendar", calendar);
 
         return res;
     }
