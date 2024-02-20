@@ -27,6 +27,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // Setting up action bar
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // When the button is clicked
@@ -143,11 +144,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     /** Back button: function is not to save edited data to firebase **/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
 
-                return true;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
