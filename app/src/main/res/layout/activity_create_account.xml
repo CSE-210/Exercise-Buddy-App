@@ -52,39 +52,64 @@
         tools:ignore="TextContrastCheck"
         android:autofillHints="" />
 
-    <EditText
-        android:id="@+id/editTextPasswordAC"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="352dp"
-        android:background="@drawable/rounded_input_background"
-        android:ems="10"
-        android:hint="@string/password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:textColorHint="@android:color/system_neutral1_300"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:passwordToggleEnabled="true"
+        app:hintEnabled="false"
+        >
+        <EditText
+            android:id="@+id/editTextPasswordAC"
+            android:layout_width="305dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="352dp"
+            android:background="@drawable/rounded_input_background"
+            android:ems="10"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textColorHint="@android:color/system_neutral1_300"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
 
-    <EditText
-        android:id="@+id/editTextPasswordConfirmAC"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="424dp"
-        android:background="@drawable/rounded_input_background"
-        android:ems="10"
-        android:hint="@string/confirm_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:textColorHint="@android:color/system_neutral1_300"
-        app:layout_constraintStart_toStartOf="parent"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:passwordToggleEnabled="true"
+        app:hintEnabled="false"
+
+        >
+
+        <EditText
+            android:id="@+id/editTextPasswordConfirmAC"
+            android:layout_width="305dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="432dp"
+            android:background="@drawable/rounded_input_background"
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textColorHint="@android:color/system_neutral1_300"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
     <Button
         android:id="@+id/buttonCreateAccount"
@@ -99,5 +124,6 @@
         android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
