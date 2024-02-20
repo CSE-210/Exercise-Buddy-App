@@ -1,4 +1,6 @@
 package com.example.activeamigo;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,9 +12,9 @@ import java.util.HashMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.annotation.*;
-public class Algorithm {
+public class Algorithm{
     public static void main(String[] args) {
-        File file = new File("/Users/christine/Desktop/CSE210/mock/src/com/company/sample1_1.json");
+        File file = new File("/Users/loukiknaik/Downloads/sample1_1.json");
         ObjectMapper objectMapper = new ObjectMapper();
 
 //        Map<String, List<Object>> data = objectMapper.readValue(file, Map.class);
