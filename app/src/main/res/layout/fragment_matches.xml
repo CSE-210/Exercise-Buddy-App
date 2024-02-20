@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="Top Matches"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
@@ -22,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textMatches"
         android:layout_alignLeft="@id/textMatches"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:text="Filters" />
     <LinearLayout
         android:id="@+id/filtersLayout"
@@ -35,7 +36,7 @@
         android:background="@color/purple_200"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Spinner
             android:id="@+id/locationSpinner"
@@ -78,6 +79,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/filterButton"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
 </RelativeLayout>

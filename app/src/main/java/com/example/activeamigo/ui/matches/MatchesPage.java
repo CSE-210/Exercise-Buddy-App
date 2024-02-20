@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -16,14 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.activeamigo.Algorithm;
-import com.example.activeamigo.MatchesActivity;
 //import com.example.activeamigo.ui.matches.R;
 import com.example.activeamigo.R;
 import com.example.activeamigo.databinding.FragmentMatchesBinding;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.util.Log;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MatchesPage extends Fragment {
 
@@ -47,6 +40,8 @@ public class MatchesPage extends Fragment {
 
         binding = FragmentMatchesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        // Filter Button Interactions
         Button filterButton = root.findViewById(R.id.filterButton);
         LinearLayout filtersLayout = root.findViewById(R.id.filtersLayout);
 
@@ -68,6 +63,7 @@ public class MatchesPage extends Fragment {
 //        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 //        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
+        //Loading the Matches List dynamically after calling the ALgo
         matchesViewModel.getMyListLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
@@ -84,16 +80,19 @@ public class MatchesPage extends Fragment {
         //Need to get the current user i.e. user1 info from database
         //Need to get all data map and users list from the database
         String user1 = "wafybtvgupqefg";
-        File file = new File("/Users/loukiknaik/Downloads/sample1_1.json");
-        ObjectMapper objectMapper = new ObjectMapper();
+        // Commenting mock data part since its not working in android but we ran the code in java to check output
 
+//        File file = new File("/Users/loukiknaik/Downloads/sample1_1.json");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
 //        Map<String, List<Object>> data = objectMapper.readValue(file, Map.class);
+//        Map<String, List<Object>> data = new HashMap<>();
+//        try {
+//            data = objectMapper.readValue(file, Map.class);
+//        } catch (IOException e) {
+//            e.printStackTrace(); // Handle the exception (e.g., log it, throw a runtime exception, etc.)
+//        }
         Map<String, List<Object>> data = new HashMap<>();
-        try {
-            data = objectMapper.readValue(file, Map.class);
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception (e.g., log it, throw a runtime exception, etc.)
-        }
         List<Object> objectList = new ArrayList<>(
                 Arrays.asList(1, Arrays.asList(5,8,9,11,12,15,16,17,21))
         );
@@ -132,7 +131,8 @@ public class MatchesPage extends Fragment {
                 break;
             }
         }
-        for(int i=0;i<100;i++){
+        //Adding extra values to check scroll
+        for(int i=0;i<20;i++){
             rankedUsers.add("Rahul");
             System.out.println("Rahul");
         }
