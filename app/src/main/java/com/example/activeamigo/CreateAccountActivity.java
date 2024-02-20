@@ -114,7 +114,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // Add the account data to db
         db.collection(dbName)
-                .document()
+                .document(emailAddress)
                 .set(accountData, SetOptions.merge())
                 // Success!
                 .addOnSuccessListener(aVoid -> {
