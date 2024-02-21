@@ -26,4 +26,9 @@
     <string name="accountCreationEmailExists">An account is already associated with this email</string>
     <string name="queryError">bad query call</string>
     <string name="dbAccounts">Accounts</string>
+    <string name="active_amigo">Active Amigo</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">forgot password?</string>
 </resources>
