@@ -78,7 +78,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         return false;
     }
 
-    // Shows the dialog boxes based on the status's
+    /** Shows the dialog boxes based on the status's passed as an int **/
     protected void showAlert(int messageId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
         builder.setMessage(messageId)
@@ -127,8 +127,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
     }
 
-    // Used to clear the text inputs
-    // If true will only clear the passwords
+    /** Used to clear the text inputs
+    If true will only clear the passwords **/
     private void clearForm(boolean pass) {
         EditText editTextName = findViewById(R.id.editTextNameAC);
         EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
