@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class CreateAccountActivity extends AppCompatActivity implements Alertable {
-    private enum Day {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
+    private enum Day {Mon, Tues, Wed, Thu, Fri, Sat, Sun}
     protected FirebaseFirestore db;
 
     @Override
@@ -80,7 +80,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     // Check if the email already exists in the database
     protected void checkEmail(String name, String emailAddress, String password, String dbName, FirebaseFirestore fs) {
         fs.collection(dbName)
-                .whereEqualTo("Email", emailAddress)
+                .whereEqualTo("email", emailAddress)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -148,17 +148,21 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         HashMap<String, Object> res = new HashMap<>();
         HashMap<String, Object> calendar = new HashMap<>();
 
-        res.put("Name", name);
-        res.put("Email", emailAddress);
-        res.put("Password", password);
-        res.put("Bio", "");
+        res.put("name", name);
+        res.put("email", emailAddress);
+        res.put("password", password);
+        res.put("bio", "");
+        res.put("dob", "");
+        res.put("exercise", "");
+        res.put("gender", "");
+        res.put("location", "");
         Day[] days = Day.values();
         int numOfDays = 7;
         for (int i = 0; i < numOfDays && i < days.length; i++) {
             int numOfHours = 24;
             calendar.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
         }
-        res.put("Calendar", calendar);
+        res.put("calendar", calendar);
 
         return res;
     }
