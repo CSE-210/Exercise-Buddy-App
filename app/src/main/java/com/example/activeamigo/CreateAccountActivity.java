@@ -2,7 +2,6 @@ package com.example.activeamigo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity implements Alertable {
     private enum Day {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
     protected FirebaseFirestore db;
 
@@ -62,29 +61,20 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // If a section is left empty
         if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
-            showAlert(R.string.createAccountErrorFilledIn);
+            showAlert(this, R.string.createAccountErrorFilledIn);
         }
         // Bad email or non ucsd email
         else if (domainPos < 1 || !domain.equals(getString(R.string.ucsdDomain))) {
-            showAlert(R.string.createAccountErrorBadEmail);
+            showAlert(this, R.string.createAccountErrorBadEmail);
         }
         // If the passwords do not match
         else if (!password.equals(passwordConfirm)) {
-            showAlert(R.string.createAccountErrorMismatchPassword);
+            showAlert(this, R.string.createAccountErrorMismatchPassword);
             clearForm(true);
         }
         else return true;
 
         return false;
-    }
-
-    /** Shows the dialog boxes based on the status's passed as an int **/
-    protected void showAlert(int messageId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-        builder.setMessage(messageId)
-                .setPositiveButton("OK", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     // Check if the email already exists in the database
@@ -97,14 +87,14 @@ public class CreateAccountActivity extends AppCompatActivity {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             // Email already exists, show error message
-                            showAlert(R.string.accountCreationEmailExists);
+                            showAlert(this, R.string.accountCreationEmailExists);
                         } else {
                             // Email does not exist, proceed with adding the account
                             addAccount(name, emailAddress, password, dbName);
                         }
                     } else {
                         // Error occurred while checking for email existence
-                        showAlert(R.string.queryError);
+                        showAlert(this, R.string.queryError);
                     }
                 });
     }
@@ -120,11 +110,11 @@ public class CreateAccountActivity extends AppCompatActivity {
                 .set(accountData, SetOptions.merge())
                 // Success!
                 .addOnSuccessListener(aVoid -> {
-                    showAlert(R.string.accountCreationSuccess);
+                    showAlert(this, R.string.accountCreationSuccess);
                     clearForm(false);
                 })
                 // Failure :(
-                .addOnFailureListener(e -> showAlert(R.string.accountCreationFailed));
+                .addOnFailureListener(e -> showAlert(this, R.string.accountCreationFailed));
     }
 
     /** Used to clear the text inputs
