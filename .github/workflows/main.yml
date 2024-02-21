@@ -29,3 +29,6 @@ jobs:
 
       - name: Run tests with Gradle
         run: ./gradlew test
+
+       - name: Run instrumentation tests with Gradle
+        run: ./gradlew connectedAndroidTest
