@@ -21,6 +21,9 @@ jobs:
         with:
           java-version: '11'
 
+      - name: Ensure script is executable
+        run: chmod +x ./gradlew   # Ensure executable permission
+
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
