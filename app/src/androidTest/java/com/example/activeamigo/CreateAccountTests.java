@@ -17,6 +17,30 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateAccountTests {
+
+    @Test
+    public void testDialogShowsOnEmptyFieldsHasNameEmail() {
+        // Creates activity to test
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+
+        //Enters name and email into input fields of ID
+        onView(withId(R.id.editTextNameAC)).perform(replaceText("Foo Bar"));
+        onView(withId(R.id.editTextEmailAddressAC)).perform(replaceText("fbar@ucsd.edu"));
+
+        // Click on the create account button without filling out any fields
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountErrorFilledIn))
+                // checks if dialog is popped up
+                .inRoot(isDialog())
+                // Checks the dialog text
+                .check(matches(withText(R.string.createAccountErrorFilledIn)));
+
+        // ends tests
+        scenario.close();
+    }
+
     @Test
     public void testDialogShowsOnEmptyFieldsHasNameEmail() {
         // Creates activity to test
