@@ -32,6 +32,9 @@ jobs:
           java-version: '11'
 >>>>>>> d1655cf (Create main.yml)
 
+      - name: Ensure script is executable
+        run: chmod +x ./gradlew   # Ensure executable permission
+
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
