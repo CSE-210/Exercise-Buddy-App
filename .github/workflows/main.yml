@@ -10,7 +10,11 @@ on:
 
 jobs:
   build:
+<<<<<<< HEAD
     runs-on: macos-latest
+=======
+    runs-on: ubuntu-latest
+>>>>>>> d1655cf (Create main.yml)
 
     steps:
       - name: Checkout code
@@ -19,16 +23,21 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
+<<<<<<< HEAD
           java-version: '17'
 
       - name: Ensure script is executable
         run: chmod +x ./gradlew   # Ensure executable permission
+=======
+          java-version: '11'
+>>>>>>> d1655cf (Create main.yml)
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
       - name: Run tests with Gradle
         run: ./gradlew test
+<<<<<<< HEAD
 
       # - name: Run connected tests
       #   uses: ReactiveCircus/android-emulator-runner@v2
@@ -38,3 +47,5 @@ jobs:
       #     arch: x86_64
       #     script: ./gradlew connectedCheck
       #     enable-hw-keyboard: true
+=======
+>>>>>>> d1655cf (Create main.yml)
