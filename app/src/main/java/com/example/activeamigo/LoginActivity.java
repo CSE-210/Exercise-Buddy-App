@@ -15,7 +15,7 @@ public class LoginActivity extends Activity {
 
         // Login Button Action
         findViewById(R.id.buttonLogIn).setOnClickListener(view -> {
-
+            showAlert(R.string.press_test);
 
         });
 
@@ -28,10 +28,7 @@ public class LoginActivity extends Activity {
 
 
         // Launch forgot password
-        findViewById(R.id.forgotPasswordText).setOnClickListener(view -> {
-
-
-        });
+        findViewById(R.id.forgotPasswordText).setOnClickListener(view -> showAlert(R.string.press_test));
     }
 
     // used to show dialogs

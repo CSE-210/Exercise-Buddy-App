@@ -38,8 +38,8 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="395dp"
-        android:layout_height="80dp"
+        android:layout_width="383dp"
+        android:layout_height="72dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="288dp"
         app:hintEnabled="false"
@@ -62,7 +62,8 @@
             android:padding="15dp"
             android:textColorHint="@android:color/system_neutral1_300"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
