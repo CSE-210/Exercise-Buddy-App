@@ -19,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <EditText
         android:id="@+id/editTextEmailLG"
         android:layout_width="305dp"
@@ -39,10 +38,10 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="378dp"
-        android:layout_height="347dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="382dp"
+        android:layout_height="118dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="232dp"
         app:hintEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,7 +52,7 @@
             android:layout_width="305dp"
             android:layout_height="49dp"
             android:layout_marginStart="56dp"
-            android:layout_marginTop="292dp"
+            android:layout_marginTop="60dp"
             android:autofillHints=""
             android:background="@drawable/rounded_input_background"
             android:ems="10"
@@ -62,8 +61,7 @@
             android:padding="15dp"
             android:textColorHint="@android:color/system_neutral1_300"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextContrastCheck" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,10 +73,10 @@
         android:layout_marginTop="368dp"
         android:clickable="true"
         android:text="@string/forgot_password"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#5E6870"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck" />
