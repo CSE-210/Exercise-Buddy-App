@@ -28,33 +28,44 @@ import static org.mockito.Mockito.when;
 @Config(manifest = Config.NONE)
 public class CreateAccountTests {
 
+    // Creates a mocked database
     @Mock
     FirebaseFirestore mockedFirestore;
 
+    // Creates a mocked collection in the database
     @Mock
     CollectionReference mockedCollectionReference;
 
+    // Creates a mock document in the collection
     @Mock
     DocumentReference mockedDocumentReference;
 
+    // Makes a mocked query call to the database
     @Mock
     Query mockedQuery;
 
+
+    // Sets up the mocked database before the test runs
     @Before
     public void setUp() {
+        // Opens Mockito
         MockitoAnnotations.openMocks(this);
+        // Creates a firebase
         when(mockedFirestore.collection(any(String.class))).thenReturn(mockedCollectionReference);
+        // Creates a collection reference
         when(mockedCollectionReference.whereEqualTo(any(String.class), any(Object.class))).thenReturn(mockedQuery);
         when(mockedCollectionReference.document(any(String.class))).thenReturn(mockedDocumentReference);
+        // In case of null error
         when(mockedDocumentReference.set(any(Map.class), any(SetOptions.class)))
                 .thenReturn(Tasks.forResult(null));
     }
 
-
+    // Cleans up after test
     @After
     public void tearDown() {
         // Clean up
     }
+
 
     @Test
     public void testAccountCreationSuccess() {
