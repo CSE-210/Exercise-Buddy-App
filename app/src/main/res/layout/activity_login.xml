@@ -10,7 +10,7 @@
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
+        android:layout_marginStart="112dp"
         android:layout_marginTop="96dp"
         android:text="@string/active_amigo"
         android:textColor="@color/black"
@@ -38,10 +38,10 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="382dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="232dp"
+        android:layout_width="395dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="288dp"
         app:hintEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,8 @@
             android:layout_width="305dp"
             android:layout_height="49dp"
             android:layout_marginStart="56dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="5dp"
+
             android:autofillHints=""
             android:background="@drawable/rounded_input_background"
             android:ems="10"
