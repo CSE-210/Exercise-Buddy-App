@@ -163,7 +163,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
             calendar.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
         }
         res.put("calendar", calendar);
-
         return res;
     }
 }
