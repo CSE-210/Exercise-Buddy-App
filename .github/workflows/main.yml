@@ -30,20 +30,10 @@ jobs:
       - name: Run tests with Gradle
         run: ./gradlew test
 
-      - name: Start emulator
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Run connected tests
+        uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: 30
           target: google_apis
-          script: |
-            # Wait for emulator to be booted
-            adb wait-for-device
-            # Disable animations on the emulator
-            adb shell settings put global window_animation_scale 0
-            adb shell settings put global transition_animation_scale 0
-            adb shell settings put global animator_duration_scale 0
-            # Unlock the emulator screen
-            adb shell input keyevent 82 &
-
-      - name: Run instrumentation tests with Gradle
-        run: ./gradlew connectedAndroidTest
+          arch: x86_64
+          script: ./gradlew connectedCheck
