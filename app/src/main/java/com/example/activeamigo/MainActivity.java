@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private Algorithm algorithm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        algorithm = new Algorithm();
+//        DataPopulator.populateDummyData();
+        // Call the method
+        algorithm.fetchUserDocumentsAndProcess("dnres11@ucsd.edu");
         setSupportActionBar(binding.appBarMain.toolbar);
 
         // Set matches text to be clickable
