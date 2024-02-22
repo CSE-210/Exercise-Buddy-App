@@ -33,7 +33,7 @@ jobs:
       - name: Start emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 34
           script: |
             # Wait for emulator to be booted
             adb wait-for-device
