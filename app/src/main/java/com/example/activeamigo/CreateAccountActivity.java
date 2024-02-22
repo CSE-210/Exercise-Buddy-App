@@ -19,14 +19,24 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     private enum Day {Mon, Tue, Wed, Thu, Fri, Sat, Sun}
     protected FirebaseFirestore db;
 
+    EditText editTextName = null;
+    EditText editTextEmailAddress = null;
+    EditText editTextPassword = null;
+    EditText editTextPasswordConfirm = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         String fSName = getResources().getString(R.string.dbAccounts);
         db = FirebaseFirestore.getInstance();
+
+        // Find the EditText views by their IDs
+        editTextName = findViewById(R.id.editTextNameAC);
+        editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
+        editTextPassword = findViewById(R.id.editTextPasswordAC);
+        editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirmAC);
 
         // Setting up action bar
         ActionBar actionBar = getSupportActionBar();
@@ -35,11 +45,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
         // When the button is clicked
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
-            // Find the EditText views by their IDs
-            EditText editTextName = findViewById(R.id.editTextNameAC);
-            EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
-            EditText editTextPassword = findViewById(R.id.editTextPasswordAC);
-            EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirmAC);
 
             // Get the text from the EditText fields
             String name = editTextName.getText().toString();
@@ -120,11 +125,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     /** Used to clear the text inputs
      If true will only clear the passwords **/
     private void clearForm(boolean pass) {
-        EditText editTextName = findViewById(R.id.editTextNameAC);
-        EditText editTextEmailAddress = findViewById(R.id.editTextEmailAddressAC);
-        EditText editTextPassword = findViewById(R.id.editTextPasswordAC);
-        EditText editTextPasswordConfirm = findViewById(R.id.editTextPasswordConfirmAC);
-
         if (!pass) {
             editTextName.setText("");
             editTextEmailAddress.setText("");
