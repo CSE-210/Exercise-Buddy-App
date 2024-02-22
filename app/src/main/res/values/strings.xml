@@ -32,4 +32,7 @@
     <string name="login">Login</string>
     <string name="forgot_password">forgot password?</string>
     <string name="press_test">Pressed</string>
+    <string name="notAccountFound">No account by that email is found</string>
+    <string name="misMatchAccountInfo">Account information does not match</string>
+    <string name="loggedIn">you logged in</string>
 </resources>
