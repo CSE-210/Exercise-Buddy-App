@@ -21,6 +21,8 @@ public class PreferencesViewModel extends ViewModel {
 
     private MutableLiveData<String> firebaseData = new MutableLiveData<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String db_collection="Accounts";
+    private String db_document = "test@ucsd.edu";
 
     public PreferencesViewModel() {
         dateOfBirth = new MutableLiveData<>();
@@ -74,7 +76,7 @@ public class PreferencesViewModel extends ViewModel {
     /**TODO: Modify collections path based off user here**/
     public void fetchDataFromFirebase() {
         // Fetch data from Firebase
-        DocumentReference docRef = db.collection("Emails").document("Preference");
+        DocumentReference docRef = db.collection(db_collection).document(db_document);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // If document exists, fetch data
@@ -84,28 +86,19 @@ public class PreferencesViewModel extends ViewModel {
                 String dobText = documentSnapshot.getString("dob");
                 String bioText = documentSnapshot.getString("bio");
 
-                // Concatenate fetched data into a single string
-                String firebaseDataString = "Exercise: " + exerciseText + "\n" +
-                        "Location: " + locationText + "\n" +
-                        "Gender: " + genderText + "\n" +
-                        "DOB: " + dobText + "\n" +
-                        "Bio: " + bioText;
                 Log.d("API", "ViewModel" + bioText+ " " + dobText + " " + genderText + " " + locationText + " " + exerciseText);
-                // Update LiveData with fetched data
-//                firebaseData.setValue(firebaseDataString);
 
+                // Update LiveData with fetched data
                 setDateOfBirth(dobText);
                 setBio(bioText);
                 setGender(genderText);
                 setExercise(exerciseText);
                 setLocation(locationText);
 
-
             }
         }).addOnFailureListener(e -> {
-            // Handle failure
+            Log.d("API", "Failed to fetch data from firebase -- Preference View Model");
         });
     }
-
 
 }

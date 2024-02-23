@@ -77,7 +77,7 @@ public class PreferencesPage extends Fragment {
             }
         });
 
-
+        //Update UI text on start up
         updateDOB(preferencesViewModel);
         updateBio(preferencesViewModel);
         updateRadioButtonByValue(preferencesViewModel);
@@ -92,6 +92,7 @@ public class PreferencesPage extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+    /** Updating the UI Display after finishing PreferenceActivity**/
     private final ActivityResultLauncher<Intent> preferenceActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -123,11 +124,7 @@ public class PreferencesPage extends Fragment {
         }
     }
 
-    private int getSpinnerIndex(Spinner spinner, String value) {
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
-        return adapter.getPosition(value);
-    }
-
+    /** Update UI Functions **/
     private void updateDOB(PreferencesViewModel preferencesViewModel) {
         preferencesViewModel.getDateOfBirth().observe(getViewLifecycleOwner(), dob -> {
             // Update the UI with the new date of birth value
@@ -141,6 +138,7 @@ public class PreferencesPage extends Fragment {
 
         });
     }
+
     private void updateBio(PreferencesViewModel preferencesViewModel) {
         preferencesViewModel.getBio().observe(getViewLifecycleOwner(), bio_text -> {
             // Update the UI with the new date of birth value
@@ -154,6 +152,7 @@ public class PreferencesPage extends Fragment {
 
         });
     }
+
     private void updateRadioButtonByValue(PreferencesViewModel preferencesViewModel) {
         preferencesViewModel.getGender().observe(getViewLifecycleOwner(), gender_text -> {
             // Update the UI with the new gender value
@@ -189,19 +188,28 @@ public class PreferencesPage extends Fragment {
         preferencesViewModel.getExercise().observe(getViewLifecycleOwner(), selection -> {
             // Update Spinner selection based on observed value
             Log.d("API", "Exercise Choice: " + selection);
-            updateSpinnerSelection(exercise_choice, selection);
+            updateExerciseDropdown(exercise_choice, selection);
         });
     }
     private void updateLocation(PreferencesViewModel preferencesViewModel){
         preferencesViewModel.getLocation().observe(getViewLifecycleOwner(), selection -> {
             // Update Spinner selection based on observed value
             Log.d("API", "Location Choice: " + selection);
-            updateSpinnerSelection(location_choice, selection);
+            updateLocationDropdown(location_choice, selection);
         });
     }
 
-    private void updateSpinnerSelection(Spinner spinner, String selection) {
+    private void updateExerciseDropdown(Spinner spinner, String selection) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.activity_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapter);
+        if (selection != null) {
+            int spinnerPosition = adapter.getPosition(selection);
+            spinner.setSelection(spinnerPosition);
+        }
+    }
+    private void updateLocationDropdown(Spinner spinner, String selection) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.location_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);
         if (selection != null) {
