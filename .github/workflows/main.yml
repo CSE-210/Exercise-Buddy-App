@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -29,3 +29,11 @@ jobs:
 
       - name: Run tests with Gradle
         run: ./gradlew test
+
+      - name: Run connected tests
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          script: ./gradlew connectedCheck
