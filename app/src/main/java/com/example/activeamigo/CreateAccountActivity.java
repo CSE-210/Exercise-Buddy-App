@@ -80,8 +80,10 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         int domainPos = emailAddress.indexOf("@");
         String domain = emailAddress.substring(domainPos + 1);
 
-        // If a section is left empty
-        if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
+        // If a section is left empty or just white spaces
+        if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() ||
+                name.trim().isEmpty() || emailAddress.trim().isEmpty() || password.trim().isEmpty()||
+              passwordConfirm.trim().isEmpty()) {
             showAlert(this, R.string.createAccountErrorFilledIn);
         }
         // Bad email or non ucsd email
@@ -125,7 +127,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     // Adds account to database
     protected void addAccount(String name, String emailAddress, String password, String dbName) {
         HashMap<String, Object> accountData = makeAccount(name, emailAddress, password);
-
 
         // Add the account data to db
         db.collection(dbName)
@@ -174,14 +175,15 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         res.put("exercise", "");
         res.put("gender", "");
         res.put("location", "");
+
         Day[] days = Day.values();
         int numOfDays = 7;
         for (int i = 0; i < numOfDays && i < days.length; i++) {
             int numOfHours = 24;
             calendar.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
         }
-
         res.put("calendar", calendar);
+
         return res;
     }
 }
