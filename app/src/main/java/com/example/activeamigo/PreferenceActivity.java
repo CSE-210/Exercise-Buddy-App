@@ -40,16 +40,16 @@ import java.util.Map;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    private EditText dobEditText;
-    private Button edit_save;
-    private Spinner exercise_choice;
-    private Spinner location_choice;
-    private RadioGroup genderGroup;
-    private String gender;
-    private EditText bio;
+    protected EditText dobEditText;
+    protected Button edit_save;
+    protected Spinner exercise_choice;
+    protected Spinner location_choice;
+    protected RadioGroup genderGroup;
+    protected String gender;
+    protected EditText bio;
 
-    private String collection="Accounts";
-    private String document = "test@ucsd.edu";
+    protected String collection="Accounts";
+    protected String document = "test@ucsd.edu";
 
 
 
@@ -59,6 +59,8 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_preferences);
+
+        //Change Button Text to "save"
         edit_save = findViewById(R.id.save);
         edit_save.setText("Save");
 
@@ -68,9 +70,9 @@ public class PreferenceActivity extends AppCompatActivity {
         genderGroup = findViewById(R.id.gender_radio_group);
         bio = findViewById(R.id.bio);
 
-
+        // showing the back button in action bar
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true); // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         dobEditText = findViewById(R.id.dob_edit_text);
         dobEditText.setOnClickListener(new View.OnClickListener() {
@@ -80,78 +82,14 @@ public class PreferenceActivity extends AppCompatActivity {
             }
         });
 
-
         /** Modifying Drop Down Arrays **/
-        //Go to strings.xml under activity_array to change/add drop down options
-        Spinner exerciseSpinner = findViewById(R.id.exercise);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.activity_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        exerciseSpinner.setAdapter(adapter);
-        exerciseSpinner.setSelection(adapter.getPosition("Select Activity"));
-
-        //Go to strings.xml under location_array to change/add drop down options
-        Spinner locationSpinner = findViewById(R.id.location);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
-                R.array.location_array, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationSpinner.setAdapter(adapter2);
-        locationSpinner.setSelection(adapter2.getPosition("Select Location"));
+        setUpSpinnerAction();
 
         // Gender Selection
-        genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-                // on below line we are getting radio button from our group.
-                RadioButton radioButton = findViewById(checkedId);
-
-                gender = radioButton.getText().toString();
-
-            }
-        });
+        setupGenderAction();
 
         /** Save Button Action **/
-        edit_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO:1. Check if all info is filled, then if conditional to the rest
-                if (checkFieldsCompleted()) {
-                    // 2. Save info to database
-                    DocumentReference docRef = db.collection(collection).document(document);
-
-                    // Create a HashMap to store the data
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("exercise", exercise_choice.getSelectedItem().toString());
-                    data.put("location", location_choice.getSelectedItem().toString());
-                    data.put("gender", gender);
-                    data.put("dob", dobEditText.getText().toString());
-                    data.put("bio", bio.getText().toString());
-
-                    // Set the data to the document with document ID "LA"
-                    docRef.set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
-
-                                    Log.d("API", "DocumentSnapshot successfully written!");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
-                                    Log.w("API", "Error writing document", e);
-                                }
-                            });
-                    //Exit
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                }
-            }
-
-        });
+        setupSaveAction();
 
         // Populate database data into UI
         loadDataFromFirestore();
@@ -311,6 +249,79 @@ public class PreferenceActivity extends AppCompatActivity {
             return true;
         }
 
+    }
+
+    private void setUpSpinnerAction(){
+        /** Modifying Drop Down Arrays **/
+        //Go to strings.xml under activity_array to change/add drop down options
+        Spinner exerciseSpinner = findViewById(R.id.exercise);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.activity_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        exerciseSpinner.setAdapter(adapter);
+        exerciseSpinner.setSelection(adapter.getPosition("Select Activity"));
+
+        //Go to strings.xml under location_array to change/add drop down options
+        Spinner locationSpinner = findViewById(R.id.location);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.location_array, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(adapter2);
+        locationSpinner.setSelection(adapter2.getPosition("Select Location"));
+    }
+
+    private void setupGenderAction(){
+        genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // on below line we are getting radio button from our group.
+                RadioButton radioButton = findViewById(checkedId);
+                gender = radioButton.getText().toString();
+            }
+        });
+    }
+
+    private void setupSaveAction(){
+        edit_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO:1. Check if all info is filled, then if conditional to the rest
+                if (checkFieldsCompleted()) {
+                    // 2. Save info to database
+                    DocumentReference docRef = db.collection(collection).document(document);
+
+                    // Create a HashMap to store the data
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("exercise", exercise_choice.getSelectedItem().toString());
+                    data.put("location", location_choice.getSelectedItem().toString());
+                    data.put("gender", gender);
+                    data.put("dob", dobEditText.getText().toString());
+                    data.put("bio", bio.getText().toString());
+
+                    // Set the data to the document with document ID "LA"
+                    docRef.set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
+
+                                    Log.d("API", "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
+                                    Log.w("API", "Error writing document", e);
+                                }
+                            });
+                    //Exit
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            }
+
+        });
     }
 
 
