@@ -29,6 +29,7 @@ import com.google.firebase.Firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +48,8 @@ public class PreferenceActivity extends AppCompatActivity {
     private String gender;
     private EditText bio;
 
+    private String collection="Accounts";
+    private String document = "test@ucsd.edu";
 
 
 
@@ -109,51 +112,49 @@ public class PreferenceActivity extends AppCompatActivity {
         });
 
         /** Save Button Action **/
-        // TODO: Save -> put into firebase table
-        // TODO: Modify collections path based off user here*
         edit_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO:1. Check if all info is filled, then if conditional to the rest
+                if (checkFieldsCompleted()) {
+                    // 2. Save info to database
+                    DocumentReference docRef = db.collection(collection).document(document);
 
-                // 2. Save info to database
-                DocumentReference docRef = db.collection("Emails").document("Preference");
+                    // Create a HashMap to store the data
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("exercise", exercise_choice.getSelectedItem().toString());
+                    data.put("location", location_choice.getSelectedItem().toString());
+                    data.put("gender", gender);
+                    data.put("dob", dobEditText.getText().toString());
+                    data.put("bio", bio.getText().toString());
 
-                // Create a HashMap to store the data
-                Map<String, Object> data = new HashMap<>();
-                data.put("exercise",exercise_choice.getSelectedItem().toString());
-                data.put("location", location_choice.getSelectedItem().toString());
-                data.put("gender", gender);
-                data.put("dob",dobEditText.getText().toString());
-                data.put("bio",bio.getText().toString());
+                    // Set the data to the document with document ID "LA"
+                    docRef.set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
 
-                // Set the data to the document with document ID "LA"
-                docRef.set(data)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
-
-                                Log.d("API", "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
-
-                                Log.w("API", "Error writing document", e);
-                            }
-                        });
-
-                //Exit
-                setResult(Activity.RESULT_OK);
-                finish();
+                                    Log.d("API", "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
+                                    Log.w("API", "Error writing document", e);
+                                }
+                            });
+                    //Exit
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
             }
+
         });
 
-
-
+        // Populate database data into UI
+        loadDataFromFirestore();
     }
 
     /** Calender pop up to select DOB **/
@@ -184,6 +185,7 @@ public class PreferenceActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+
     /** Back button: function is not to save edited data to firebase **/
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -195,6 +197,7 @@ public class PreferenceActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     /** Enable XML Views**/
     public void enableAllViews(ViewGroup viewGroup) {
@@ -209,4 +212,107 @@ public class PreferenceActivity extends AppCompatActivity {
             }
         }
     }
+
+    // Method to load data from Firestore
+    private void loadDataFromFirestore() {
+        db.collection(collection).document(document).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Get data from Firestore
+                            String exercise = documentSnapshot.getString("exercise");
+                            String location = documentSnapshot.getString("location");
+                            String gender = documentSnapshot.getString("gender");
+                            String dob = documentSnapshot.getString("dob");
+                            String bioText = documentSnapshot.getString("bio");
+
+                            // Update UI with fetched data
+                            updateUI(exercise, location, gender, dob, bioText);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                        Toast.makeText(PreferenceActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+                        Log.e("PreferenceActivity", "Error fetching data: " + e.getMessage());
+                    }
+                });
+    }
+
+    // Method to update UI with fetched data
+    private void updateUI(String exercise, String location, String gender, String dob, String bioText) {
+        // Update exercise spinner
+        ArrayAdapter<CharSequence> exerciseAdapter = (ArrayAdapter<CharSequence>) exercise_choice.getAdapter();
+        if (exerciseAdapter != null) {
+            int exercisePosition = exerciseAdapter.getPosition(exercise);
+            exercise_choice.setSelection(exercisePosition);
+        }
+
+        // Update location spinner
+        ArrayAdapter<CharSequence> locationAdapter = (ArrayAdapter<CharSequence>) location_choice.getAdapter();
+        if (locationAdapter != null) {
+            int locationPosition = locationAdapter.getPosition(location);
+            location_choice.setSelection(locationPosition);
+        }
+
+        // Update gender radio button
+        if (gender != null) {
+            int radioButtonId = -1;
+            switch (gender) {
+                case "Male":
+                    radioButtonId = R.id.male_button;
+                    break;
+                case "Female":
+                    radioButtonId = R.id.female_button;
+                    break;
+            }
+            if (radioButtonId != -1) {
+                genderGroup.check(radioButtonId);
+            }
+        }
+
+        // Update date of birth edit text
+        if (dobEditText != null) {
+            dobEditText.setText(dob);
+        }
+
+        // Update bio edit text
+        if (bio != null) {
+            bio.setText(bioText);
+        }
+    }
+
+    private boolean checkFieldsCompleted(){
+        if (exercise_choice.getSelectedItemPosition() == 0 || location_choice.getSelectedItemPosition() == 0) {
+            // Spinner is at index 0 (first item) indicating "Select Activity" or "Select Location" is still selected
+            Toast.makeText(this, "Please select valid options for activity and location", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (gender == null) {
+            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (dobEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill Date of birth field", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
+                Toast.makeText(this, "Please fill bio fields", Toast.LENGTH_SHORT).show();
+                return false;
+        }
+        else if (gender == null) {
+            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    }
+
+
+
 }

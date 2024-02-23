@@ -14,14 +14,14 @@
 
     <string-array name="activity_array">
         <item>Select Activity</item>
-        <item>Other option 1</item>
-        <item>Other option 2</item>
+        <item>Gym</item>
+        <item>Basketball</item>
         <!-- Add more options if needed -->
     </string-array>
     <string-array name="location_array">
         <item>Select Location</item>
-        <item>Other option 1</item>
-        <item>Other option 2</item>
+        <item>Rimac</item>
+        <item>24hr Fitness UTC</item>
         <!-- Add more options if needed -->
     </string-array>
 
