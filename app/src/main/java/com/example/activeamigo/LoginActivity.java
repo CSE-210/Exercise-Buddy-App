@@ -106,4 +106,5 @@ public class LoginActivity extends Activity implements Alertable{
     protected boolean checkInputs(String email, String password){
         return !email.trim().isEmpty() && !password.trim().isEmpty();
     }
+
 }
