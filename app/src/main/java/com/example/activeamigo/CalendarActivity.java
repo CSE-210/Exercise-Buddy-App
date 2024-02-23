@@ -24,9 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CalendarActivity extends AppCompatActivity {
     // Access a Cloud Firestore instance from your Activity
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String globalDay = null;
+    private List<Integer> timeTextViewIds = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
+
+        print();
     }
 
     /** Set Back Button **/
@@ -132,7 +135,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // You can use the 'day' variable to get the selected time slot
                 // Grab the data that matches the week clicked
                 handleDayClick(day);
-                displayCalendar((LinearLayout) dayButton.getParent());
+//                displayCalendar();
             }
         });
         return dayButton;
@@ -140,6 +143,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     // Helper Method to reset the days clicked
     private void resetdayColors(LinearLayout headerLayout) {
+        Log.d("CalendarEntry", "childCount: "+headerLayout.getChildCount());
         for (int i = 0; i < headerLayout.getChildCount(); i++) {
             View child = headerLayout.getChildAt(i);
             if (child instanceof TextView) {
@@ -154,6 +158,7 @@ public class CalendarActivity extends AppCompatActivity {
         Toast.makeText(this, "Day of the week: " + day, Toast.LENGTH_SHORT).show();
         // call getCurrentCalendar and color in the time slot selected
         globalDay = day;
+
     }
 
     /**
@@ -173,6 +178,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Create a vertical linear layout for displaying different times of the day
         LinearLayout timeLayout = createTimeLayout(context);
+
         scrollView.addView(timeLayout);
 
         return scrollView;
@@ -191,12 +197,19 @@ public class CalendarActivity extends AppCompatActivity {
         );
 
         LinearLayout timeLayout = new LinearLayout(context);
+
         timeLayout.setLayoutParams(layoutParams);
         timeLayout.setOrientation(LinearLayout.VERTICAL);
 
         // Add TextViews to represent different times of the day
         for (int i = 0; i < 24; i++) {
             TextView timeTextView = createClickableTextView(context, i + ":00");
+
+            // Assign unique IDs to each timeTextView
+            int textViewId = View.generateViewId();
+            timeTextView.setId(textViewId);
+            timeTextViewIds.add(textViewId);
+
             timeLayout.addView(timeTextView);
         }
         return timeLayout;
@@ -224,10 +237,11 @@ public class CalendarActivity extends AppCompatActivity {
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
                         textView.setBackgroundColor(Color.parseColor("#CCE5FF"));
                         handleTimeSlotClick(time); // add time slot to DB
+                        updateCalendar(true, time);
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
                         // remove time slot from DB
-//                    updateCalendar(false, time); // remove selected time from calendar
+                        updateCalendar(false, time); // remove selected time from calendar
                     }
                 }
             }
@@ -239,48 +253,23 @@ public class CalendarActivity extends AppCompatActivity {
     private void handleTimeSlotClick(String selectedTime) {
         // Modify to import the time selected to display
         Toast.makeText(this, "Selected Time: " + selectedTime, Toast.LENGTH_SHORT).show();
-        updateCalendar(true, selectedTime);
-
-        // TASK: modify to add to the right account later
-//        db.collection("Accounts").document("User1")
-//                .set(calendar, SetOptions.merge())
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w("Firestore", "Error writing document", e);
-//                    }
-//                });
-
-//        HashMap<String, Object> current = getCurrentCalendar();
-//        for (Map.Entry<String, Object> entry : current.entrySet()) {
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            Log.d("CalendarEntry", "Key: " + key + ", Value: " + value.toString());
-//            Log.d("CalendarEntry", "I am here");
-//        }
-
-        // set the selected time to be true
-//        (ArrayList<Integer>)current.get(globalDay)[selectedTime] = 1;
     }
 
     public void updateCalendar(Boolean add, String selectedTime) {
-        Log.d("CalendarEntry:",  "inside updateCalendar())");
+        Log.d("CalendarEntry:",  "inside updateCalendar-())");
+        Log.d("CalendarEntry:",  "  --  " + selectedTime);
         HashMap<String, Object> current = new HashMap<>();
-        DocumentReference docRef = db.collection("Accounts").document("cn@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document("test@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
-            Log.d("CalendarEntry:",  "documentSnapshot found");
+            Log.d("CalendarEntry:", "documentSnapshot found");
             if (documentSnapshot.exists()) {
+                Log.d("CalendarEntry:", "  --  HERE 0");
                 // If document exists, fetch data
                 Map<String, Object> data = documentSnapshot.getData();
                 if (data != null) {
                     // Check if the calendar field exists in the document
                     if (data.containsKey("calendar")) {
+                        Log.d("CalendarEntry:", "  --  HERE 1");
                         // Get the calendar field
                         Object calendarObj = data.get("calendar");
                         if (calendarObj instanceof HashMap) {
@@ -289,54 +278,30 @@ public class CalendarActivity extends AppCompatActivity {
                             Log.d("CalendarEntry", "found it: " + "Key: " + globalDay);
                             Log.d("CalendarEntry", "Value: " + calendarMap.get(globalDay));
 
-                            // parse the selected time
-                            String time = selectedTime.split(":")[0];
-                            int time1 = Integer.parseInt(selectedTime.split(":")[0]);
+                            // Parse the selected time
+                            int time = Integer.parseInt(selectedTime.split(":")[0]);
 
-                            Log.d("CalendarEntry", "selectedTime: " + time1);
-//                            int avail = calendarMap.get(globalDay).toString().charAt(Integer.parseInt(time));
-                            Log.d("CalendarEntry", "Current avail at selectedTime" + "avail: " + calendarMap.get(globalDay).get(time1));
-//                            calendarMap.get(globalDay).set(time1, 1);
-//                            Log.d("CalendarEntry", "After avail at selectedTime" + "avail: " + calendarMap.get(globalDay).get(time1));
-                        }
-                    } else {
-                        // Calendar field does not exist in the document
-                        Log.d("CalendarEntry", "Calendar field does not exist in the document");
-                    }
-                }
-            }
-        }).addOnFailureListener(e -> {
-            // Handle failure
-        });
-    }
+                            Log.d("CalendarEntry", "selectedTime: " + time);
 
-    public void displayCalendar(LinearLayout headerLayout) {
-        Log.d("CalendarEntry:",  "inside updateCalendar())");
-        HashMap<String, Object> current = new HashMap<>();
-        DocumentReference docRef = db.collection("Accounts").document("cn@ucsd.edu");
-        docRef.get().addOnSuccessListener(documentSnapshot -> {
-            Log.d("CalendarEntry:",  "documentSnapshot found");
-            if (documentSnapshot.exists()) {
-                // If document exists, fetch data
-                Map<String, Object> data = documentSnapshot.getData();
-                if (data != null) {
-                    // Check if the calendar field exists in the document
-                    if (data.containsKey("calendar")) {
-                        // Get the calendar field
-                        Object calendarObj = data.get("calendar");
-                        if (calendarObj instanceof HashMap) {
-                            // Cast it to HashMap<String, ArrayList> if it is a HashMap
-                            HashMap<String, List<Integer>> calendarMap = (HashMap<String, List<Integer>>) calendarObj;
-                            List<Integer> times = calendarMap.get(globalDay);
-
-                            // loop through the array of possible times
-                            for (int i=0; i<times.size(); i++) {
-                                if (times.get(i) == 1) { // if the time is selected then color it
-                                    View child = headerLayout.getChildAt(i);
-                                    if (child instanceof TextView) {
-                                        ((TextView) child).setBackgroundColor(Color.parseColor("#CCE5FF"));
-                                    }
+                            // Update the availability
+                            List<Integer> availabilityList = calendarMap.get(globalDay);
+                            if (availabilityList != null && time < availabilityList.size()) {
+                                if (add) { // add availability
+                                    availabilityList.set(time, 1);
+                                    Log.d("CalendarEntry", "Selected time will be added");
                                 }
+                                else { // remove availability
+                                    availabilityList.set(time, 0);  // TODO: MODIFY HERE TO BE THE OPPOSITE VAL 0,1
+                                    Log.d("CalendarEntry", "Selected time will be removed");
+                                }
+                                calendarMap.put(globalDay, availabilityList);
+
+                                // Update Firestore document
+                                docRef.update("calendar", calendarMap)
+                                        .addOnSuccessListener(aVoid -> Log.d("CalendarEntry", "DocumentSnapshot successfully updated!"))
+                                        .addOnFailureListener(e -> Log.w("CalendarEntry", "Error updating document", e));
+                            } else {
+                                Log.d("CalendarEntry", "Invalid time or availability list for the selected day");
                             }
                         }
                     } else {
@@ -347,45 +312,57 @@ public class CalendarActivity extends AppCompatActivity {
             }
         }).addOnFailureListener(e -> {
             // Handle failure
+            Log.e("CalendarEntry", "Error fetching document", e);
         });
     }
 
-//    public HashMap<String, Object> getCurrentCalendar() {
-//        HashMap<String, Object> current = new HashMap<>();
-//        DocumentReference docRef = db.collection("Accounts").document("cn@ucsd.edu");
-//        docRef.get().addOnSuccessListener(documentSnapshot -> {
-//            if (documentSnapshot.exists()) {
-//                // If document exists, fetch data
-//                Map<String, Object> data = documentSnapshot.getData();
-//                if (data != null) {
-//                    // Check if the calendar field exists in the document
-//                    if (data.containsKey("calendar")) {
-//                        // Get the calendar field
-//                        Object calendarObj = data.get("calendar");
-//                        if (calendarObj instanceof HashMap) {
-//                            // Cast it to HashMap<String, ArrayList> if it is a HashMap
-//                            HashMap<String, Object> calendarMap = (HashMap<String, Object>) calendarObj;
-//                            // Log the contents of the calendarMap
-//                            for (Map.Entry<String, Object> entry : calendarMap.entrySet()) {
-//                                String key = entry.getKey();
-//                                Object value = entry.getValue();
-////                                current.put(key,
-////                                        value);
-//                                // Log key and value
-//                                Log.d("CalendarEntry", "Key: " + key + ", Value: " + value.toString());
-//                            }
-//                            Log.d("CalendarEntry", "Length1: " + current.size());
-//                        }
-//                    } else {
-//                        // Calendar field does not exist in the document
-//                        Log.d("CalendarEntry", "Calendar field does not exist in the document");
-//                    }
-//                }
-//            }
-//        }).addOnFailureListener(e -> {
-//            // Handle failure
-//        });
-//        Log.d("CalendarEntry", "Length: " + current.size());
-//        return current;
-//    }
+    private void displayCalendar() {
+        Log.d("CalendarEntry", "inside displayCalendar");
+        DocumentReference docRef = db.collection("Accounts").document("test@ucsd.edu");
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            Log.d("CalendarEntry", "documentSnapshot found");
+            if (documentSnapshot.exists()) {
+                Log.d("CalendarEntry", "documentSnapshot exists");
+                Map<String, Object> data = documentSnapshot.getData();
+                if (data != null && data.containsKey("calendar")) {
+                    Log.d("CalendarEntry", "calendar data exists");
+                    Object calendarObj = data.get("calendar");
+                    if (calendarObj instanceof HashMap) {
+                        HashMap<String, List<Integer>> calendarMap = (HashMap<String, List<Integer>>) calendarObj;
+                        List<Integer> availabilityList = calendarMap.get(globalDay);
+                        if (availabilityList != null) {
+                            for (int i: availabilityList) {
+                                Log.d("CalendarEntry", "i: " +i);
+                            }
+                        }
+//                        updateUITimeSlots(availabilityList);
+                    }
+                }
+            }
+        }).addOnFailureListener(e -> {
+            // Handle failure
+            Log.e("CalendarEntry", "Error fetching document", e);
+        });
+    }
+
+    private void updateUITimeSlots(List<Integer> availabilityList) {
+        // Iterate through each time slot and update UI color
+        for (int i = 0; i < availabilityList.size(); i++) {
+            if (availabilityList.get(i) == 1) {
+//                timeTextViewIds.get(i+10); // set the background for textID
+//                Log.d("CalendarEntry", Integer.toString(timeTextViewIds.get(i)-10));
+            }
+        }
+    }
+
+    public void print() {
+        for (int i=0; i<timeTextViewIds.size(); i++) {
+            int j = timeTextViewIds.get(i);
+            Log.d("CalendarEntry", Integer.toString(j));
+        }
+//        for (int i: timeTextViewIds) {
+//            i = i-10;
+//            Log.d("CalendarEntry", Integer.toString(i));
+//        }
+    }
 }
