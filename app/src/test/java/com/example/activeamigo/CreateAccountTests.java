@@ -75,10 +75,9 @@ public class CreateAccountTests {
         // Fill in valid form data
         String name = "Test User";
         String emailAddress = "test@example.com";
-        String password = "password";
 
         // Call the method that adds the account to the database
-        createAccountActivity.addAccount(name, emailAddress, password, "accounts");
+        createAccountActivity.addAccount(name, emailAddress, "accounts");
 
         // Verify account was added
         verify(mockedFirestore).collection("accounts");
@@ -94,7 +93,7 @@ public class CreateAccountTests {
         // Fill in valid form data
         String name = "Test User";
         String emailAddress = "test@example.com";
-        String password = "password";
+
 
         // Mock Firestore to simulate an existing user with the same email
         QuerySnapshot querySnapshot = Mockito.mock(QuerySnapshot.class);
@@ -102,7 +101,7 @@ public class CreateAccountTests {
         when(mockedQuery.get()).thenReturn(Tasks.forResult(querySnapshot));
 
         // Call the method that adds the account to the database
-        createAccountActivity.addAccount(name, emailAddress, password, "accounts");
+        createAccountActivity.addAccount(name, emailAddress,"accounts");
 
         // Verify account was not added due to duplicate email
         verify(mockedFirestore).collection("accounts");
