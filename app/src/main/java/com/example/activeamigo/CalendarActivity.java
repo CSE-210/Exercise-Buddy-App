@@ -23,7 +23,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CalendarActivity extends AppCompatActivity {
-    // Access a Cloud Firestore instance from your Activity
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String globalDay = null;
     private List<Integer> timeTextViewIds = new ArrayList<>();
@@ -47,8 +46,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
-
-        print();
     }
 
     /** Set Back Button **/
@@ -135,7 +132,8 @@ public class CalendarActivity extends AppCompatActivity {
                 // You can use the 'day' variable to get the selected time slot
                 // Grab the data that matches the week clicked
                 handleDayClick(day);
-//                displayCalendar();
+                resetTimeColors();
+                displayCalendar();
             }
         });
         return dayButton;
@@ -152,7 +150,15 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    // Method to handle the click on a time slot
+    // Helper method to reset the time slots clicked
+    private void resetTimeColors() {
+        for (int i=0; i<timeTextViewIds.size(); i++) {
+            int id = timeTextViewIds.get(i);
+            findViewById(id).setBackgroundColor(Color.WHITE);
+        }
+    }
+
+    // Helper Method to handle the click on a day
     private void handleDayClick(String day) {
         // Modify to import the time selected to display
         Toast.makeText(this, "Day of the week: " + day, Toast.LENGTH_SHORT).show();
@@ -232,12 +238,12 @@ public class CalendarActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                handleTimeSlotClick(time);
                 if (globalDay != null) {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
                         textView.setBackgroundColor(Color.parseColor("#CCE5FF"));
-                        handleTimeSlotClick(time); // add time slot to DB
-                        updateCalendar(true, time);
+                        updateCalendar(true, time); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
                         // remove time slot from DB
@@ -249,7 +255,7 @@ public class CalendarActivity extends AppCompatActivity {
         return textView;
     }
 
-    // Method to handle the click on a time slot
+    // Helper Method to handle the click on a time slot
     private void handleTimeSlotClick(String selectedTime) {
         // Modify to import the time selected to display
         Toast.makeText(this, "Selected Time: " + selectedTime, Toast.LENGTH_SHORT).show();
@@ -258,8 +264,7 @@ public class CalendarActivity extends AppCompatActivity {
     public void updateCalendar(Boolean add, String selectedTime) {
         Log.d("CalendarEntry:",  "inside updateCalendar-())");
         Log.d("CalendarEntry:",  "  --  " + selectedTime);
-        HashMap<String, Object> current = new HashMap<>();
-        DocumentReference docRef = db.collection("Accounts").document("test@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document("be@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry:", "documentSnapshot found");
             if (documentSnapshot.exists()) {
@@ -318,7 +323,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void displayCalendar() {
         Log.d("CalendarEntry", "inside displayCalendar");
-        DocumentReference docRef = db.collection("Accounts").document("test@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document("be@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry", "documentSnapshot found");
             if (documentSnapshot.exists()) {
@@ -328,14 +333,19 @@ public class CalendarActivity extends AppCompatActivity {
                     Log.d("CalendarEntry", "calendar data exists");
                     Object calendarObj = data.get("calendar");
                     if (calendarObj instanceof HashMap) {
-                        HashMap<String, List<Integer>> calendarMap = (HashMap<String, List<Integer>>) calendarObj;
-                        List<Integer> availabilityList = calendarMap.get(globalDay);
+                        HashMap<String, List<Long>> calendarMap = (HashMap<String, List<Long>>) calendarObj;
+                        List<Long> availabilityList = calendarMap.get(globalDay);
                         if (availabilityList != null) {
-                            for (int i: availabilityList) {
-                                Log.d("CalendarEntry", "i: " +i);
+                            // Display availability on UI
+                            for (int i = 0; i < availabilityList.size(); i++) {
+                                if (availabilityList.get(i) == 1) {
+                                    Log.d("CalendarEntry", i + ": " + availabilityList.get(i));
+                                    int id = timeTextViewIds.get(i); // set the background for textID
+                                    findViewById(id).setBackgroundColor(Color.parseColor("#CCE5FF"));
+//                                    Log.d("CalendarEntry", i + ": " + Integer.toString(timeTextViewIds.get(i)));
+                                }
                             }
                         }
-//                        updateUITimeSlots(availabilityList);
                     }
                 }
             }
@@ -343,26 +353,5 @@ public class CalendarActivity extends AppCompatActivity {
             // Handle failure
             Log.e("CalendarEntry", "Error fetching document", e);
         });
-    }
-
-    private void updateUITimeSlots(List<Integer> availabilityList) {
-        // Iterate through each time slot and update UI color
-        for (int i = 0; i < availabilityList.size(); i++) {
-            if (availabilityList.get(i) == 1) {
-//                timeTextViewIds.get(i+10); // set the background for textID
-//                Log.d("CalendarEntry", Integer.toString(timeTextViewIds.get(i)-10));
-            }
-        }
-    }
-
-    public void print() {
-        for (int i=0; i<timeTextViewIds.size(); i++) {
-            int j = timeTextViewIds.get(i);
-            Log.d("CalendarEntry", Integer.toString(j));
-        }
-//        for (int i: timeTextViewIds) {
-//            i = i-10;
-//            Log.d("CalendarEntry", Integer.toString(i));
-//        }
     }
 }
