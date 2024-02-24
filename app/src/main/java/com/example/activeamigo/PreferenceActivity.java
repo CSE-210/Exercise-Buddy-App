@@ -51,14 +51,13 @@ public class PreferenceActivity extends AppCompatActivity {
     protected String collection="Accounts";
     protected String document = "test@ucsd.edu";
 
-
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    protected FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_preferences);
+
+        db = FirebaseFirestore.getInstance();
 
         //Change Button Text to "save"
         edit_save = findViewById(R.id.save);
