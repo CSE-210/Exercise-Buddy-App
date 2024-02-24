@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -54,7 +57,20 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
             // Call validateInformation function before adding account to database
             if (validateInformation(name, emailAddress, password, passwordConfirm)) {
-                checkEmail(name, emailAddress, password, fSName, this.db);
+                Task<DocumentSnapshot> res = checkEmail(emailAddress, fSName, this.db);
+                res.addOnCompleteListener(task -> {
+                   if(task.isSuccessful()){
+                       DocumentSnapshot ds = task.getResult();
+                       if(ds == null){
+                           addAccount(name, emailAddress, password, fSName);
+                           showAlert(this, R.string.accountCreationSuccess);
+                           clearForm(false);
+                       }
+                       else{
+                           showAlert(this, R.string.accountCreationEmailExists);
+                       }
+                   }
+                });
             }
         });
     }
@@ -83,7 +99,8 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     }
 
     // Check if the email already exists in the database
-    protected void checkEmail(String name, String emailAddress, String password, String dbName, FirebaseFirestore fs) {
+    protected Task<DocumentSnapshot> checkEmail(String emailAddress, String dbName, FirebaseFirestore fs) {
+        final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
         fs.collection(dbName)
                 .whereEqualTo("email", emailAddress)
                 .get()
@@ -91,17 +108,18 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                     if (task.isSuccessful()) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            // Email already exists, show error message
-                            showAlert(this, R.string.accountCreationEmailExists);
-                        } else {
-                            // Email does not exist, proceed with adding the account
-                            addAccount(name, emailAddress, password, dbName);
+                            tcs.setResult(querySnapshot.getDocuments().get(0));
                         }
-                    } else {
+                        else{
+                            tcs.setResult(null);
+                        }
+                    }
+                    else {
                         // Error occurred while checking for email existence
                         showAlert(this, R.string.queryError);
                     }
                 });
+        return tcs.getTask();
     }
 
     // Adds account to database
