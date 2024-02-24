@@ -586,6 +586,27 @@ public class CreateAccountTests {
     }
 
     @Test
+    public void testDialogShowsOnPasswordLT6() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+
+        // Fill out the password fields with mismatched passwords
+        onView(withId(R.id.editTextNameAC)).perform(replaceText("name"));
+        onView(withId(R.id.editTextEmailAddressAC)).perform(replaceText("email@ucsd.edu"));
+        onView(withId(R.id.editTextPasswordAC)).perform(replaceText("p"));
+        onView(withId(R.id.editTextPasswordConfirmAC)).perform(replaceText("p"));
+
+        // Click on the create account button
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.createAccountShortPassword))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.createAccountShortPassword)));
+
+        scenario.close();
+    }
+
+    @Test
     public void testClearFormOnPasswordMismatch() {
         ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
 
