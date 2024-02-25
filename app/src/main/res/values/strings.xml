@@ -36,4 +36,5 @@
     <string name="misMatchAccountInfo">Account information does not match</string>
     <string name="loggedIn">you logged in</string>
     <string name="createAccountShortPassword">Password but be 6 characters long</string>
+    <string name="passwordWithWhiteSpace">Passwords cannot have spaces</string>
 </resources>
