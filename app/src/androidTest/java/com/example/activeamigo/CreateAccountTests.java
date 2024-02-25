@@ -634,4 +634,32 @@ public class CreateAccountTests {
         scenario.close();
     }
 
+    @Test
+    public void testClearFormOnPasswordWithSpaces() {
+        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launch(CreateAccountActivity.class);
+
+        // Fill out the password fields with mismatched passwords
+        onView(withId(R.id.editTextNameAC)).perform(replaceText("name"));
+        onView(withId(R.id.editTextEmailAddressAC)).perform(replaceText("email@ucsd.edu"));
+        onView(withId(R.id.editTextPasswordAC)).perform(replaceText("password 1"));
+        onView(withId(R.id.editTextPasswordConfirmAC)).perform(replaceText("password 1"));
+
+        // Click on the create account button
+        onView(withId(R.id.buttonCreateAccount)).perform(click());
+
+        // Check if the dialog pops up with the correct message
+        onView(withText(R.string.passwordWithWhiteSpace))
+                .inRoot(isDialog())
+                .check(matches(withText(R.string.passwordWithWhiteSpace)));
+        onView(withText("OK")).inRoot(isDialog()).perform(click());
+
+        // Check if the form is cleared after mismatching passwords are entered
+        onView(withId(R.id.editTextNameAC)).check(matches(withText("name")));
+        onView(withId(R.id.editTextEmailAddressAC)).check(matches(withText("email@ucsd.edu")));
+        onView(withId(R.id.editTextPasswordAC)).check(matches(withText("")));
+        onView(withId(R.id.editTextPasswordConfirmAC)).check(matches(withText("")));
+
+        scenario.close();
+    }
+
 }
