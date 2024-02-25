@@ -102,9 +102,9 @@ public class LoginActivity extends Activity implements Alertable{
         return local.equals(database);
     }
 
-
     // Makes sure the fields are filled in
     protected boolean checkInputs(String email, String password){
         return !email.trim().isEmpty() && !password.trim().isEmpty();
     }
+
 }
