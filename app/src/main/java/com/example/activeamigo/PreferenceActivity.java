@@ -5,10 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,9 +22,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -88,7 +82,7 @@ public class PreferenceActivity extends AppCompatActivity {
         setupGenderAction();
 
         /** Save Button Action **/
-        setupSaveAction();
+        setupSaveButtonAction();
 
         // Populate database data into UI
         loadDataFromFirestore();
@@ -150,7 +144,7 @@ public class PreferenceActivity extends AppCompatActivity {
         }
     }
 
-    // Method to load data from Firestore
+    /** Method to load data from Firestore **/
     private void loadDataFromFirestore() {
         db.collection(collection).document(document).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -179,7 +173,7 @@ public class PreferenceActivity extends AppCompatActivity {
                 });
     }
 
-    // Method to update UI with fetched data
+    /** Method to update UI with fetched data **/
     private void updateUI(String exercise, String location, String gender, String dob, String bioText) {
         // Update exercise spinner
         ArrayAdapter<CharSequence> exerciseAdapter = (ArrayAdapter<CharSequence>) exercise_choice.getAdapter();
@@ -222,6 +216,7 @@ public class PreferenceActivity extends AppCompatActivity {
         }
     }
 
+    /** Function to check if all fields are inputted. Returns true if everything is inputted or else it will reutrn false and prompt the user**/
     private boolean checkFieldsCompleted(){
         if (exercise_choice.getSelectedItemPosition() == 0 || location_choice.getSelectedItemPosition() == 0) {
             // Spinner is at index 0 (first item) indicating "Select Activity" or "Select Location" is still selected
@@ -250,6 +245,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     }
 
+    /** Setting up the dropdowns for location and excercise**/
     private void setUpSpinnerAction(){
         /** Modifying Drop Down Arrays **/
         //Go to strings.xml under activity_array to change/add drop down options
@@ -269,6 +265,7 @@ public class PreferenceActivity extends AppCompatActivity {
         locationSpinner.setSelection(adapter2.getPosition("Select Location"));
     }
 
+    /** On click listener for gender buttons**/
     private void setupGenderAction(){
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -280,7 +277,8 @@ public class PreferenceActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSaveAction(){
+    /** Function save action button to organize and reduce the onCreate **/
+    protected void setupSaveButtonAction(){
         edit_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,32 +286,12 @@ public class PreferenceActivity extends AppCompatActivity {
                 if (checkFieldsCompleted()) {
                     // 2. Save info to database
                     DocumentReference docRef = db.collection(collection).document(document);
-
-                    // Create a HashMap to store the data
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("exercise", exercise_choice.getSelectedItem().toString());
-                    data.put("location", location_choice.getSelectedItem().toString());
-                    data.put("gender", gender);
-                    data.put("dob", dobEditText.getText().toString());
-                    data.put("bio", bio.getText().toString());
-
-                    // Set the data to the document with document ID "LA"
-                    docRef.set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
-
-                                    Log.d("API", "DocumentSnapshot successfully written!");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
-                                    Log.w("API", "Error writing document", e);
-                                }
-                            });
+                    pushNewData(docRef,
+                            exercise_choice.getSelectedItem().toString(),
+                            location_choice.getSelectedItem().toString(),
+                            gender,
+                            dobEditText.getText().toString(),
+                            bio.getText().toString());
                     //Exit
                     setResult(Activity.RESULT_OK);
                     finish();
@@ -323,6 +301,31 @@ public class PreferenceActivity extends AppCompatActivity {
         });
     }
 
+    /** Pushing inputted data to Firestore, separated for unit testing **/
+    protected void pushNewData(DocumentReference docRef, String exercise, String location, String gen, String date, String bio_str){
+        // 2. Save info to database
+//        DocumentReference docRef = db.collection(collection).document(document);
+
+        // Create a HashMap to store the data
+        Map<String, Object> data = new HashMap<>();
+        data.put("exercise", exercise);
+        data.put("location", location);
+        data.put("gender", gen);
+        data.put("dob", date);
+        data.put("bio", bio_str);
+
+        // Set the data to the document with document ID "LA"
+        docRef.set(data)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
+                        Log.d("API", "DocumentSnapshot successfully written!");
+                    } else {
+                        Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
+                        Log.w("API", "Error writing document", task.getException());
+                    }
+                });
+    }
 
 
 }
