@@ -1,5 +1,7 @@
 package com.example.activeamigo;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,10 +25,14 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import android.os.Handler;
+import android.os.Looper;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -78,13 +84,19 @@ public class PreferenceUnitTesting {
 
         // Mock Firestore DocumentReference
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("be@ucsd.edu")).thenReturn(mockDocRef);
+        when(mockedFirestore.collection("Accounts").document("test@ucsd.edu")).thenReturn(mockedDocumentReference);
 
         // Mock the behavior of DocumentReference.set(Object) to return a non-null Task
-        doReturn(Tasks.forResult(null)).when(mockDocRef).set(any(Map.class), any(SetOptions.class));
-
-        preferenceActivity.collection = "Accounts";
-        preferenceActivity.document = "be@ucsd.edu";
+        doAnswer(invocation -> {
+            // Simulate the completion of the task after a short delay
+            Task<Void> task = Tasks.forResult(null);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                ((OnCompleteListener<Void>) invocation.getArgument(0)).onComplete(task);
+            }, 100); // Adjust the delay as needed
+            return task;
+        }).when(mockDocRef).set(any(Map.class), any(SetOptions.class));
+//        preferenceActivity.collection = "Accounts";
+//        preferenceActivity.document = "be@ucsd.edu";
 
         // Fill in valid form data
         String exe = "Gym";
@@ -94,7 +106,7 @@ public class PreferenceUnitTesting {
         String bioText = "I love running";
 
         // Set mock data in UI
-        preferenceActivity.pushNewData(mockDocRef, exe, loc, gen, date, bioText);
+        preferenceActivity.pushNewData(mockedDocumentReference, exe, loc, gen, date, bioText);
 
         // Verify that the Firestore collection and document were accessed correctly
         verify(mockedFirestore).collection("Accounts");
