@@ -23,14 +23,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CalendarActivity extends AppCompatActivity {
-    static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    static String globalDay = null;
-    protected static List<Integer> timeTextViewIds = new ArrayList<>();
-    public static List<Integer> dayButtonIds = new ArrayList<>();
+    protected FirebaseFirestore db;
+    protected static String globalDay;
+    protected static List<Integer> timeTextViewIds;
+    protected static List<Integer> dayButtonIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
+        globalDay = null;
+        timeTextViewIds = new ArrayList<>();
+        dayButtonIds = new ArrayList<>();
+
+        // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true); // showing the back button in action bar
 
