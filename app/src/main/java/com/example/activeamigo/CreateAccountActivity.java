@@ -24,6 +24,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
     private enum Day {Mon, Tue, Wed, Thu, Fri, Sat, Sun}
     protected FirebaseFirestore db;
     private FirebaseAuth auth;
+    static final String desiredDomain = "ucsd.edu";
 
     EditText editTextName = null;
     EditText editTextEmailAddress = null;
@@ -90,17 +91,15 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
     // Makes sure the information in the from is filled in, a good email, matching passwords
     private boolean validateInformation(String name, String emailAddress, String password, String passwordConfirm) {
-        int domainPos = emailAddress.indexOf("@");
-        String domain = emailAddress.substring(domainPos + 1);
-
-        // If a section is left empty or just white spaces
+        String emailPattern = "^[A-Za-z0-9._%+-]+@" + desiredDomain + "$"
+                ;
         if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() ||
                 name.trim().isEmpty() || emailAddress.trim().isEmpty() || password.trim().isEmpty()||
               passwordConfirm.trim().isEmpty()) {
             showAlert(this, R.string.createAccountErrorFilledIn);
         }
         // Bad email or non ucsd email
-        else if (domainPos < 1 || !domain.equals(getString(R.string.ucsdDomain))) {
+        else if (!emailAddress.matches(emailPattern)) {
             showAlert(this, R.string.createAccountErrorBadEmail);
         }
         // If the passwords do not match
@@ -112,8 +111,10 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         else if (password.length() < 6) {
             showAlert(this, R.string.createAccountShortPassword);
             clearForm(true);
-        }
-        else return true;
+        } else if (password.contains(" ")) {
+            showAlert(this, R.string.passwordWithWhiteSpace);
+
+        } else return true;
 
         return false;
     }
