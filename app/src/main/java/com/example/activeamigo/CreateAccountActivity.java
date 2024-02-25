@@ -3,10 +3,15 @@ package com.example.activeamigo;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -18,6 +23,7 @@ import java.util.HashMap;
 public class CreateAccountActivity extends AppCompatActivity implements Alertable {
     private enum Day {Mon, Tue, Wed, Thu, Fri, Sat, Sun}
     protected FirebaseFirestore db;
+    private FirebaseAuth auth;
 
     EditText editTextName = null;
     EditText editTextEmailAddress = null;
@@ -31,6 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         setContentView(R.layout.activity_create_account);
         String fSName = getResources().getString(R.string.dbAccounts);
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Find the EditText views by their IDs
         editTextName = findViewById(R.id.editTextNameAC);
@@ -43,7 +50,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // When the button is clicked
         findViewById(R.id.buttonCreateAccount).setOnClickListener(view -> {
 
             // Get the text from the EditText fields
@@ -54,7 +60,30 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
             // Call validateInformation function before adding account to database
             if (validateInformation(name, emailAddress, password, passwordConfirm)) {
-                checkEmail(name, emailAddress, password, fSName, this.db);
+                checkEmail(emailAddress, fSName, this.db).addOnCompleteListener(task -> {
+                   if(task.isSuccessful()){
+                        DocumentSnapshot ds = task.getResult();
+                        if(ds != null){
+                            // Check if email
+                            showAlert(this, R.string.accountCreationEmailExists);
+                        }
+                        else{
+                            auth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(task1 -> {
+                                if(task1.isSuccessful()){
+                                    showAlert(CreateAccountActivity.this, R.string.accountCreationSuccess);
+                                    addAccount(name, emailAddress, fSName);
+                                    clearForm(false);
+                                }
+                                else{
+                                    showAlert(CreateAccountActivity.this, R.string.accountCreationFailed);
+                                }
+                            });
+                        }
+                   }
+                   else{
+                        showAlert(this, R.string.queryError);
+                   }
+                });
             }
         });
     }
@@ -64,8 +93,10 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         int domainPos = emailAddress.indexOf("@");
         String domain = emailAddress.substring(domainPos + 1);
 
-        // If a section is left empty
-        if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
+        // If a section is left empty or just white spaces
+        if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() ||
+                name.trim().isEmpty() || emailAddress.trim().isEmpty() || password.trim().isEmpty()||
+              passwordConfirm.trim().isEmpty()) {
             showAlert(this, R.string.createAccountErrorFilledIn);
         }
         // Bad email or non ucsd email
@@ -77,13 +108,19 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
             showAlert(this, R.string.createAccountErrorMismatchPassword);
             clearForm(true);
         }
+        // If the passwords do not match
+        else if (password.length() < 6) {
+            showAlert(this, R.string.createAccountShortPassword);
+            clearForm(true);
+        }
         else return true;
 
         return false;
     }
 
     // Check if the email already exists in the database
-    protected void checkEmail(String name, String emailAddress, String password, String dbName, FirebaseFirestore fs) {
+    protected Task<DocumentSnapshot> checkEmail(String emailAddress, String dbName, FirebaseFirestore fs) {
+        final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
         fs.collection(dbName)
                 .whereEqualTo("email", emailAddress)
                 .get()
@@ -91,23 +128,23 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                     if (task.isSuccessful()) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            // Email already exists, show error message
-                            showAlert(this, R.string.accountCreationEmailExists);
-                        } else {
-                            // Email does not exist, proceed with adding the account
-                            addAccount(name, emailAddress, password, dbName);
+                            tcs.setResult(querySnapshot.getDocuments().get(0));
                         }
-                    } else {
+                        else{
+                            tcs.setResult(null);
+                        }
+                    }
+                    else {
                         // Error occurred while checking for email existence
                         showAlert(this, R.string.queryError);
                     }
                 });
+        return tcs.getTask();
     }
 
     // Adds account to database
-    protected void addAccount(String name, String emailAddress, String password, String dbName) {
-        HashMap<String, Object> accountData = makeAccount(name, emailAddress, password);
-
+    protected void addAccount(String name, String emailAddress, String dbName) {
+        HashMap<String, Object> accountData = makeAccount(name, emailAddress);
 
         // Add the account data to db
         db.collection(dbName)
@@ -144,18 +181,18 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         return super.onOptionsItemSelected(item);
     }
 
-    private HashMap<String, Object> makeAccount(String name, String emailAddress, String password){
+    private HashMap<String, Object> makeAccount(String name, String emailAddress){
         HashMap<String, Object> res = new HashMap<>();
         HashMap<String, Object> calendar = new HashMap<>();
 
         res.put("name", name);
         res.put("email", emailAddress);
-        res.put("password", password);
         res.put("bio", "");
         res.put("dob", "");
         res.put("exercise", "");
         res.put("gender", "");
         res.put("location", "");
+
         Day[] days = Day.values();
         int numOfDays = 7;
         for (int i = 0; i < numOfDays && i < days.length; i++) {

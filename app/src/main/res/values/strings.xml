@@ -35,4 +35,5 @@
     <string name="notAccountFound">No account by that email is found</string>
     <string name="misMatchAccountInfo">Account information does not match</string>
     <string name="loggedIn">you logged in</string>
+    <string name="createAccountShortPassword">Password but be 6 characters long</string>
 </resources>
