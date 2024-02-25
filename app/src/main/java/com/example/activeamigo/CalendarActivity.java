@@ -23,9 +23,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CalendarActivity extends AppCompatActivity {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String globalDay = null;
-    private List<Integer> timeTextViewIds = new ArrayList<>();
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    static String globalDay = null;
+    protected static List<Integer> timeTextViewIds = new ArrayList<>();
+    public static List<Integer> dayButtonIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,16 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
+
+        Log.d("Calendar", "Time Slot Ids");
+        for (int i: timeTextViewIds) {
+            Log.d("Calendar", i + " ");
+        }
+
+        Log.d("Calendar", "Day Button Ids");
+        for (int i: dayButtonIds) {
+            Log.d("Calendar", i + ": ");
+        }
     }
 
     /** Set Back Button **/
@@ -65,7 +76,7 @@ public class CalendarActivity extends AppCompatActivity {
      * @param context The context in which the layout will be created.
      * @return The main layout (LinearLayout).
      */
-    private LinearLayout createMainLayout(Context context) {
+    public LinearLayout createMainLayout(Context context) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -83,7 +94,7 @@ public class CalendarActivity extends AppCompatActivity {
      * @param context The context in which the layout will be created.
      * @return The header layout (LinearLayout).
      */
-    private LinearLayout createHeaderLayout(Context context) {
+    public LinearLayout createHeaderLayout(Context context) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -97,6 +108,12 @@ public class CalendarActivity extends AppCompatActivity {
         String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         for (String day : daysOfWeek) {
             Button dayButton = createDayButton(context, day);
+
+            // Assign unique IDs to each timeTextView
+            int dayButtonId = View.generateViewId();
+            dayButton.setId(dayButtonId);
+            dayButtonIds.add(dayButtonId);
+
             headerLayout.addView(dayButton);
         }
         return headerLayout;
@@ -110,7 +127,7 @@ public class CalendarActivity extends AppCompatActivity {
      * @param day     The day text for the button.
      * @return The day button (Button).
      */
-    private Button createDayButton(Context context, String day) {
+    public Button createDayButton(Context context, String day) {
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -131,7 +148,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Implement logic to switch between days here
                 // You can use the 'day' variable to get the selected time slot
                 // Grab the data that matches the week clicked
-                handleDayClick(day);
+                globalDay = day;
                 resetTimeColors();
                 displayCalendar();
             }
@@ -156,15 +173,6 @@ public class CalendarActivity extends AppCompatActivity {
             int id = timeTextViewIds.get(i);
             findViewById(id).setBackgroundColor(Color.WHITE);
         }
-    }
-
-    // Helper Method to handle the click on a day
-    private void handleDayClick(String day) {
-        // Modify to import the time selected to display
-        Toast.makeText(this, "Day of the week: " + day, Toast.LENGTH_SHORT).show();
-        // call getCurrentCalendar and color in the time slot selected
-        globalDay = day;
-
     }
 
     /**
@@ -238,7 +246,6 @@ public class CalendarActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleTimeSlotClick(time);
                 if (globalDay != null) {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
@@ -253,12 +260,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
         return textView;
-    }
-
-    // Helper Method to handle the click on a time slot
-    private void handleTimeSlotClick(String selectedTime) {
-        // Modify to import the time selected to display
-        Toast.makeText(this, "Selected Time: " + selectedTime, Toast.LENGTH_SHORT).show();
     }
 
     public void updateCalendar(Boolean add, String selectedTime) {
@@ -321,7 +322,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    private void displayCalendar() {
+    void displayCalendar() {
         Log.d("CalendarEntry", "inside displayCalendar");
         DocumentReference docRef = db.collection("Accounts").document("be@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
