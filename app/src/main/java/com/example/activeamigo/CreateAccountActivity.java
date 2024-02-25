@@ -113,7 +113,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
             clearForm(true);
         } else if (password.contains(" ")) {
             showAlert(this, R.string.passwordWithWhiteSpace);
-
+            clearForm(true);
         } else return true;
 
         return false;
