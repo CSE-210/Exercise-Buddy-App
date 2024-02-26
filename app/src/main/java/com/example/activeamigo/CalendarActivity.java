@@ -28,6 +28,8 @@ public class CalendarActivity extends AppCompatActivity {
     private static List<Integer> timeTextViewIds;
     protected static List<Integer> dayButtonIds;
     protected static String userEmail;
+    protected static String collections;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class CalendarActivity extends AppCompatActivity {
         timeTextViewIds = new ArrayList<>();
         dayButtonIds = new ArrayList<>();
         userEmail = null;
+        collections = "Accounts";
 
         // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -274,7 +277,7 @@ public class CalendarActivity extends AppCompatActivity {
      * @param selectedTime  The selected time in the format "HH:mm".
      */
     public void updateCalendar(Boolean add, String selectedTime, String userEmail) {
-        DocumentReference docRef = db.collection("Accounts").document(userEmail);
+        DocumentReference docRef = db.collection(collections).document(userEmail);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry:", "documentSnapshot found");
             if (documentSnapshot.exists()) {
@@ -328,7 +331,7 @@ public class CalendarActivity extends AppCompatActivity {
     /** Helper method to fetch calendar information to display on the UI. **/
     void displayCalendar(String userEmail) {
         Log.d("CalendarEntry", "inside displayCalendar");
-        DocumentReference docRef = db.collection("Accounts").document(userEmail);
+        DocumentReference docRef = db.collection(collections).document(userEmail);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry", "documentSnapshot found");
             if (documentSnapshot.exists()) {
