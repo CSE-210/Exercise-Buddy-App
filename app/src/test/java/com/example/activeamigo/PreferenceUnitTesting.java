@@ -23,6 +23,7 @@ import org.robolectric.annotation.Config;
 import java.util.Collections;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -106,5 +107,9 @@ public class PreferenceUnitTesting {
 //        verify(mockedFirestore.collection("Accounts")).document("test@ucsd.edu");
 //    }
 
+    @Test
+    public void addition_isCorrect() {
+        assertEquals(4, 2 + 2);
+    }
 
 }
