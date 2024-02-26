@@ -34,16 +34,16 @@ import java.util.Map;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    protected EditText dobEditText;
-    protected Button edit_save;
-    protected Spinner exercise_choice;
-    protected Spinner location_choice;
-    protected RadioGroup genderGroup;
-    protected String gender;
-    protected EditText bio;
+    private EditText dobEditText;
+    private Button edit_save;
+    private Spinner exercise_choice;
+    private Spinner location_choice;
+    private RadioGroup genderGroup;
+    private String gender;
+    private EditText bio;
 
-    protected String collection="Accounts";
-    protected String document = "test@ucsd.edu";
+    protected static String collection="Accounts";
+    protected static String document = "test@ucsd.edu";
 
     protected FirebaseFirestore db;
     @Override
@@ -220,24 +220,20 @@ public class PreferenceActivity extends AppCompatActivity {
     private boolean checkFieldsCompleted(){
         if (exercise_choice.getSelectedItemPosition() == 0 || location_choice.getSelectedItemPosition() == 0) {
             // Spinner is at index 0 (first item) indicating "Select Activity" or "Select Location" is still selected
-            Toast.makeText(this, "Please select valid options for activity and location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.exercise_choice_fail, Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (gender == null) {
-            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.gender_fail, Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (dobEditText.getText().toString().isEmpty()){
-            Toast.makeText(this, "Please fill Date of birth field", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.dob_fail, Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
-                Toast.makeText(this, "Please fill bio fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.bio_fail, Toast.LENGTH_SHORT).show();
                 return false;
-        }
-        else if (gender == null) {
-            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show();
-            return false;
         }
         else{
             return true;
