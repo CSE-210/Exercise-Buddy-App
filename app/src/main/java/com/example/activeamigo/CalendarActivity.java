@@ -53,16 +53,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
-
-        Log.d("Calendar", "Time Slot Ids");
-        for (int i: timeTextViewIds) {
-            Log.d("Calendar", i + " ");
-        }
-
-        Log.d("Calendar", "Day Button Ids");
-        for (int i: dayButtonIds) {
-            Log.d("Calendar", i + ": ");
-        }
     }
 
     /** Set Back Button **/
@@ -151,9 +141,6 @@ public class CalendarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 resetdayColors((LinearLayout) dayButton.getParent());
                 dayButton.setBackgroundColor(Color.parseColor("#CCE5FF"));
-                // Implement logic to switch between days here
-                // You can use the 'day' variable to get the selected time slot
-                // Grab the data that matches the week clicked
                 globalDay = day;
                 resetTimeColors();
                 displayCalendar();
@@ -266,7 +253,6 @@ public class CalendarActivity extends AppCompatActivity {
                         updateCalendar(true, time); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
-                        // remove time slot from DB
                         updateCalendar(false, time); // remove selected time from calendar
                     }
                 }
@@ -305,7 +291,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                             // Parse the selected time
                             int time = Integer.parseInt(selectedTime.split(":")[0]);
-
                             Log.d("CalendarEntry", "selectedTime: " + time);
 
                             // Update the availability
@@ -361,9 +346,8 @@ public class CalendarActivity extends AppCompatActivity {
                             for (int i = 0; i < availabilityList.size(); i++) {
                                 if (availabilityList.get(i) == 1) {
                                     Log.d("CalendarEntry", i + ": " + availabilityList.get(i));
-                                    int id = timeTextViewIds.get(i); // set the background for textID
-                                    findViewById(id).setBackgroundColor(Color.parseColor("#CCE5FF"));
-//                                    Log.d("CalendarEntry", i + ": " + Integer.toString(timeTextViewIds.get(i)));
+                                    int id = timeTextViewIds.get(i);
+                                    findViewById(id).setBackgroundColor(Color.parseColor("#CCE5FF")); // set the background for textID
                                 }
                             }
                         }
