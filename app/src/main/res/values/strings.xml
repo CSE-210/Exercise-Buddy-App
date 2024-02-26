@@ -11,4 +11,22 @@
     <string name="menu_calender">Calendar</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_settings">Settings</string>
+    <string name="exercise_choice_fail">Please select valid options for activity and location</string>
+    <string name="gender_fail">Please select a gender</string>
+    <string name="dob_fail">Please fill Date of birth field</string>
+    <string name="bio_fail">Please fill bio fields</string>
+
+    <string-array name="activity_array">
+        <item>Select Activity</item>
+        <item>Gym</item>
+        <item>Basketball</item>
+        <!-- Add more options if needed -->
+    </string-array>
+    <string-array name="location_array">
+        <item>Select Location</item>
+        <item>Rimac</item>
+        <item>24hr Fitness UTC</item>
+        <!-- Add more options if needed -->
+    </string-array>
+
 </resources>
