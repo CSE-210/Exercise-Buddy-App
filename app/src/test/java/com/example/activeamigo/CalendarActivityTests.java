@@ -75,7 +75,7 @@ public class CalendarActivityTests {
         calendarActivity.db = mockedFirestore;
 
         // Mock Firestore DocumentReference
-        String userEmail = "mj@ucsd.edu";
+        String userEmail = "cn@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
         when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
 
@@ -107,7 +107,7 @@ public class CalendarActivityTests {
         calendarActivity.db = mockedFirestore;
 
         // Mock Firestore DocumentReference
-        String userEmail = "mj@ucsd.edu";
+        String userEmail = "cn@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
         when(mockedFirestore.collection("Accounts").document(userEmail)).thenReturn(mockDocRef);
 
