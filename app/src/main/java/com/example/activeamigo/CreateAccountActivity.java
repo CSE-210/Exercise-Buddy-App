@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class CreateAccountActivity extends AppCompatActivity implements Alertable {
-    private enum Day {Mon, Tue, Wed, Thu, Fri, Sat, Sun}
+    private enum Day {mon, tue, wed, thu, fri, sat, sun}
     protected FirebaseFirestore db;
     private FirebaseAuth auth;
     static final String desiredDomain = "ucsd.edu";
