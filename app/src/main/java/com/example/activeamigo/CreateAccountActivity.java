@@ -205,5 +205,4 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         res.put("calendar", calendar);
         return res;
     }
-
 }
