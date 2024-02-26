@@ -16,6 +16,9 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".PreferenceActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateAccountActivity"
             android:exported="false" />
         <activity
