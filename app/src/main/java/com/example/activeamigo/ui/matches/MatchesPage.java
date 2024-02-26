@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 //import com.example.activeamigo.ui.matches.R;
 import com.example.activeamigo.R;
 import com.example.activeamigo.databinding.FragmentMatchesBinding;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
