@@ -87,14 +87,7 @@ public class PreferenceUnitTesting {
         when(mockedFirestore.collection("Accounts").document("test@ucsd.edu")).thenReturn(mockedDocumentReference);
 
         // Mock the behavior of DocumentReference.set(Object) to return a non-null Task
-        doAnswer(invocation -> {
-            // Simulate the completion of the task after a short delay
-            Task<Void> task = Tasks.forResult(null);
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                ((OnCompleteListener<Void>) invocation.getArgument(0)).onComplete(task);
-            }, 100); // Adjust the delay as needed
-            return task;
-        }).when(mockDocRef).set(any(Map.class), any(SetOptions.class));
+
 //        preferenceActivity.collection = "Accounts";
 //        preferenceActivity.document = "be@ucsd.edu";
 
@@ -110,7 +103,7 @@ public class PreferenceUnitTesting {
 
         // Verify that the Firestore collection and document were accessed correctly
         verify(mockedFirestore).collection("Accounts");
-        verify(mockedFirestore.collection("Accounts")).document("be@ucsd.edu");
+        verify(mockedFirestore.collection("Accounts")).document("test@ucsd.edu");
     }
 
 
