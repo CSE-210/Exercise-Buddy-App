@@ -28,4 +28,8 @@
     <string name="dbAccounts">Accounts</string>
     <string name="createAccountShortPassword">Password but be 6 characters long</string>
     <string name="passwordWithWhiteSpace">Passwords cannot have spaces</string>
+    <string name="loggedIn">Logged In\n</string>
+    <string name="misMatchAccountInfo">Account Information Does Not Mathc</string>
+    <string name="press_test">Pressed\n</string>
+    <string name="notAccountFound">No Account By That Email Found</string>
 </resources>
