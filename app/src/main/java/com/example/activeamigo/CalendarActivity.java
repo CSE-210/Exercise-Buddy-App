@@ -271,7 +271,7 @@ public class CalendarActivity extends AppCompatActivity {
     public void updateCalendar(Boolean add, String selectedTime) {
         Log.d("CalendarEntry:",  "inside updateCalendar-())");
         Log.d("CalendarEntry:",  "  --  " + selectedTime);
-        DocumentReference docRef = db.collection("Accounts").document("be@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry:", "documentSnapshot found");
             if (documentSnapshot.exists()) {
@@ -330,7 +330,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     void displayCalendar() {
         Log.d("CalendarEntry", "inside displayCalendar");
-        DocumentReference docRef = db.collection("Accounts").document("be@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry", "documentSnapshot found");
             if (documentSnapshot.exists()) {
