@@ -1,10 +1,8 @@
 package com.example.activeamigo;
 
 import android.util.Log;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
 
 
 public class Algorithm {
@@ -105,7 +102,6 @@ public class Algorithm {
                 if (!user1Location.equals(userLocation))
                     continue;
             }
-            //Log.d(TAG, "User: " + userId);
             HashMap<String, Object> uSchedule = null;
             if (document.contains("Calendar")) {
                 uSchedule = (HashMap<String, Object>) document.get("Calendar");
