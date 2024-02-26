@@ -76,7 +76,7 @@ public class CalendarActivityTests {
 
         // Mock Firestore DocumentReference
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("be@ucsd.edu")).thenReturn(mockDocRef);
+        when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
 
         // Mock Firestore documentSnapshot
         DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
@@ -107,7 +107,7 @@ public class CalendarActivityTests {
 
         // Mock Firestore DocumentReference
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("be@ucsd.edu")).thenReturn(mockDocRef);
+        when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
 
         // Mock Firestore documentSnapshot
         DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
