@@ -5,7 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -24,7 +23,7 @@ public class DataPopulator {
         String[] genders = {"Male", "Female"};
         String[] activities = {"Running", "Swimming", "Cycling", "Yoga", "Gym"};
         String[] locations = {"Rimac", "Graduate Housing", "Main Gym"};
-        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+        String[] days = {"mon", "tue", "wed", "thu", "fri"};
 
         // Create dummy data for each user
         for (int i = 1; i <= numUsers; i++) {
@@ -46,16 +45,16 @@ public class DataPopulator {
 
             // Create a map representing the user data
             Map<String, Object> userData = new HashMap<>();
-            userData.put("Email", email);
-            userData.put("Name", name);
-            userData.put("Password", password);
-            userData.put("Bio", bio);
-            userData.put("Dob", dob);
-            userData.put("Gender", gender);
-            userData.put("Exercise", exercise);
-            userData.put("Location", location);
+            userData.put("email", email);
+            userData.put("name", name);
+            userData.put("password", password);
+            userData.put("bio", bio);
+            userData.put("dob", dob);
+            userData.put("gender", gender);
+            userData.put("exercise", exercise);
+            userData.put("location", location);
             //userData.put("Day", Day);
-            userData.put("Calendar", calendar);
+            userData.put("calendar", calendar);
 
             // Add the user data to Firestore as a document
             DocumentReference userDocument = accountsCollection.document(email);
@@ -89,7 +88,7 @@ public class DataPopulator {
     private static Map<String, Object> generateDummyCalendar() {
         Random random = new Random();
         Map<String, Object> calendar = new HashMap<>();
-        for (String day : new String[]{"Mon", "Tue", "Wed", "Thu", "Fri"}) {
+        for (String day : new String[]{"mon", "tue", "wed", "thu", "fri"}) {
             ArrayList<Integer> hours = new ArrayList<Integer>();
             for (int i = 0; i < 24; i++) {
                 hours.add(random.nextInt(2)); // Randomly assign 0 or 1 to each hour
