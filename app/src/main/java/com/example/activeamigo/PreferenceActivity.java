@@ -303,8 +303,6 @@ public class PreferenceActivity extends AppCompatActivity {
 
     /** Pushing inputted data to Firestore, separated for unit testing **/
     protected void pushNewData(DocumentReference docRef, String exercise, String location, String gen, String date, String bio_str){
-        // 2. Save info to database
-//        DocumentReference docRef = db.collection(collection).document(document);
 
         // Create a HashMap to store the data
         Map<String, Object> data = new HashMap<>();
@@ -316,13 +314,17 @@ public class PreferenceActivity extends AppCompatActivity {
 
         // Set the data to the document with document ID "LA"
         docRef.set(data)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                .addOnSuccessListener(aVoid-> {
+
                         Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
+
                         Log.d("API", "DocumentSnapshot successfully written!");
-                    } else {
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
                         Toast.makeText(PreferenceActivity.this, "Preferences Failed!", Toast.LENGTH_LONG).show();
-                        Log.w("API", "Error writing document", task.getException());
+                        Log.w("API", "Error writing document", e);
                     }
                 });
     }
