@@ -77,7 +77,7 @@ public class Algorithm {
 
         // Get the day of the week
         DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
-        if(Filters.containsKey("day"))
+        if(Filters.get("day") != null)
             user1Day = Filters.get("day").toLowerCase();
         else
             user1Day = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
