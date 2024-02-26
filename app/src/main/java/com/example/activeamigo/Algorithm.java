@@ -22,10 +22,10 @@ public class Algorithm {
         void onFetchComplete(List<HashMap<String, Object>> matches);
         void onFetchError(Exception e);
     }
-
-    public void fetchUserDocumentsAndProcess(String user1, HashMap<String, String> filters, OnFetchCompleteListener listener) {
+    // Method to fetch user documents from Firestore and process them
+    public void fetchUserDocumentsAndProcess(String user1, HashMap<String, String> filters, String collectionPath, OnFetchCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("mockedAccounts")
+        db.collection(collectionPath)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -39,7 +39,7 @@ public class Algorithm {
                     }
                 });
     }
-
+    // Method to find similar schedules for a given user
     private static List<HashMap<String,Object>> findSimilarSchedulesForUser(String user1, List<DocumentSnapshot> userDocuments,HashMap<String,String> Filters) {
         List<HashMap<String,Object>> similarUsers = new ArrayList<>();
 
@@ -53,19 +53,19 @@ public class Algorithm {
 
         for (DocumentSnapshot document : userDocuments) {
             if (document.getId().equals(user1)) {
-                user1Schedule = (HashMap<String,Object>) document.get("Calendar");
-                if(Filters.get("Exercise") == null)
-                    user1Exercise = document.getString("Exercise");
+                user1Schedule = (HashMap<String,Object>) document.get("calendar");
+                if(Filters.get("exercise") == null)
+                    user1Exercise = document.getString("exercise");
                 else
-                    user1Exercise = Filters.get("Exercise");
-                if(Filters.get("Location") == null)
-                    user1Location = document.getString("Location");
+                    user1Exercise = Filters.get("exercise");
+                if(Filters.get("location") == null)
+                    user1Location = document.getString("location");
                 else
-                    user1Location = Filters.get("Location");
-                if(Filters.get("Gender") == null)
-                    user1Gender = document.getString("Gender");
+                    user1Location = Filters.get("location");
+                if(Filters.get("gender") == null)
+                    user1Gender = document.getString("gender");
                 else
-                    user1Gender = Filters.get("Gender");
+                    user1Gender = Filters.get("gender");
                 break;
             }
         }
@@ -77,17 +77,16 @@ public class Algorithm {
 
         // Get the day of the week
         DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
-        if(Filters.get("Day") == null)
-            user1Day = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-        // Get the day name abbreviated
+        if(Filters.containsKey("day"))
+            user1Day = Filters.get("day").toLowerCase();
         else
-            user1Day = Filters.get("Day");
+            user1Day = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
         // Calculate similarity scores for other users' schedules
         for (DocumentSnapshot document : userDocuments) {
             String userId = document.getId();
-            String userExercise = document.getString("Exercise");
-            String userLocation = document.getString("Location");
-            String userGender = document.getString("Gender");
+            String userExercise = document.getString("exercise");
+            String userLocation = document.getString("location");
+            String userGender = document.getString("gender");
 
             if (userId.equals(user1)) continue; // Skip user1
             if (user1Gender != null) {
@@ -103,8 +102,8 @@ public class Algorithm {
                     continue;
             }
             HashMap<String, Object> uSchedule = null;
-            if (document.contains("Calendar")) {
-                uSchedule = (HashMap<String, Object>) document.get("Calendar");
+            if (document.contains("calendar")) {
+                uSchedule = (HashMap<String, Object>) document.get("calendar");
             }
 
             // Calculate score only if user's schedule exists and has the same day as user1's day prefernce
@@ -116,13 +115,13 @@ public class Algorithm {
                     List<Long> user1ScheduleForDay = (List<Long>) user1ScheduleForDayObject;
                     int currScore = calculateScore(user1ScheduleForDay, uScheduleForDay);
                     HashMap<String, Object> userData = new HashMap<>();
-                    userData.put("Exercise",userExercise);
-                    userData.put("Name",document.getString("Name"));
-                    userData.put("Bio",document.getString("Bio"));
-                    userData.put("Email",document.getString("Email"));
-                    userData.put("Location",userLocation);
-                    userData.put("Gender",userGender);
-                    userData.put("Score",currScore);
+                    userData.put("exercise",userExercise);
+                    userData.put("name",document.getString("name"));
+                    userData.put("bio",document.getString("bio"));
+                    userData.put("email",document.getString("email"));
+                    userData.put("location",userLocation);
+                    userData.put("gender",userGender);
+                    userData.put("score",currScore);
                     similarUsers.add(userData);
                 } else {
                     Log.e(TAG, "Not appropraite data struct in schedule");
@@ -133,8 +132,8 @@ public class Algorithm {
 
         // Sort similarUsers based on score in descending order
         Collections.sort(similarUsers, (firstMap, secondMap) -> {
-            Integer firstValue = (Integer)firstMap.get("Score");
-            Integer secondValue = (Integer)secondMap.get("Score");
+            Integer firstValue = (Integer)firstMap.get("score");
+            Integer secondValue = (Integer)secondMap.get("score");
             return secondValue.compareTo(firstValue);
         });
 
