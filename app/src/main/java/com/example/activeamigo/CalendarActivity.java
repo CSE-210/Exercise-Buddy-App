@@ -162,7 +162,7 @@ public class CalendarActivity extends AppCompatActivity {
         return dayButton;
     }
 
-    // Helper Method to reset the days clicked
+    /** Helper Method to reset the days clicked **/
     private void resetdayColors(LinearLayout headerLayout) {
         Log.d("CalendarEntry", "childCount: "+headerLayout.getChildCount());
         for (int i = 0; i < headerLayout.getChildCount(); i++) {
@@ -173,7 +173,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to reset the time slots clicked
+    /** Helper method to reset the time slots clicked **/
     private void resetTimeColors() {
         for (int i=0; i<timeTextViewIds.size(); i++) {
             int id = timeTextViewIds.get(i);
@@ -341,9 +341,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Helper method to fetch calendar information to display on the UI.
-     */
+    /** Helper method to fetch calendar information to display on the UI. **/
     void displayCalendar() {
         Log.d("CalendarEntry", "inside displayCalendar");
         DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
