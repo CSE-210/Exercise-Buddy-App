@@ -26,13 +26,6 @@
     <string name="accountCreationEmailExists">An account is already associated with this email</string>
     <string name="queryError">bad query call</string>
     <string name="dbAccounts">Accounts</string>
-    <string name="active_amigo">Active Amigo</string>
-    <string name="enter_your_email">Enter your email</string>
-    <string name="enter_your_password">Enter your password</string>
-    <string name="login">Login</string>
-    <string name="forgot_password">forgot password?</string>
-    <string name="press_test">Pressed</string>
-    <string name="notAccountFound">No account by that email is found</string>
-    <string name="misMatchAccountInfo">Account information does not match</string>
-    <string name="loggedIn">you logged in</string>
+    <string name="createAccountShortPassword">Password but be 6 characters long</string>
+    <string name="passwordWithWhiteSpace">Passwords cannot have spaces</string>
 </resources>
