@@ -65,10 +65,11 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                    if(task.isSuccessful()){
                         DocumentSnapshot ds = task.getResult();
                         if(ds != null){
-                            // Check if email
+                            // Checks email
                             showAlert(this, R.string.accountCreationEmailExists);
                         }
                         else{
+                            // Adds account to authentication and database
                             auth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
                                     showAlert(CreateAccountActivity.this, R.string.accountCreationSuccess);
