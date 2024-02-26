@@ -101,7 +101,7 @@ public class CalendarActivity extends AppCompatActivity {
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         // Add buttons for each day of the week
-        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        String[] daysOfWeek = {"sun", "mon", "tue", "eed", "thu", "fri", "sat"};
         for (String day : daysOfWeek) {
             Button dayButton = createDayButton(context, day);
 
