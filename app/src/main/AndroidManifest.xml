@@ -13,11 +13,7 @@
         android:theme="@style/Theme.ActiveAmigo"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CreateAccountActivity"
-            android:exported="false" />
+            android:name=".CalendarActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
