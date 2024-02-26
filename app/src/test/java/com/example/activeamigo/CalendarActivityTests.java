@@ -75,6 +75,7 @@ public class CalendarActivityTests {
         calendarActivity.db = mockedFirestore;
 
         // Mock Firestore DocumentReference
+        String userEmail = "mj@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
         when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
 
@@ -87,7 +88,7 @@ public class CalendarActivityTests {
         when(mockDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot));
 
         // Perform the test
-        calendarActivity.displayCalendar();
+        calendarActivity.displayCalendar(userEmail);
     }
 
     private Map<String, Object> getMockCalendarData() {
@@ -106,8 +107,9 @@ public class CalendarActivityTests {
         calendarActivity.db = mockedFirestore;
 
         // Mock Firestore DocumentReference
+        String userEmail = "mj@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
+        when(mockedFirestore.collection("Accounts").document(userEmail)).thenReturn(mockDocRef);
 
         // Mock Firestore documentSnapshot
         DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
@@ -118,7 +120,7 @@ public class CalendarActivityTests {
         when(mockDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot));
 
         // Perform the test
-        calendarActivity.updateCalendar(true, "12:00");
+        calendarActivity.updateCalendar(true, "12:00",  userEmail);
 
 
         // Verify that the get() method was called on the DocumentReference

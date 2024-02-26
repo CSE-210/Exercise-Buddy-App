@@ -27,6 +27,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected static String globalDay;
     private static List<Integer> timeTextViewIds;
     protected static List<Integer> dayButtonIds;
+    protected static String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class CalendarActivity extends AppCompatActivity {
         globalDay = null;
         timeTextViewIds = new ArrayList<>();
         dayButtonIds = new ArrayList<>();
+        userEmail = null;
 
         // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -53,6 +55,10 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
+    }
+
+    public void setUserEmail() {
+        // update to interact with session
     }
 
     /** Set Back Button **/
@@ -101,7 +107,7 @@ public class CalendarActivity extends AppCompatActivity {
         headerLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         // Add buttons for each day of the week
-        String[] daysOfWeek = {"sun", "mon", "tue", "eed", "thu", "fri", "sat"};
+        String[] daysOfWeek = {"sun", "mon", "tue", "wed", "thu", "fri", "sat"};
         for (String day : daysOfWeek) {
             Button dayButton = createDayButton(context, day);
 
@@ -143,7 +149,7 @@ public class CalendarActivity extends AppCompatActivity {
                 dayButton.setBackgroundColor(getResources().getColor(R.color.light_blue));
                 globalDay = day;
                 resetTimeColors();
-                displayCalendar();
+                displayCalendar(userEmail);
             }
         });
         return dayButton;
@@ -250,10 +256,10 @@ public class CalendarActivity extends AppCompatActivity {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
                         textView.setBackgroundColor(getResources().getColor(R.color.light_blue));
-                        updateCalendar(true, time); // add selected time from calendar
+                        updateCalendar(true, time, userEmail); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
-                        updateCalendar(false, time); // remove selected time from calendar
+                        updateCalendar(false, time, userEmail); // remove selected time from calendar
                     }
                 }
             }
@@ -267,31 +273,24 @@ public class CalendarActivity extends AppCompatActivity {
      * @param add           True if adding availability, False if removing.
      * @param selectedTime  The selected time in the format "HH:mm".
      */
-    public void updateCalendar(Boolean add, String selectedTime) {
-        Log.d("CalendarEntry:",  "inside updateCalendar-())");
-        Log.d("CalendarEntry:",  "  --  " + selectedTime);
-        DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
+    public void updateCalendar(Boolean add, String selectedTime, String userEmail) {
+        DocumentReference docRef = db.collection("Accounts").document(userEmail);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry:", "documentSnapshot found");
             if (documentSnapshot.exists()) {
-                Log.d("CalendarEntry:", "  --  HERE 0");
                 // If document exists, fetch data
                 Map<String, Object> data = documentSnapshot.getData();
                 if (data != null) {
                     // Check if the calendar field exists in the document
                     if (data.containsKey("calendar")) {
-                        Log.d("CalendarEntry:", "  --  HERE 1");
                         // Get the calendar field
                         Object calendarObj = data.get("calendar");
                         if (calendarObj instanceof HashMap) {
                             // Cast it to HashMap<String, ArrayList> if it is a HashMap
                             HashMap<String, List<Integer>> calendarMap = (HashMap<String, List<Integer>>) calendarObj;
-                            Log.d("CalendarEntry", "found it: " + "Key: " + globalDay);
-                            Log.d("CalendarEntry", "Value: " + calendarMap.get(globalDay));
 
                             // Parse the selected time
                             int time = Integer.parseInt(selectedTime.split(":")[0]);
-                            Log.d("CalendarEntry", "selectedTime: " + time);
 
                             // Update the availability
                             List<Integer> availabilityList = calendarMap.get(globalDay);
@@ -301,7 +300,7 @@ public class CalendarActivity extends AppCompatActivity {
                                     Log.d("CalendarEntry", "Selected time will be added");
                                 }
                                 else { // remove availability
-                                    availabilityList.set(time, 0);  // TODO: MODIFY HERE TO BE THE OPPOSITE VAL 0,1
+                                    availabilityList.set(time, 0);
                                     Log.d("CalendarEntry", "Selected time will be removed");
                                 }
                                 calendarMap.put(globalDay, availabilityList);
@@ -327,9 +326,9 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     /** Helper method to fetch calendar information to display on the UI. **/
-    void displayCalendar() {
+    void displayCalendar(String userEmail) {
         Log.d("CalendarEntry", "inside displayCalendar");
-        DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
+        DocumentReference docRef = db.collection("Accounts").document(userEmail);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             Log.d("CalendarEntry", "documentSnapshot found");
             if (documentSnapshot.exists()) {
