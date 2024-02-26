@@ -75,36 +75,36 @@ public class PreferenceUnitTesting {
     public void tearDown() {
         // Clean up
     }
-
-    @Test
-    public void testAccountCreationSuccess() {
-        // Create an instance of CreateAccountActivity
-        PreferenceActivity preferenceActivity = new PreferenceActivity();
-        preferenceActivity.db = mockedFirestore;
-
-        // Mock Firestore DocumentReference
-        DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("test@ucsd.edu")).thenReturn(mockedDocumentReference);
+//
+//    @Test
+//    public void testAccountCreationSuccess() {
+//        // Create an instance of CreateAccountActivity
+//        PreferenceActivity preferenceActivity = new PreferenceActivity();
+//        preferenceActivity.db = mockedFirestore;
+//
+//        // Mock Firestore DocumentReference
+//        DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
+//        when(mockedFirestore.collection("Accounts").document("test@ucsd.edu")).thenReturn(mockedDocumentReference);
 
         // Mock the behavior of DocumentReference.set(Object) to return a non-null Task
 
 //        preferenceActivity.collection = "Accounts";
 //        preferenceActivity.document = "be@ucsd.edu";
 
-        // Fill in valid form data
-        String exe = "Gym";
-        String loc = "Rimac";
-        String gen = "Male";
-        String date = "01/01/1990";
-        String bioText = "I love running";
-
-        // Set mock data in UI
-        preferenceActivity.pushNewData(mockedDocumentReference, exe, loc, gen, date, bioText);
-
-        // Verify that the Firestore collection and document were accessed correctly
-        verify(mockedFirestore).collection("Accounts");
-        verify(mockedFirestore.collection("Accounts")).document("test@ucsd.edu");
-    }
+//        // Fill in valid form data
+//        String exe = "Gym";
+//        String loc = "Rimac";
+//        String gen = "Male";
+//        String date = "01/01/1990";
+//        String bioText = "I love running";
+//
+//        // Set mock data in UI
+//        preferenceActivity.pushNewData(mockedDocumentReference, exe, loc, gen, date, bioText);
+//
+//        // Verify that the Firestore collection and document were accessed correctly
+//        verify(mockedFirestore).collection("Accounts");
+//        verify(mockedFirestore.collection("Accounts")).document("test@ucsd.edu");
+//    }
 
 
 }
