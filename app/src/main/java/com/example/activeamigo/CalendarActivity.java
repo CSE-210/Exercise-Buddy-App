@@ -235,6 +235,13 @@ public class CalendarActivity extends AppCompatActivity {
         return timeLayout;
     }
 
+    /**
+     * Creates a clickable TextView representing a time slot on the UI.
+     *
+     * @param context The context in which the TextView will be created.
+     * @param time    The time value associated with the TextView.
+     * @return A TextView instance representing a clickable time slot.
+     */
     private TextView createClickableTextView(Context context, String time) {
         LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -268,6 +275,12 @@ public class CalendarActivity extends AppCompatActivity {
         return textView;
     }
 
+    /**
+     * Helper method to update (add/remove) available time slots on Firestore.
+     *
+     * @param add           True if adding availability, False if removing.
+     * @param selectedTime  The selected time in the format "HH:mm".
+     */
     public void updateCalendar(Boolean add, String selectedTime) {
         Log.d("CalendarEntry:",  "inside updateCalendar-())");
         Log.d("CalendarEntry:",  "  --  " + selectedTime);
@@ -328,6 +341,9 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Helper method to fetch calendar information to display on the UI.
+     */
     void displayCalendar() {
         Log.d("CalendarEntry", "inside displayCalendar");
         DocumentReference docRef = db.collection("Accounts").document("mj@ucsd.edu");
