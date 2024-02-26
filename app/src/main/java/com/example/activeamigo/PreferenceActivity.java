@@ -238,7 +238,6 @@ public class PreferenceActivity extends AppCompatActivity {
         else{
             return true;
         }
-
     }
 
     /** Setting up the dropdowns for location and excercise**/
