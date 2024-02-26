@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class CalendarActivity extends AppCompatActivity {
     protected FirebaseFirestore db;
     protected static String globalDay;
-    protected static List<Integer> timeTextViewIds;
+    private static List<Integer> timeTextViewIds;
     protected static List<Integer> dayButtonIds;
 
     @Override
@@ -140,7 +140,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resetdayColors((LinearLayout) dayButton.getParent());
-                dayButton.setBackgroundColor(Color.parseColor("#CCE5FF"));
+                dayButton.setBackgroundColor(getResources().getColor(R.color.light_blue));
                 globalDay = day;
                 resetTimeColors();
                 displayCalendar();
@@ -249,7 +249,7 @@ public class CalendarActivity extends AppCompatActivity {
                 if (globalDay != null) {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
-                        textView.setBackgroundColor(Color.parseColor("#CCE5FF"));
+                        textView.setBackgroundColor(getResources().getColor(R.color.light_blue));
                         updateCalendar(true, time); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
@@ -347,7 +347,7 @@ public class CalendarActivity extends AppCompatActivity {
                                 if (availabilityList.get(i) == 1) {
                                     Log.d("CalendarEntry", i + ": " + availabilityList.get(i));
                                     int id = timeTextViewIds.get(i);
-                                    findViewById(id).setBackgroundColor(Color.parseColor("#CCE5FF")); // set the background for textID
+                                    findViewById(id).setBackgroundColor(getResources().getColor(R.color.light_blue)); // set the background for textID
                                 }
                             }
                         }
