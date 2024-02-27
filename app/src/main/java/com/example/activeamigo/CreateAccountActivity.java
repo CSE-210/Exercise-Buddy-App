@@ -72,7 +72,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                             // Adds account to authentication and database
                             auth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
-                                    showAlert(CreateAccountActivity.this, R.string.accountCreationSuccess);
                                     addAccount(name, emailAddress, fSName);
                                     clearForm(false);
                                 }
