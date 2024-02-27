@@ -27,6 +27,13 @@ public class LoginActivity extends Activity implements Alertable{
         auth = FirebaseAuth.getInstance();
         String fsName = "Accounts";
 
+        // Check if user is already logged in
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, PreferenceActivity.class));
+            finish();
+            return;
+        }
+
         emailView = findViewById(R.id.editTextEmailLG);
         passwordView = findViewById(R.id.editTextpasswordLG);
 
