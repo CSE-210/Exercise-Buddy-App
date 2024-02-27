@@ -29,7 +29,7 @@ public class LoginActivity extends Activity implements Alertable{
 
         // Check if user is already logged in
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, PreferenceActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
             return;
         }
