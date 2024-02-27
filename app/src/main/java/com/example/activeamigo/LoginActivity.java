@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
-
+import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -16,10 +17,13 @@ public class LoginActivity extends Activity implements Alertable{
     private EditText emailView = null;
     private EditText passwordView = null;
 
+    private FirebaseAuth auth = null;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         String fsName = "Accounts";
 
         emailView = findViewById(R.id.editTextEmailLG);
@@ -45,17 +49,15 @@ public class LoginActivity extends Activity implements Alertable{
                         DocumentSnapshot documentSnapshot = task.getResult();
                         // If the account exists
                         if (documentSnapshot != null) {
-                            // Grab the password
-                            String passwordDB = documentSnapshot.getString("password");
-                            // ADD decryption
-
-                            // Check the password
-                            if (checkPassword(password, passwordDB))
-                                // Logg-in in actions
-                                showAlert(this, R.string.loggedIn);
-
-                            else
-                                showAlert(this, R.string.misMatchAccountInfo);
+                            auth.signInWithEmailAndPassword(email, password)
+                                    // If login fails
+                                    .addOnFailureListener(e -> showAlert(LoginActivity.this, R.string.misMatchAccountInfo))
+                                    // If login succeeds
+                                    .addOnSuccessListener(authResult -> {
+                                        Toast.makeText(LoginActivity.this, R.string.loggedIn, Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        finish();
+                                    });
                         }
                     }
                 });
@@ -95,11 +97,6 @@ public class LoginActivity extends Activity implements Alertable{
                 });
 
         return tcs.getTask();
-    }
-
-    // Checks if password matches the one in the database
-    protected boolean checkPassword(String local, String database) {
-        return local.equals(database);
     }
 
     // Makes sure the fields are filled in
