@@ -3,9 +3,7 @@ package com.example.activeamigo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,13 +24,6 @@ public class LoginActivity extends Activity implements Alertable{
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         String fsName = "Accounts";
-
-        // Check if user is already logged in
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-            return;
-        }
 
         emailView = findViewById(R.id.editTextEmailLG);
         passwordView = findViewById(R.id.editTextpasswordLG);
@@ -62,8 +53,6 @@ public class LoginActivity extends Activity implements Alertable{
                                     .addOnFailureListener(e -> showAlert(LoginActivity.this, R.string.misMatchAccountInfo))
                                     // If login succeeds
                                     .addOnSuccessListener(authResult -> {
-                                        Log.d("USER:",auth.getCurrentUser().getEmail() + auth.getCurrentUser().toString());
-                                        Toast.makeText(LoginActivity.this, R.string.loggedIn, Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         finish();
                                     });
