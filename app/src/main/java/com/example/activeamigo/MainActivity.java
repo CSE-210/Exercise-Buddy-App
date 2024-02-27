@@ -2,6 +2,7 @@ package com.example.activeamigo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.launchLogOut).setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         });
     }
 

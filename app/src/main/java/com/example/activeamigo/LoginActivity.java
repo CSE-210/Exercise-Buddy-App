@@ -3,6 +3,7 @@ package com.example.activeamigo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
@@ -54,6 +55,7 @@ public class LoginActivity extends Activity implements Alertable{
                                     .addOnFailureListener(e -> showAlert(LoginActivity.this, R.string.misMatchAccountInfo))
                                     // If login succeeds
                                     .addOnSuccessListener(authResult -> {
+                                        Log.d("USER:",auth.getCurrentUser().getEmail() + auth.getCurrentUser().toString());
                                         Toast.makeText(LoginActivity.this, R.string.loggedIn, Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         finish();
