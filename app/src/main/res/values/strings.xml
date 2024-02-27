@@ -41,6 +41,7 @@
     <string name="gender_fail">Please select a gender</string>
     <string name="dob_fail">Please fill Date of birth field</string>
     <string name="bio_fail">Please fill bio fields</string>
+    <string name="logout">Logout</string>
 
 
     <string-array name="activity_array">
