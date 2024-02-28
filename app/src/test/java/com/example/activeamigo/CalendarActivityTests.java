@@ -1,20 +1,15 @@
 package com.example.activeamigo;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
 import java.util.*;
 
 @RunWith(RobolectricTestRunner.class)
@@ -53,6 +47,7 @@ public class CalendarActivityTests {
     public void setUp() {
         // Opens Mockito
         MockitoAnnotations.openMocks(this);
+        mockedFirestore = Mockito.mock(FirebaseFirestore.class);
         // Creates a firebase
         when(mockedFirestore.collection(any(String.class))).thenReturn(mockedCollectionReference);
         // Creates a collection reference
@@ -73,11 +68,12 @@ public class CalendarActivityTests {
     public void testDisplayCalendar() {
         CalendarActivity calendarActivity = new CalendarActivity();
         calendarActivity.db = mockedFirestore;
+        calendarActivity.collections = "Accounts";
 
         // Mock Firestore DocumentReference
-        String userEmail = "mj@ucsd.edu";
+        String userEmail = "cn@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
-        when(mockedFirestore.collection("Accounts").document("mj@ucsd.edu")).thenReturn(mockDocRef);
+        when(mockedFirestore.collection("Accounts").document(userEmail)).thenReturn(mockDocRef);
 
         // Mock Firestore documentSnapshot
         DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
@@ -89,6 +85,9 @@ public class CalendarActivityTests {
 
         // Perform the test
         calendarActivity.displayCalendar(userEmail);
+
+        // check if get() was called
+        verify(mockDocRef).get();
     }
 
     private Map<String, Object> getMockCalendarData() {
@@ -105,9 +104,10 @@ public class CalendarActivityTests {
     public void testUpdateCalendar() {
         CalendarActivity calendarActivity = new CalendarActivity();
         calendarActivity.db = mockedFirestore;
+        calendarActivity.collections = "Accounts";
 
         // Mock Firestore DocumentReference
-        String userEmail = "mj@ucsd.edu";
+        String userEmail = "cn@ucsd.edu";
         DocumentReference mockDocRef = Mockito.mock(DocumentReference.class);
         when(mockedFirestore.collection("Accounts").document(userEmail)).thenReturn(mockDocRef);
 
@@ -122,15 +122,7 @@ public class CalendarActivityTests {
         // Perform the test
         calendarActivity.updateCalendar(true, "12:00",  userEmail);
 
-
         // Verify that the get() method was called on the DocumentReference
         verify(mockDocRef).get();
-
-        // Verify that the update() method was called on the DocumentReference
-        // Note: This assumes that your updateCalendar method calls update on docRef
-//        verify(mockDocRef).update(eq("calendar"), anyMap());
-
-        // Alternatively, if you have a specific expected map, you can use:
-        // verify(mockDocRef).update(eq("calendar"), eq(expectedMap));
     }
 }
