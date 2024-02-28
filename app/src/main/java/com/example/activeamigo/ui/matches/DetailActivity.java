@@ -20,11 +20,23 @@ public class DetailActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true); //
         // Retrieve the data
         String selectedItem = getIntent().getStringExtra("SELECTED_ITEM");
+        String bio = getIntent().getStringExtra("BIO_KEY");
+        String exercise = getIntent().getStringExtra("EXERCISE_KEY");
+        String location = getIntent().getStringExtra("LOCATION_KEY");
+        String email = getIntent().getStringExtra("EMAIL_KEY");
 
         // Use the data to update UI, for example, setting a TextView's text
         TextView detailTextView = findViewById(R.id.matchersName);
-        detailTextView.setText(selectedItem);
+        TextView bioTextView = findViewById(R.id.matchersBio); // Assuming you have this TextView for bio
+        TextView exerciseTextView = findViewById(R.id.matchersExercise); // And so for exercise
+        TextView locationTextView = findViewById(R.id.matchersLocation); // And so for location
+        TextView emailTextView = findViewById(R.id.matchersEmail); // And so for email
 
+        detailTextView.setText(selectedItem);
+        bioTextView.setText(bio);
+        exerciseTextView.setText(exercise);
+        locationTextView.setText(location);
+        emailTextView.setText(email);
 
     }
     @Override

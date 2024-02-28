@@ -17,9 +17,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 //import com.example.activeamigo.ui.matches.R;
+import com.example.activeamigo.Algorithm;
 import com.example.activeamigo.R;
 import com.example.activeamigo.databinding.FragmentMatchesBinding;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class MatchesPage extends Fragment {
 
     private FragmentMatchesBinding binding;
     private ListView matchesList;
+    HashMap<String, String[]> matchedUsers = new HashMap<String, String[]>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         MatchesViewModel matchesViewModel =
@@ -59,7 +61,7 @@ public class MatchesPage extends Fragment {
         setUpSpinner(root.findViewById(R.id.locationSpinner), new String[]{"Location 1", "Location 2"});
         setUpSpinner(root.findViewById(R.id.exerciseTypeSpinner), new String[]{"Yoga", "Running"});
         setUpSpinner(root.findViewById(R.id.genderSpinner), new String[]{"Male", "Female", "Other"});
-        setUpSpinner(root.findViewById(R.id.daySpinner), new String[]{"Monday", "Tuesday", "Wednesday","Thursday", "Friday"});
+        setUpSpinner(root.findViewById(R.id.daySpinner), new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
 
 //
 //        final TextView textView = binding.textMatches;
@@ -93,112 +95,67 @@ public class MatchesPage extends Fragment {
                         // Pass data to DetailActivity
                         intent.putExtra("SELECTED_ITEM", selectedItem);
 
+                        String[] userDetails = matchedUsers.get(selectedItem);
+                        String bio = userDetails[0]; // Access the bio
+                        String exercise = userDetails[1]; // Access the exercise
+                        String location = userDetails[2]; // Access the location
+                        String email = userDetails[3]; // Access the email
+                        intent.putExtra("BIO_KEY", bio); // Assuming bio is a String variable
+                        intent.putExtra("EXERCISE_KEY", exercise); // Assuming exercise is not already a String
+                        intent.putExtra("LOCATION_KEY", location); // Assuming location is not already a String
+                        intent.putExtra("EMAIL_KEY", email); // Assuming email is not already a String
                         // Start DetailActivity
                         startActivity(intent);
                     }
                 });
 
-            };
+            }
+
+            ;
 //
         });
 
 
-        //Need to get the current user i.e. user1 info from database
-        //Need to get all data map and users list from the database
-        String user1 = "wafybtvgupqefg";
-        // Commenting mock data part since its not working in android but we ran the code in java to check output
 
-//        File file = new File("/Users/loukiknaik/Downloads/sample1_1.json");
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        Map<String, List<Object>> data = objectMapper.readValue(file, Map.class);
-//        Map<String, List<Object>> data = new HashMap<>();
-//        try {
-//            data = objectMapper.readValue(file, Map.class);
-//        } catch (IOException e) {
-//            e.printStackTrace(); // Handle the exception (e.g., log it, throw a runtime exception, etc.)
-//        }
-        Map<String, List<Object>> data = new HashMap<>();
-        List<Object> objectList = new ArrayList<>(
-                Arrays.asList(1, Arrays.asList(5,8,9,11,12,15,16,17,21))
-        );
-        data.put("wafybtvgupqefg",objectList);
-        List<Object> objectList1 = new ArrayList<>(
-                Arrays.asList(6, Arrays.asList(2, 4, 10, 14, 20, 22))
-        );
-        data.put("keyxtaamnivy",objectList1);
-        List<Object> objectList2 = new ArrayList<>(
-                Arrays.asList(1, Arrays.asList(5,8,9,11,12,15,17,21))
-        );
-        data.put("lafybtvgupfg",objectList2);
+        Algorithm algorithm = new Algorithm();
+//DataPopulator.populateDummyData();
+// Call the method
+        HashMap<String, String> Filters = new HashMap<>();
+        Filters.put("day", "tue");
+        Filters.put("exercise", null);
+        Filters.put("location", null);
+        Filters.put("gender", null);
+// Create an instance of the Algorithm class
+        algorithm = new Algorithm();
 
-        List<String> users = new ArrayList<>(data.keySet());
-        ArrayList<String> matches = findMatches(user1,users,data);
-        matchesViewModel.setList(matches);
+
+// Call fetchUserDocumentsAndProcess method for a user
+        algorithm.fetchUserDocumentsAndProcess("affxe97@ucsd.edu", Filters,”mockedAccounts“, new Algorithm.OnFetchCompleteListener() {
+            @Override
+            public void onFetchComplete(List<HashMap<String, Object>> matches) {
+
+                for (HashMap<String, Object> match : matches) {
+                    matchedUsers.put(match.get("name").toString(),new String[] {match.get("bio").toString(),match.get("exercise").toString(),match.get("location").toString(),match.get("email").toString()});
+                //Log.d("Test", "User: " + match.get("name") + ", Score: " + match.get("score"));
+                }
+                ArrayList<String> matchedUsersNames = new ArrayList<String>();
+                matchedUsersNames.addAll(matchedUsers.keySet());
+                matchesViewModel.setList(matchedUsersNames);
+            }
+
+            @Override
+            public void onFetchError(Exception e) {
+                // Handle errors here
+                Log.e("Test", "Error fetching user documents", e);
+            }
+        });
+
         return root;
     }
     private void setUpSpinner(Spinner spinner, String[] options) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-    }
-    public ArrayList<String> findMatches(String user1, List<String> users, Map<String, List<Object>> data){
-        ArrayList<String> rankedUsers = new ArrayList<String>();
-        Log.d("Start","Start userList creation");
-        List<List<Object>> userList = findSimilarSchedulesForUser(user1,users,data);
-        Log.d("Success","Passed userList creation");
-        int j=20;
-        for(List<Object> u: userList){
-            String s = u.get(1).toString();
-            System.out.println(s);
-            rankedUsers.add(s);
-            j-=1;
-            if(j==0){
-                break;
-            }
-        }
-        //Adding extra values to check scroll
-        for(int i=0;i<20;i++){
-            rankedUsers.add("Rahul");
-            System.out.println("Rahul");
-        }
-        return rankedUsers;
-    }
-    public List<List<Object>> findSimilarSchedulesForUser(String user1, List<String> users, Map<String, List<Object>> data) {
-        Log.d("Start uswe List", "ejnf");
-        Log.d((data).toString(),"Data log");
-        List<Integer> user1Schedule = (List<Integer>) data.get(user1).get(1);
-        Log.d(user1Schedule.toString(),"user 1 schedule");
-        int user1Day = (int) data.get(user1).get(0);
-        Map<String, Integer> score = new HashMap<>();
-
-        for (String u : users) {
-            if (!data.containsKey(u)|| data.get(u) == null || data.get(u).size() < 2) continue;
-            int i = 0, j = 0;
-            if (user1Day != (int) data.get(u).get(0)) continue;
-
-            List<Integer> uSchedule = (List<Integer>) data.get(u).get(1);
-            int currScore = 0;
-            while (i < user1Schedule.size() && j < uSchedule.size()) {
-                if (user1Schedule.get(i).equals(uSchedule.get(j))) {
-                    currScore++;
-                    i++;
-                    j++;
-                } else if (user1Schedule.get(i) < uSchedule.get(j)) {
-                    i++;
-                } else {
-                    j++;
-                }
-            }
-            score.put(u, currScore);
-        }
-
-        List<List<Object>> similarUserList = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : score.entrySet()) {
-            similarUserList.add(Arrays.asList(entry.getValue(), entry.getKey()));
-        }
-        similarUserList.sort((a, b) -> (int) b.get(0) - (int) a.get(0));
-        return similarUserList;
     }
 
     @Override
