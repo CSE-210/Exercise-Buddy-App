@@ -29,6 +29,10 @@
             android:name=".CreateAccountActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.matches.DetailActivity"
+            android:exported="False" />
+        <activity android:name=".DetailActivity"></activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ActiveAmigo.NoActionBar">
