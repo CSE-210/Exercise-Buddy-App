@@ -71,7 +71,7 @@ public class LoginActivity extends Activity implements Alertable{
 
         // Launch forgot password
         findViewById(R.id.forgotPasswordText).setOnClickListener(view ->{
-            Intent intent = new Intent(LoginActivity.this, ForgotPassword.class);
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
         });
 
