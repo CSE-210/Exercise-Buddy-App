@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,7 +46,7 @@ public class PreferenceActivity extends AppCompatActivity {
     protected static String collection="Accounts";
     protected static String document = "test@ucsd.edu";
 
-    protected FirebaseFirestore db;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,7 +282,7 @@ public class PreferenceActivity extends AppCompatActivity {
                 if (checkFieldsCompleted()) {
                     // 2. Save info to database
                     DocumentReference docRef = db.collection(collection).document(document);
-                    pushNewData(docRef,
+                    pushNewData(
                             exercise_choice.getSelectedItem().toString(),
                             location_choice.getSelectedItem().toString(),
                             gender,
@@ -297,8 +298,9 @@ public class PreferenceActivity extends AppCompatActivity {
     }
 
     /** Pushing inputted data to Firestore, separated for unit testing **/
-    protected void pushNewData(DocumentReference docRef, String exercise, String location, String gen, String date, String bio_str){
+    protected void pushNewData(String exercise, String location, String gen, String date, String bio_str){
 
+        DocumentReference docRef = db.collection(collection).document(document);
         // Create a HashMap to store the data
         Map<String, Object> data = new HashMap<>();
         data.put("exercise", exercise);
@@ -308,7 +310,7 @@ public class PreferenceActivity extends AppCompatActivity {
         data.put("bio", bio_str);
 
         // Set the data to the document with document ID "LA"
-        docRef.set(data)
+        docRef.set(data, SetOptions.merge())
                 .addOnSuccessListener(aVoid-> {
 
                         Toast.makeText(PreferenceActivity.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
@@ -322,6 +324,11 @@ public class PreferenceActivity extends AppCompatActivity {
                         Log.w("API", "Error writing document", e);
                     }
                 });
+    }
+
+    /** Setter function for db **/
+    protected void setDB(FirebaseFirestore fstore){
+        db = fstore;
     }
 
 
