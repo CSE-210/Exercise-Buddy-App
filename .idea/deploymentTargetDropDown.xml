@@ -5,16 +5,16 @@
       <entry key="App">
         <State />
       </entry>
-      <entry key="CreateAccountTests">
-        <State />
-      </entry>
-      <entry key="LoginTests">
+      <entry key="ForgotPasswordActivity">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="logOutTest()">
+      <entry key="cantFindEmail()">
+        <State />
+      </entry>
+      <entry key="foundEmail()">
         <State />
       </entry>
     </value>

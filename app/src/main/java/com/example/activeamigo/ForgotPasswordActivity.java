@@ -15,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class ForgotPassword extends AppCompatActivity implements Alertable{
+public class ForgotPasswordActivity extends AppCompatActivity implements Alertable{
    private FirebaseAuth auth = null;
    private FirebaseFirestore db = null;
    private EditText emailText = null;

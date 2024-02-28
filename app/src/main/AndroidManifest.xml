@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ActiveAmigo"
         tools:targetApi="33">
         <activity
-            android:name=".ForgotPassword"
+            android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
