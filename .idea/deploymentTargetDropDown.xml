@@ -5,16 +5,10 @@
       <entry key="App">
         <State />
       </entry>
-      <entry key="LoginTests">
+      <entry key="app">
         <State />
       </entry>
-      <entry key="MainActivityTest">
-        <State />
-      </entry>
-      <entry key="TestTest">
-        <State />
-      </entry>
-      <entry key="loginGoesToMain()">
+      <entry key="loginTest()">
         <State />
       </entry>
     </value>
