@@ -12,34 +12,37 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import java.util.*;
-
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class CalendarActivity extends AppCompatActivity {
     protected FirebaseFirestore db;
+    protected FirebaseAuth auth;
     protected static String globalDay;
     private static List<Integer> timeTextViewIds;
     protected static List<Integer> dayButtonIds;
     protected static String userEmail;
-    protected static String collections;
+    protected String collections;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
         globalDay = null;
         timeTextViewIds = new ArrayList<>();
         dayButtonIds = new ArrayList<>();
         userEmail = null;
         collections = "Accounts";
+        setUserEmail();
 
         // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -60,8 +63,18 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(mainLayout);
     }
 
+    /** Helper Method to set the userEmail based on session **/
     public void setUserEmail() {
-        // update to interact with session
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d("Calendar", "user is signed in");
+            userEmail = user.getEmail();
+        } else {
+            // No user is signed in
+            Log.d("Calendar", "no user is signed in");
+            userEmail = "cn@ucsd.edu"; // for testing purposes
+        }
     }
 
     /** Set Back Button **/
