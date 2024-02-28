@@ -30,7 +30,7 @@ public class CalendarActivity extends AppCompatActivity {
     private static List<Integer> timeTextViewIds;
     protected static List<Integer> dayButtonIds;
     protected static String userEmail;
-    protected static String collections;
+    protected String collections;
 
 
     @Override
