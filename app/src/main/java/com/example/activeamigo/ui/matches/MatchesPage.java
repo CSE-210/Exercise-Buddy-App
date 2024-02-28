@@ -130,7 +130,7 @@ public class MatchesPage extends Fragment {
 
 
 // Call fetchUserDocumentsAndProcess method for a user
-        algorithm.fetchUserDocumentsAndProcess("affxe97@ucsd.edu", Filters,”mockedAccounts“, new Algorithm.OnFetchCompleteListener() {
+        algorithm.fetchUserDocumentsAndProcess("affxe97@ucsd.edu", Filters,"mockedAccounts", new Algorithm.OnFetchCompleteListener() {
             @Override
             public void onFetchComplete(List<HashMap<String, Object>> matches) {
 
