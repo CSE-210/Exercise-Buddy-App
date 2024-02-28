@@ -42,6 +42,8 @@
     <string name="dob_fail">Please fill Date of birth field</string>
     <string name="bio_fail">Please fill bio fields</string>
     <string name="logout">Logout</string>
+    <string name="send_email">Send Email</string>
+    <string name="forgotPasswordTitle">Forgot Password?</string>
 
 
     <string-array name="activity_array">
