@@ -16,9 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class ForgotPassword extends AppCompatActivity implements Alertable{
-   private FirebaseAuth auth;
-   private FirebaseFirestore db;
-   private EditText emailText;
+   private FirebaseAuth auth = null;
+   private FirebaseFirestore db = null;
+   private EditText emailText = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +53,7 @@ public class ForgotPassword extends AppCompatActivity implements Alertable{
 
     }
 
-
-    // Check if the email already exists in the database
+    /** Check if the email already exists in the database **/
     protected Task<DocumentSnapshot> checkEmail(String emailAddress, FirebaseFirestore fs) {
         final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
         fs.collection("Accounts")
