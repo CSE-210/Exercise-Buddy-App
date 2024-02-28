@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="150dp"
+        android:contentDescription="@string/nav_header_desc"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        app:srcCompat="@mipmap/ic_launcher_round"
+
+        />
+
+    <TextView
+        android:id="@+id/matchersName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="error name"
+        android:layout_alignLeft="@id/imageView"
+        android:layout_below="@+id/imageView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/matchersBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="error bio"
+        android:layout_alignLeft="@id/imageView"
+        android:layout_below="@+id/matchersName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/matchersExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="error exercise"
+        android:layout_alignLeft="@id/imageView"
+        android:layout_below="@+id/matchersBio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/matchersLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="error location"
+        android:layout_alignLeft="@id/imageView"
+        android:layout_below="@+id/matchersExercise"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/matchersEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="error email"
+        android:layout_alignLeft="@id/imageView"
+        android:layout_below="@+id/matchersLocation"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+
+
+</RelativeLayout>
