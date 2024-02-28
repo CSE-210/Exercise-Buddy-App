@@ -21,7 +21,7 @@ public class CalendarPageTests {
     public void testDayButtonClicked() {
         // Creates activity to test
         ActivityScenario<CalendarActivity> scenario = ActivityScenario.launch(CalendarActivity.class);
-        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        String[] daysOfWeek = {"sun", "mon", "tue", "wed", "thu", "fri", "sat"};
 
         for (int i=0; i<CalendarActivity.dayButtonIds.size(); i++) {
             int dayButtonId = CalendarActivity.dayButtonIds.get(i);
