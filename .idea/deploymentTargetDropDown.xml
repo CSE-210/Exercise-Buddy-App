@@ -5,6 +5,18 @@
       <entry key="App">
         <State />
       </entry>
+      <entry key="LoginTests">
+        <State />
+      </entry>
+      <entry key="MainActivityTest">
+        <State />
+      </entry>
+      <entry key="TestTest">
+        <State />
+      </entry>
+      <entry key="loginGoesToMain()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
