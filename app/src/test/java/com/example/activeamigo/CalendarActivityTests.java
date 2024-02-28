@@ -3,9 +3,6 @@ package com.example.activeamigo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import android.util.Log;
-
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -52,6 +49,7 @@ public class CalendarActivityTests {
     public void setUp() {
         // Opens Mockito
         MockitoAnnotations.openMocks(this);
+        mockedFirestore = Mockito.mock(FirebaseFirestore.class);
         // Creates a firebase
         when(mockedFirestore.collection(any(String.class))).thenReturn(mockedCollectionReference);
         // Creates a collection reference
@@ -71,8 +69,8 @@ public class CalendarActivityTests {
     @Test
     public void testDisplayCalendar() {
         CalendarActivity calendarActivity = new CalendarActivity();
-        mockedFirestore = FirebaseFirestore.getInstance();
         calendarActivity.db = mockedFirestore;
+        calendarActivity.collections = "Accounts";
 
         // Mock Firestore DocumentReference
         String userEmail = "cn@ucsd.edu";
@@ -89,6 +87,9 @@ public class CalendarActivityTests {
 
         // Perform the test
         calendarActivity.displayCalendar(userEmail);
+
+        // check if get() was called
+        verify(mockDocRef).get();
     }
 
     private Map<String, Object> getMockCalendarData() {
@@ -105,6 +106,7 @@ public class CalendarActivityTests {
     public void testUpdateCalendar() {
         CalendarActivity calendarActivity = new CalendarActivity();
         calendarActivity.db = mockedFirestore;
+        calendarActivity.collections = "Accounts";
 
         // Mock Firestore DocumentReference
         String userEmail = "cn@ucsd.edu";
@@ -120,16 +122,9 @@ public class CalendarActivityTests {
         when(mockDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot));
 
         // Perform the test
-//        calendarActivity.updateCalendar(true, "12:00",  userEmail);
+        calendarActivity.updateCalendar(true, "12:00",  userEmail);
 
         // Verify that the get() method was called on the DocumentReference
-//        verify(mockDocRef).get();
-
-        // Verify that the update() method was called on the DocumentReference
-        // Note: This assumes that your updateCalendar method calls update on docRef
-//        verify(mockDocRef).update(eq("calendar"), anyMap());
-
-        // Alternatively, if you have a specific expected map, you can use:
-        // verify(mockDocRef).update(eq("calendar"), eq(expectedMap));
+        verify(mockDocRef).get();
     }
 }
