@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -69,6 +71,7 @@ public class CalendarActivityTests {
     @Test
     public void testDisplayCalendar() {
         CalendarActivity calendarActivity = new CalendarActivity();
+        mockedFirestore = FirebaseFirestore.getInstance();
         calendarActivity.db = mockedFirestore;
 
         // Mock Firestore DocumentReference
@@ -85,7 +88,7 @@ public class CalendarActivityTests {
         when(mockDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot));
 
         // Perform the test
-//        calendarActivity.displayCalendar(userEmail);
+        calendarActivity.displayCalendar(userEmail);
     }
 
     private Map<String, Object> getMockCalendarData() {
@@ -118,7 +121,6 @@ public class CalendarActivityTests {
 
         // Perform the test
 //        calendarActivity.updateCalendar(true, "12:00",  userEmail);
-
 
         // Verify that the get() method was called on the DocumentReference
 //        verify(mockDocRef).get();
