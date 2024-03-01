@@ -60,4 +60,23 @@
         <!-- Add more options if needed -->
     </string-array>
 
+    <string-array name="gender_array">
+        <item>Select Location</item>
+        <item>Male</item>
+        <item>Female</item>
+        <!-- Add more options if needed -->
+    </string-array>
+
+    <string-array name="day_array">
+        <item>Current Day</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <!-- Add more options if needed -->
+    </string-array>
+
 </resources>
