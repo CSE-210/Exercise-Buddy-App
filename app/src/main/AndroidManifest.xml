@@ -19,12 +19,12 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountActivity"
+            android:name=".CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.matches.DetailActivity"
-            android:exported="False" />
-        <activity android:name=".DetailActivity"></activity>
+            android:name=".CreateAccountActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
