@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,15 +46,19 @@ public class PreferenceActivity extends AppCompatActivity {
     private EditText bio;
 
     protected static String collection="Accounts";
-    protected static String document = "test@ucsd.edu";
+    protected String email;
 
     private FirebaseFirestore db;
+    protected FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_preferences);
 
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
+
 
         //Change Button Text to "save"
         edit_save = findViewById(R.id.save);
@@ -85,8 +91,24 @@ public class PreferenceActivity extends AppCompatActivity {
         /** Save Button Action **/
         setupSaveButtonAction();
 
+        // Get user
+        setUserEmail();
+
         // Populate database data into UI
         loadDataFromFirestore();
+    }
+
+    public void setUserEmail() {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d("PreferenceActivity", "user is signed in");
+            email = user.getEmail();
+        } else {
+            // No user is signed in
+            Log.d("PreferenceActivity", "no user is signed in");
+            email = "cn@ucsd.edu"; // for testing purposes
+        }
     }
 
     /** Calender pop up to select DOB **/
@@ -147,7 +169,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     /** Method to load data from Firestore **/
     private void loadDataFromFirestore() {
-        db.collection(collection).document(document).get()
+        db.collection(collection).document(email).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -281,7 +303,7 @@ public class PreferenceActivity extends AppCompatActivity {
                 // TODO:1. Check if all info is filled, then if conditional to the rest
                 if (checkFieldsCompleted()) {
                     // 2. Save info to database
-                    DocumentReference docRef = db.collection(collection).document(document);
+                    DocumentReference docRef = db.collection(collection).document(email);
                     pushNewData(
                             exercise_choice.getSelectedItem().toString(),
                             location_choice.getSelectedItem().toString(),
@@ -300,7 +322,7 @@ public class PreferenceActivity extends AppCompatActivity {
     /** Pushing inputted data to Firestore, separated for unit testing **/
     protected void pushNewData(String exercise, String location, String gen, String date, String bio_str){
 
-        DocumentReference docRef = db.collection(collection).document(document);
+        DocumentReference docRef = db.collection(collection).document(email);
         // Create a HashMap to store the data
         Map<String, Object> data = new HashMap<>();
         data.put("exercise", exercise);
