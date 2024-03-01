@@ -57,11 +57,12 @@
         <item>Select Location</item>
         <item>Rimac</item>
         <item>24hr Fitness UTC</item>
+        <item>Canyonview</item>
         <!-- Add more options if needed -->
     </string-array>
 
     <string-array name="gender_array">
-        <item>Select Location</item>
+        <item>Neither</item>
         <item>Male</item>
         <item>Female</item>
         <!-- Add more options if needed -->

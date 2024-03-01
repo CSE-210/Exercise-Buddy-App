@@ -61,11 +61,14 @@ public class MatchesPage extends Fragment {
                 filtersLayout.setVisibility(View.GONE);
             }
         });
-
-        setUpSpinner(root.findViewById(R.id.locationSpinner), new String[]{"Location 1", "Location 2"});
-        setUpSpinner(root.findViewById(R.id.exerciseTypeSpinner), new String[]{"Yoga", "Running"});
-        setUpSpinner(root.findViewById(R.id.genderSpinner), new String[]{"Male", "Female", "Other"});
-        setUpSpinner(root.findViewById(R.id.daySpinner), new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+        String[] locations= getResources().getStringArray(R.array.location_array);
+        setUpSpinner(root.findViewById(R.id.locationSpinner), locations);
+        String[] exercises= getResources().getStringArray(R.array.activity_array);
+        setUpSpinner(root.findViewById(R.id.exerciseTypeSpinner), exercises);
+        String[] gender= getResources().getStringArray(R.array.gender_array);
+        setUpSpinner(root.findViewById(R.id.genderSpinner), gender);
+        String[] days= getResources().getStringArray(R.array.day_array);
+        setUpSpinner(root.findViewById(R.id.daySpinner), days);
 
 //
 //        final TextView textView = binding.textMatches;
