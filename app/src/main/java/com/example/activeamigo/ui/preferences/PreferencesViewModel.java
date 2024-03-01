@@ -29,7 +29,7 @@ public class PreferencesViewModel extends ViewModel {
         dateOfBirth = new MutableLiveData<>();
         bio = new MutableLiveData<>();
 
-        fetchDataFromFirebase();
+        setUserEmail();
     }
 
     public void setUserEmail() {
