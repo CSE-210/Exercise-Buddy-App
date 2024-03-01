@@ -30,8 +30,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.matches.DetailActivity"
-            android:exported="False" />
-        <activity android:name=".DetailActivity"></activity>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
