@@ -44,8 +44,11 @@ public class LoginActivity extends Activity implements Alertable, DAO{
                     // If it grabs an account successfully
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
-                        if(documentSnapshot == null)
+                        if(documentSnapshot == null) {
                             showAlert(this, R.string.notAccountFound);
+                            emailView.setText("");
+                            passwordView.setText("");
+                        }
                         // If the account exists
                         else {
                             auth.signInWithEmailAndPassword(email, password)
