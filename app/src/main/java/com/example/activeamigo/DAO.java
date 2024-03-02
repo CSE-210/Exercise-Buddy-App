@@ -44,25 +44,5 @@ public interface DAO{
 
     }
 
-    /** Check if the email already exists in the database **/
-    default Task<DocumentSnapshot> checkEmail(String emailAddress, FirebaseFirestore fs) {
-        final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
-        fs.collection("Accounts")
-                .whereEqualTo("email", emailAddress)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            tcs.setResult(querySnapshot.getDocuments().get(0));
-                        }
-                        else{
-                            tcs.setResult(null);
-                        }
-                    }
-                });
-        return tcs.getTask();
-    }
-
 }
 
