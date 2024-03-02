@@ -32,7 +32,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Alertab
 
         findViewById(R.id.buttonResetPassword).setOnClickListener(task->{
             String email = emailText.getText().toString();
-            checkEmail(email, this.db).addOnCompleteListener(task2 ->{
+            checkAccount(email, "Accounts", this.db).addOnCompleteListener(task2 ->{
                  if(task2.isSuccessful()){
                      DocumentSnapshot ds = task2.getResult();
 

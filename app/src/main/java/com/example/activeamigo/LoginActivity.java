@@ -53,7 +53,10 @@ public class LoginActivity extends Activity implements Alertable, DAO{
                         else {
                             auth.signInWithEmailAndPassword(email, password)
                                     // If login fails
-                                    .addOnFailureListener(e -> showAlert(LoginActivity.this, R.string.misMatchAccountInfo))
+                                    .addOnFailureListener(e -> {
+                                        showAlert(LoginActivity.this, R.string.misMatchAccountInfo);
+                                        passwordView.setText("");
+                                    })
                                     // If login succeeds
                                     .addOnSuccessListener(authResult -> {
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
