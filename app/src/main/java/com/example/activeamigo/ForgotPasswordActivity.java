@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-public class ForgotPasswordActivity extends AppCompatActivity implements Alertable{
+public class ForgotPasswordActivity extends AppCompatActivity implements Alertable, DAO{
    private FirebaseAuth auth = null;
    private FirebaseFirestore db = null;
    private EditText emailText = null;
@@ -45,6 +43,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Alertab
                      }
                      else{
                          showAlert(this, R.string.notAccountFound);
+                         emailText.setText("");
                      }
                  }
             });
@@ -53,29 +52,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Alertab
 
     }
 
-    /** Check if the email already exists in the database **/
-    protected Task<DocumentSnapshot> checkEmail(String emailAddress, FirebaseFirestore fs) {
-        final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
-        fs.collection("Accounts")
-                .whereEqualTo("email", emailAddress)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            tcs.setResult(querySnapshot.getDocuments().get(0));
-                        }
-                        else{
-                            tcs.setResult(null);
-                        }
-                    }
-                    else {
-                        // Error occurred while checking for email existence
-                        showAlert(this, R.string.queryError);
-                    }
-                });
-        return tcs.getTask();
-    }
 
     /** Back button: function is not to save edited data to firebase **/
     @Override
