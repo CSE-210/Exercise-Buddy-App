@@ -108,6 +108,8 @@ public class PreferencePageTesting {
 
         //set db
         preferenceActivity.setDB(mockedFirestore);
+        preferenceActivity.setCollection("Accounts");
+        preferenceActivity.setEmail("test@ucsd.edu");
 
 
         //Test pushNewData method -> pushing data to firestore

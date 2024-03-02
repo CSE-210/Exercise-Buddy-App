@@ -353,5 +353,14 @@ public class PreferenceActivity extends AppCompatActivity {
         db = fstore;
     }
 
+    protected void setCollection(String c){
+
+        collection = c;
+    }
+
+    protected void setEmail(String e){
+        email=e;
+    }
+
 
 }
