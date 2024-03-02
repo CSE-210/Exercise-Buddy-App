@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-public class LoginActivity extends Activity implements Alertable{
+public class LoginActivity extends Activity implements Alertable, DAO{
     private FirebaseFirestore db = null;
     private EditText emailView = null;
     private EditText passwordView = null;
@@ -46,8 +44,10 @@ public class LoginActivity extends Activity implements Alertable{
                     // If it grabs an account successfully
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
+                        if(documentSnapshot == null)
+                            showAlert(this, R.string.notAccountFound);
                         // If the account exists
-                        if (documentSnapshot != null) {
+                        else {
                             auth.signInWithEmailAndPassword(email, password)
                                     // If login fails
                                     .addOnFailureListener(e -> showAlert(LoginActivity.this, R.string.misMatchAccountInfo))
@@ -58,7 +58,7 @@ public class LoginActivity extends Activity implements Alertable{
                                     });
                         }
                     }
-                });
+                }).addOnFailureListener(task -> showAlert(this, R.string.queryError));
             }
         });
 
@@ -75,29 +75,6 @@ public class LoginActivity extends Activity implements Alertable{
             startActivity(intent);
         });
 
-    }
-
-    // Grabs the account from the dataBase
-    protected Task<DocumentSnapshot> checkAccount(String emailAddress, String dbName, FirebaseFirestore fs) {
-        final TaskCompletionSource<DocumentSnapshot> tcs = new TaskCompletionSource<>();
-        fs.collection(dbName)
-                .whereEqualTo("email", emailAddress)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                            tcs.setResult(document);
-                        } else {
-                            showAlert(this, R.string.notAccountFound);
-                        }
-                    } else {
-                        showAlert(this, R.string.queryError);
-                    }
-                });
-
-        return tcs.getTask();
     }
 
     // Makes sure the fields are filled in
