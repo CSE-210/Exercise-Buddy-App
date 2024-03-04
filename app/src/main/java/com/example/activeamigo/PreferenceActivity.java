@@ -45,7 +45,7 @@ public class PreferenceActivity extends AppCompatActivity {
     private EditText bio;
 
     protected static String collection="Accounts";
-    protected static String document = "test@ucsd.edu";
+    protected static String document;
 
     private FirebaseFirestore db;
     protected boolean firstTimeUser =false;
@@ -70,6 +70,7 @@ public class PreferenceActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             firstTimeUser = extras.getBoolean("firstTimeUser", false);
+            document = extras.getString("email");
         }
 
         // showing the back button in action bar

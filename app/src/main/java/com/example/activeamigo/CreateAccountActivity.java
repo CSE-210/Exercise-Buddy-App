@@ -173,6 +173,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                     intent.putExtra("firstTimeUser", true);
+                    intent.putExtra("email",emailAddress);
 
                     // Start MainActivity
                     preferenceActivityResultLauncher.launch(intent);
