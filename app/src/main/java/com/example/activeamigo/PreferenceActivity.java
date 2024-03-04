@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,15 +47,20 @@ public class PreferenceActivity extends AppCompatActivity {
 
     protected static String collection="Accounts";
     protected static String document;
+    protected String email;
 
     private FirebaseFirestore db;
     protected boolean firstTimeUser =false;
+    protected FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_preferences);
 
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
+
 
         //Change Button Text to "save"
         edit_save = findViewById(R.id.save);
@@ -94,8 +100,24 @@ public class PreferenceActivity extends AppCompatActivity {
         /** Save Button Action **/
         setupSaveButtonAction();
 
+        // Get user
+        setUserEmail();
+
         // Populate database data into UI
         loadDataFromFirestore();
+    }
+
+    public void setUserEmail() {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d("PreferenceActivity", "user is signed in");
+            email = user.getEmail();
+        } else {
+            // No user is signed in
+            Log.d("PreferenceActivity", "no user is signed in");
+            email = "cn@ucsd.edu"; // for testing purposes
+        }
     }
 
     /** Calender pop up to select DOB **/
@@ -132,20 +154,8 @@ public class PreferenceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.d("pa", "First_time_user "+firstTimeUser );
-                if (firstTimeUser) {
-                    // Create an intent to navigate back to MainActivity
-//                    Intent intent = new Intent(this, MainActivity.class);
-//                    // Clear the back stack to prevent going back to PreferenceActivity
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-                    //Disable Back Button and display a message
-                    Toast.makeText(PreferenceActivity.this, "Fill in all data fields and click save", Toast.LENGTH_LONG).show();
-                    return true;
-                } else {
-                    // Finish the activity and go back to the previous one
-                    finish();
-                }
+                this.finish();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -168,7 +178,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     /** Method to load data from Firestore **/
     private void loadDataFromFirestore() {
-        db.collection(collection).document(document).get()
+        db.collection(collection).document(email).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -321,7 +331,7 @@ public class PreferenceActivity extends AppCompatActivity {
     /** Pushing inputted data to Firestore, separated for unit testing **/
     protected void pushNewData(String exercise, String location, String gen, String date, String bio_str){
 
-        DocumentReference docRef = db.collection(collection).document(document);
+        DocumentReference docRef = db.collection(collection).document(email);
         // Create a HashMap to store the data
         Map<String, Object> data = new HashMap<>();
         data.put("exercise", exercise);
