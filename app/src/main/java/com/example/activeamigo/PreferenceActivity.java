@@ -46,7 +46,6 @@ public class PreferenceActivity extends AppCompatActivity {
     private EditText bio;
 
     protected static String collection="Accounts";
-    protected static String document;
     protected String email;
 
     private FirebaseFirestore db;
@@ -76,7 +75,7 @@ public class PreferenceActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             firstTimeUser = extras.getBoolean("firstTimeUser", false);
-            document = extras.getString("email");
+            email = extras.getString("email");
         }
 
         // showing the back button in action bar
@@ -312,7 +311,7 @@ public class PreferenceActivity extends AppCompatActivity {
                 // TODO:1. Check if all info is filled, then if conditional to the rest
                 if (checkFieldsCompleted()) {
                     // 2. Save info to database
-                    DocumentReference docRef = db.collection(collection).document(document);
+                    DocumentReference docRef = db.collection(collection).document(email);
                     pushNewData(
                             exercise_choice.getSelectedItem().toString(),
                             location_choice.getSelectedItem().toString(),
@@ -361,6 +360,16 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void setDB(FirebaseFirestore fstore){
         db = fstore;
     }
+
+    protected void setCollection(String c){
+
+        collection = c;
+    }
+
+    protected void setEmail(String e){
+        email=e;
+    }
+
 
 
 }
