@@ -29,7 +29,7 @@ public class PreferencesViewModel extends ViewModel {
         dateOfBirth = new MutableLiveData<>();
         bio = new MutableLiveData<>();
 
-        setUserEmail();
+
     }
 
     public void setUserEmail() {
@@ -91,6 +91,7 @@ public class PreferencesViewModel extends ViewModel {
     /**TODO: Modify collections path based off user here**/
     public void fetchDataFromFirebase() {
         // Fetch data from Firebase
+        setUserEmail();
         DocumentReference docRef = db.collection(db_collection).document(db_email);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
