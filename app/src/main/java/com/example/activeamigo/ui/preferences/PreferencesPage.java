@@ -46,6 +46,7 @@ public class PreferencesPage extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         preferencesViewModel =
                 new ViewModelProvider(this).get(PreferencesViewModel.class);
+        preferencesViewModel.fetchDataFromFirebase();
 
         binding = FragmentPreferencesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
