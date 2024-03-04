@@ -21,19 +21,16 @@ public class CalendarPage extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Intent intent = new Intent(getActivity(), CalendarActivity.class);
+
         CalendarViewModel calendarViewModel =
                 new ViewModelProvider(this).get(CalendarViewModel.class);
 
         binding = FragmentCalendarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        root.findViewById(R.id.edit_calendar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalendarActivity.class);
-                startActivity(intent);
-            }
-        });
+        startActivity(intent);
+        // Inflate the layout for this fragment
+        //return inflater.inflate(R.layout.fragment_matches, container, false);
         return root;
     }
 
