@@ -1,13 +1,13 @@
 package com.example.activeamigo.ui.preferences;
 
 import android.util.Log;
-import android.widget.RadioButton;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.activeamigo.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,15 +21,30 @@ public class PreferencesViewModel extends ViewModel {
 
     private MutableLiveData<String> firebaseData = new MutableLiveData<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    protected FirebaseAuth auth = FirebaseAuth.getInstance();
     private String db_collection="Accounts";
-    private String db_document = "test@ucsd.edu";
+    private String db_email;
 
     public PreferencesViewModel() {
         dateOfBirth = new MutableLiveData<>();
         bio = new MutableLiveData<>();
 
-        fetchDataFromFirebase();
+        setUserEmail();
     }
+
+    public void setUserEmail() {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d("PreferenceViewModel", "user is signed in");
+            db_email = user.getEmail();
+        } else {
+            // No user is signed in
+            Log.d("PreferenceViewModel", "no user is signed in");
+            db_email = "cn@ucsd.edu"; // for testing purposes
+        }
+    }
+
 
     public LiveData<String> getDateOfBirth() {
 
@@ -76,7 +91,7 @@ public class PreferencesViewModel extends ViewModel {
     /**TODO: Modify collections path based off user here**/
     public void fetchDataFromFirebase() {
         // Fetch data from Firebase
-        DocumentReference docRef = db.collection(db_collection).document(db_document);
+        DocumentReference docRef = db.collection(db_collection).document(db_email);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // If document exists, fetch data

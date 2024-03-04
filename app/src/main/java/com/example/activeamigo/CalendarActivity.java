@@ -1,5 +1,6 @@
 package com.example.activeamigo;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -82,7 +83,12 @@ public class CalendarActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                // Create a new intent for MainActivity
+                Intent intent = new Intent(this, MainActivity.class);
+                // Start MainActivity
+                startActivity(intent);
+                // Finish the current activity
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
