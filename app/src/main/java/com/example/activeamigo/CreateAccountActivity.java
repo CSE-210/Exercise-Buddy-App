@@ -135,7 +135,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
     protected HashMap<String, Object> makeAccount(String name, String emailAddress){
         HashMap<String, Object> res = new HashMap<>();
-        HashMap<String, Object> calendar = new HashMap<>();
+        HashMap<String, ArrayList<Integer>> calendar = new HashMap<>();
 
         res.put("name", name);
         res.put("email", emailAddress);
