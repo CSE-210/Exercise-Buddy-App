@@ -262,10 +262,10 @@ public class PreferenceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.dob_fail, Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
-                Toast.makeText(this, R.string.bio_fail, Toast.LENGTH_SHORT).show();
-                return false;
-        }
+//        else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
+//                Toast.makeText(this, R.string.bio_fail, Toast.LENGTH_SHORT).show();
+//                return false;
+//        }
         else{
             return true;
         }
