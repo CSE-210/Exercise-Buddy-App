@@ -45,6 +45,7 @@
     <string name="send_email">Send Email</string>
     <string name="forgotPasswordTitle">Forgot Password?</string>
     <string name="resetPasswordSuccess">Email Sent!</string>
+    <string name="fbName">Accounts</string>
 
 
     <string-array name="activity_array">

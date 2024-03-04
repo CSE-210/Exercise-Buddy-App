@@ -3,9 +3,9 @@ package com.example.activeamigo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
 
+
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -18,11 +18,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.activeamigo.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DAO {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        String userEmail = auth.getCurrentUser().getEmail();
+        //userRedirection(userEmail);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -71,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void userRedirection(String email){
+        Task<DocumentSnapshot> res = checkAccount(email, String.valueOf(R.string.fbName), this.db);
+        res.addOnCompleteListener(task->{
+            DocumentSnapshot ds = task.getResult();
+            Object loc = ds.get("location");
+            Object exc = ds.get("exercise");
+            Object gen = ds.get("gender");
+
+            if(loc == null || exc == null || gen == null)
+                startActivity(new Intent(MainActivity.this, PreferenceActivity.class));
+        });
     }
 
 }
