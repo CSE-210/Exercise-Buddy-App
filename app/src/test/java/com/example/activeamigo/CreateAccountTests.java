@@ -76,8 +76,10 @@ public class CreateAccountTests {
         String name = "Test User";
         String emailAddress = "test@example.com";
 
+
         // Call the method that adds the account to the database
-        createAccountActivity.addAccount(name, emailAddress, "accounts");
+        createAccountActivity.addAccount(createAccountActivity.makeAccount(name,emailAddress),
+                createAccountActivity.db, "accounts");
 
         // Verify account was added
         verify(mockedFirestore).collection("accounts");
@@ -101,7 +103,8 @@ public class CreateAccountTests {
         when(mockedQuery.get()).thenReturn(Tasks.forResult(querySnapshot));
 
         // Call the method that adds the account to the database
-        createAccountActivity.addAccount(name, emailAddress,"accounts");
+        createAccountActivity.addAccount(createAccountActivity.makeAccount(name,emailAddress),
+                createAccountActivity.db, "accounts");
 
         // Verify account was not added due to duplicate email
         verify(mockedFirestore).collection("accounts");
