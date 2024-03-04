@@ -169,6 +169,11 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                 .addOnSuccessListener(aVoid -> {
 
                     Intent intent = new Intent(this, PreferenceActivity.class);
+                    // Set flag to disable the "Up" button
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                    intent.putExtra("firstTimeUser", true);
+
                     // Start MainActivity
                     preferenceActivityResultLauncher.launch(intent);
 

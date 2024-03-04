@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ public class PreferenceActivity extends AppCompatActivity {
     protected static String document = "test@ucsd.edu";
 
     private FirebaseFirestore db;
+    protected boolean firstTimeUser =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,12 @@ public class PreferenceActivity extends AppCompatActivity {
         location_choice = findViewById(R.id.location);
         genderGroup = findViewById(R.id.gender_radio_group);
         bio = findViewById(R.id.bio);
+
+        // Retrieve the firstTimeUser flag from the Intent extras
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            firstTimeUser = extras.getBoolean("firstTimeUser", false);
+        }
 
         // showing the back button in action bar
         ActionBar actionBar = getSupportActionBar();
@@ -123,8 +131,20 @@ public class PreferenceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
-
+                Log.d("pa", "First_time_user "+firstTimeUser );
+                if (firstTimeUser) {
+                    // Create an intent to navigate back to MainActivity
+//                    Intent intent = new Intent(this, MainActivity.class);
+//                    // Clear the back stack to prevent going back to PreferenceActivity
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+                    //Disable Back Button and display a message
+                    Toast.makeText(PreferenceActivity.this, "Fill in all data fields and click save", Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    // Finish the activity and go back to the previous one
+                    finish();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
