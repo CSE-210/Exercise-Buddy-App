@@ -153,11 +153,19 @@ public class PreferenceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
-
-                return true;
+                if (firstTimeUser) {
+                    // Show a toast indicating that all data fields should be filled and saved
+                    Toast.makeText(PreferenceActivity.this, "Fill in all data fields and click save", Toast.LENGTH_LONG).show();
+                    // Return true to consume the event and prevent further processing
+                    return true;
+                } else {
+                    // Finish the activity and go back to the previous one
+                    finish();
+                    return true;
+                }
         }
         return super.onOptionsItemSelected(item);
+
     }
 
 

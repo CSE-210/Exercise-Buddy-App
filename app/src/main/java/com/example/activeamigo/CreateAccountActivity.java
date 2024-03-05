@@ -178,7 +178,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                     // Start MainActivity
                     preferenceActivityResultLauncher.launch(intent);
 
-                    showAlert(this, R.string.accountCreationSuccess);
+//                    showAlert(this, R.string.accountCreationSuccess);
                     clearForm(false);
                 })
                 // Failure :(
