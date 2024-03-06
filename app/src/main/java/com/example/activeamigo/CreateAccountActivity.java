@@ -12,22 +12,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import com.google.android.gms.common.internal.FallbackServiceBroker;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
-public class CreateAccountActivity extends AppCompatActivity implements Alertable {
+public class CreateAccountActivity extends AppCompatActivity implements Alertable, DAO {
     private enum Day {mon, tue, wed, thu, fri, sat, sun}
     protected FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -75,30 +70,29 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
             // Call validateInformation function before adding account to database
             if (validateInformation(name, emailAddress, password, passwordConfirm)) {
-                checkEmail(emailAddress, fSName, this.db).addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        DocumentSnapshot ds = task.getResult();
-                        if(ds != null){
-                            // Checks email
-                            showAlert(this, R.string.accountCreationEmailExists);
+
+                checkAccount(emailAddress, fSName, this.db).addOnCompleteListener(task -> {
+                   if(task.isSuccessful()) {
+                       DocumentSnapshot ds = task.getResult();
+                       if (ds != null) {
+                           // Checks email
+                           showAlert(this, R.string.accountCreationEmailExists);
+                       }
+                       else {
+                           // Sets up authentication account
+                        auth.createUserWithEmailAndPassword(emailAddress, password).addOnSuccessListener(task1-> {
+                            //Makes the account
+                            HashMap<String, Object> account = makeAccount(name, emailAddress);
+                            // Adds account to database
+                            addAccount(account, this.db, "Accounts");
+                            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+                            finish();
+
+                        }).addOnFailureListener(task2-> showAlert(this, R.string.accountCreationFailed));
                         }
-                        else{
-                            // Adds account to authentication and database
-                            auth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(task1 -> {
-                                if(task1.isSuccessful()){
-                                    addAccount(name, emailAddress, fSName);
-                                    clearForm(false);
-                                }
-                                else{
-                                    showAlert(CreateAccountActivity.this, R.string.accountCreationFailed);
-                                }
-                            });
-                        }
-                    }
-                    else{
-                        showAlert(this, R.string.queryError);
-                    }
+                   }
                 });
+
             }
         });
     }
@@ -119,79 +113,23 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         // If the passwords do not match
         else if (!password.equals(passwordConfirm)) {
             showAlert(this, R.string.createAccountErrorMismatchPassword);
-            clearForm(true);
+            clearForm();
         }
         // If the passwords do not match
         else if (password.length() < 6) {
             showAlert(this, R.string.createAccountShortPassword);
-            clearForm(true);
+            clearForm();
         } else if (password.contains(" ")) {
             showAlert(this, R.string.passwordWithWhiteSpace);
-            clearForm(true);
+            clearForm();
         } else return true;
 
         return false;
     }
 
-    // Check if the email already exists in the database
-    protected Task<DocumentSnapshot> checkEmail(String emailAddress, String dbName, FirebaseFirestore fs) {
-        final TaskCompletionSource<DocumentSnapshot> tcs  = new TaskCompletionSource<>();
-        fs.collection(dbName)
-                .whereEqualTo("email", emailAddress)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            tcs.setResult(querySnapshot.getDocuments().get(0));
-                        }
-                        else{
-                            tcs.setResult(null);
-                        }
-                    }
-                    else {
-                        // Error occurred while checking for email existence
-                        showAlert(this, R.string.queryError);
-                    }
-                });
-        return tcs.getTask();
-    }
-
-    // Adds account to database
-    protected void addAccount(String name, String emailAddress, String dbName) {
-        HashMap<String, Object> accountData = makeAccount(name, emailAddress);
-
-        // Add the account data to db
-        db.collection(dbName)
-                .document(emailAddress)
-                .set(accountData, SetOptions.merge())
-                // Success!
-                .addOnSuccessListener(aVoid -> {
-
-                    Intent intent = new Intent(this, PreferenceActivity.class);
-                    // Set flag to disable the "Up" button
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                    intent.putExtra("firstTimeUser", true);
-                    intent.putExtra("email",emailAddress);
-
-                    // Start MainActivity
-                    preferenceActivityResultLauncher.launch(intent);
-
-//                    showAlert(this, R.string.accountCreationSuccess);
-                    clearForm(false);
-                })
-                // Failure :(
-                .addOnFailureListener(e -> showAlert(this, R.string.accountCreationFailed));
-    }
-
     /** Used to clear the text inputs
      If true will only clear the passwords **/
-    private void clearForm(boolean pass) {
-        if (!pass) {
-            editTextName.setText("");
-            editTextEmailAddress.setText("");
-        }
+    private void clearForm() {
         editTextPassword.setText("");
         editTextPasswordConfirm.setText("");
     }
@@ -207,7 +145,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         return super.onOptionsItemSelected(item);
     }
 
-    private HashMap<String, Object> makeAccount(String name, String emailAddress){
+    protected HashMap<String, Object> makeAccount(String name, String emailAddress){
         HashMap<String, Object> res = new HashMap<>();
         HashMap<String, Object> calendar = new HashMap<>();
 
@@ -225,8 +163,8 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
             int numOfHours = 24;
             calendar.put(days[i].toString(), new ArrayList<>(Collections.nCopies(numOfHours, 0)));
         }
-        res.put("calendar", calendar);
 
+        res.put("calendar", calendar);
         return res;
     }
 

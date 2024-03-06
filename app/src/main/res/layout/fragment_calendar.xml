@@ -12,10 +12,12 @@
         android:layout_height="209dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="268dp"
-        android:text="@string/loading_calander"
+
+        android:text="@string/loading_calendar"
         android:textAlignment="center"
-        android:textSize="28dp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
