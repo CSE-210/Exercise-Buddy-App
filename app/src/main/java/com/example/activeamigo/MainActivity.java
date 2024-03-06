@@ -3,9 +3,10 @@ package com.example.activeamigo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -18,11 +19,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.activeamigo.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+
+public class MainActivity extends AppCompatActivity implements DAO {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
+        userRedirection(userEmail);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -72,5 +86,39 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private void userRedirection(String email){
+        Task<DocumentSnapshot> res = checkAccount(email, "Accounts", this.db);
+        res.addOnCompleteListener(task->{
+            DocumentSnapshot ds = task.getResult();
+            if(Objects.requireNonNull(ds.getString("location")).isEmpty() || Objects.requireNonNull(ds.getString("exercise")).isEmpty()
+                    || Objects.requireNonNull(ds.getString("gender")).isEmpty() || Objects.requireNonNull(ds.getString("dob")).isEmpty()){
+
+                Toast.makeText(MainActivity.this, "Set all preferences first", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity.this, PreferenceActivity.class));
+                return;
+            }
+           HashMap<Object, ArrayList<Long>> temp = (HashMap<Object,ArrayList<Long> >) ds.get("calendar");
+           if(!nonEmptySchedule(temp)){ // calendar is empty
+               Toast.makeText(MainActivity.this, "Input some time into your schedule first",
+                       Toast.LENGTH_LONG).show();
+               startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+               finish();
+           }
+
+        });
+    }
+
+    private boolean nonEmptySchedule(HashMap<Object, ArrayList<Long>> schedule) {
+        boolean res = false;
+        for (ArrayList<Long> val : schedule.values()) {
+            if (val.contains(1L)) {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
 
 }
