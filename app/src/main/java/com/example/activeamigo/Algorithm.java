@@ -152,8 +152,9 @@ public class Algorithm {
                     userData.put("location",userLocation);
                     userData.put("gender",userGender);
                     userData.put("score",currScore);
-                    if(currScore>0)
-                    similarUsers.add(userData);
+                    if(currScore>0) {
+                        similarUsers.add(userData);
+                    }
                 } else {
                     Log.e(TAG, "Not appropraite data struct in schedule");
                 }
