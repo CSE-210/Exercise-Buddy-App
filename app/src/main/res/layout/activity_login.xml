@@ -16,7 +16,7 @@
         android:orientation="vertical"
         app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:passwordToggleEnabled="true">
@@ -57,7 +57,7 @@
         android:id="@+id/editTextEmailLG"
         android:layout_width="305dp"
         android:layout_height="49dp"
-        android:layout_marginTop="212dp"
+        android:layout_marginTop="220dp"
         android:autofillHints=""
         android:background="@drawable/rounded_input_background"
         android:ems="10"
