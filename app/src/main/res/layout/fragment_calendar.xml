@@ -12,6 +12,7 @@
         android:layout_height="209dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="268dp"
+
         android:text="@string/loading_calendar"
         android:textAlignment="center"
         android:textSize="28sp"
