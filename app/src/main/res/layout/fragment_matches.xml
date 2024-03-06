@@ -58,20 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp" />
 
-        <!--        <FrameLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="48dp">-->
-
-        <!--            <EditText-->
-        <!--                android:id="@+id/dateEditText"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:drawableRight="@android:drawable/ic_menu_my_calendar"-->
-        <!--                android:focusable="false"-->
-        <!--                android:hint="Day" />-->
-
-        <!--        </FrameLayout>-->
-
     </LinearLayout>
     <ListView
         android:id="@+id/matchesList"
