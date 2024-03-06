@@ -125,6 +125,7 @@
         android:layout_marginTop="584dp"
         android:padding="10dp"
         android:text="@string/agree_and_register"
+        android:background="@drawable/light_blue_button"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
