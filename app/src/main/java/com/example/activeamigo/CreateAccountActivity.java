@@ -1,32 +1,44 @@
 package com.example.activeamigo;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 public class CreateAccountActivity extends AppCompatActivity implements Alertable, DAO {
     private enum Day {mon, tue, wed, thu, fri, sat, sun}
     protected FirebaseFirestore db;
     private FirebaseAuth auth;
     static final String desiredDomain = "ucsd.edu";
+    private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 1;
+    private static final int REQUEST_CODE_CALENDAR_ACTIVITY = 2;
 
     EditText editTextName = null;
     EditText editTextEmailAddress = null;
     EditText editTextPassword = null;
     EditText editTextPasswordConfirm = null;
+
+    private String pref_location_check="";
+    private String pref_gender_check=null;
+    private String pref_excercise_check="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
             // Call validateInformation function before adding account to database
             if (validateInformation(name, emailAddress, password, passwordConfirm)) {
+
                 checkAccount(emailAddress, fSName, this.db).addOnCompleteListener(task -> {
                    if(task.isSuccessful()) {
                        DocumentSnapshot ds = task.getResult();
@@ -90,7 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                 ;
         if (name.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() ||
                 name.trim().isEmpty() || emailAddress.trim().isEmpty() || password.trim().isEmpty()||
-              passwordConfirm.trim().isEmpty()) {
+                passwordConfirm.trim().isEmpty()) {
             showAlert(this, R.string.createAccountErrorFilledIn);
         }
         // Bad email or non ucsd email
@@ -113,7 +126,6 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
 
         return false;
     }
-
 
     /** Used to clear the text inputs
      If true will only clear the passwords **/
@@ -155,4 +167,49 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         res.put("calendar", calendar);
         return res;
     }
+
+    private CompletableFuture<Boolean> checkPreferenceInfo(String dbName, String emailAddress) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        DocumentReference docRef = db.collection(dbName).document(emailAddress);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot.exists()) {
+                    // If document exists, fetch data
+                    String exerciseText = documentSnapshot.getString("exercise");
+                    String locationText = documentSnapshot.getString("location");
+
+                    pref_excercise_check = exerciseText;
+                    pref_location_check = locationText;
+                    Log.d("API", exerciseText + "     " + locationText + "     --createacc");
+
+                    // Check if all required preferences are present
+                    boolean preferencesValid = exerciseText != null && locationText != null;
+                    future.complete(preferencesValid);
+                } else {
+                    // Document doesn't exist, preferences not present
+                    future.complete(false);
+                }
+            } else {
+                // Failed to fetch data
+                Log.d("API", "Failed to fetch data from firebase -- Preference View Model", task.getException());
+                future.complete(false);
+            }
+        });
+
+        return future;
+    }
+    private ActivityResultLauncher<Intent> preferenceActivityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // PreferenceActivity finished successfully, start CalendarActivity
+                            Intent intent = new Intent(this, CalendarActivity.class);
+                            startActivity(intent);
+                        }
+//                        else {
+////                            showAlert(this, R.string.preferenceCheckFailed);
+//                        }
+                    });
 }
