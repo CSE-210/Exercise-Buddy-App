@@ -5,26 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/RegisterTextAC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="100dp"
         android:text="@string/register"
         android:textColor="@color/black"
         android:textSize="33sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <EditText
         android:id="@+id/editTextNameAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="192dp"
         android:autofillHints=""
         android:background="@drawable/rounded_input_background"
         android:ems="10"
@@ -32,6 +31,7 @@
         android:inputType="text"
         android:padding="15dp"
         android:textColorHint="@android:color/system_neutral1_300"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
@@ -40,8 +40,7 @@
         android:id="@+id/editTextEmailAddressAC"
         android:layout_width="305dp"
         android:layout_height="49dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="268dp"
         android:autofillHints=""
         android:background="@drawable/rounded_input_background"
         android:ems="10"
@@ -49,18 +48,21 @@
         android:inputType="textEmailAddress"
         android:padding="15dp"
         android:textColorHint="@android:color/system_neutral1_300"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="348dp"
+        android:layout_width="404dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="340dp"
+        android:orientation="vertical"
         app:hintEnabled="false"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:passwordToggleEnabled="true">
 
@@ -84,12 +86,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="358dp"
-        android:layout_height="62dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="424dp"
-
+        android:id="@+id/textInputLayout2"
+        android:layout_width="404dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="420dp"
+        android:orientation="vertical"
         app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:passwordToggleEnabled="true">
@@ -118,11 +122,11 @@
         android:id="@+id/buttonCreateAccount"
         android:layout_width="305dp"
         android:layout_height="49dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="572dp"
+        android:layout_marginTop="584dp"
         android:padding="10dp"
         android:text="@string/agree_and_register"
         android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
