@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="@string/active_amigo"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="30sp"/>
 
 </LinearLayout>
