@@ -49,6 +49,7 @@ public class PreferenceActivity extends AppCompatActivity {
     protected String email;
 
     private FirebaseFirestore db;
+    protected boolean firstTimeUser =false;
     protected FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,13 @@ public class PreferenceActivity extends AppCompatActivity {
         location_choice = findViewById(R.id.location);
         genderGroup = findViewById(R.id.gender_radio_group);
         bio = findViewById(R.id.bio);
+
+        // Retrieve the firstTimeUser flag from the Intent extras
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            firstTimeUser = extras.getBoolean("firstTimeUser", false);
+            email = extras.getString("email");
+        }
 
         // showing the back button in action bar
         ActionBar actionBar = getSupportActionBar();
@@ -145,11 +153,19 @@ public class PreferenceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
-
-                return true;
+                if (firstTimeUser) {
+                    // Show a toast indicating that all data fields should be filled and saved
+                    Toast.makeText(PreferenceActivity.this, "Fill in all data fields and click save", Toast.LENGTH_LONG).show();
+                    // Return true to consume the event and prevent further processing
+                    return true;
+                } else {
+                    // Finish the activity and go back to the previous one
+                    finish();
+                    return true;
+                }
         }
         return super.onOptionsItemSelected(item);
+
     }
 
 
@@ -254,10 +270,10 @@ public class PreferenceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.dob_fail, Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
-                Toast.makeText(this, R.string.bio_fail, Toast.LENGTH_SHORT).show();
-                return false;
-        }
+//        else if (bio.getText().toString().isEmpty() || bio.getText().toString().equals("Bio")){
+//                Toast.makeText(this, R.string.bio_fail, Toast.LENGTH_SHORT).show();
+//                return false;
+//        }
         else{
             return true;
         }
@@ -361,6 +377,7 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void setEmail(String e){
         email=e;
     }
+
 
 
 }
