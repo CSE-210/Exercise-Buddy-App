@@ -29,8 +29,6 @@ public class SettingsPage extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSettings;
-        settingsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         // Find the logout button
         Button logoutButton = root.findViewById(R.id.buttonLogOut);
