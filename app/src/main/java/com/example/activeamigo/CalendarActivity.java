@@ -48,7 +48,8 @@ public class CalendarActivity extends AppCompatActivity {
         // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true); // showing the back button in action bar
-
+        actionBar.setTitle("Calendar");
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
         // Create the main layout (LinearLayout)
         LinearLayout mainLayout = createMainLayout(this);
 
