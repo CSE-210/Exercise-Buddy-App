@@ -1,7 +1,11 @@
 package com.example.activeamigo.ui.matches;
 //package com.example.activeamigo;
+import static android.content.ContentValues.TAG;
+
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,14 +46,21 @@ public class MatchesPage extends Fragment {
     private FragmentMatchesBinding binding;
     private ListView matchesList;
     HashMap<String, String[]> matchedUsers = new HashMap<String, String[]>();
+    Algorithm algorithm;
+    MatchesViewModel matchesViewModel;
+    HashMap<String, String> Filters;
+    Spinner exerciseSpinner;
+    Spinner locationSpinner;
+    Spinner genderSpinner;
+    Spinner daySpinner;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MatchesViewModel matchesViewModel =
-                new ViewModelProvider(this).get(MatchesViewModel.class);
-
+        matchesViewModel = new ViewModelProvider(this).get(MatchesViewModel.class);
         binding = FragmentMatchesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         auth = FirebaseAuth.getInstance();
+
         // Filter Button Interactions
         Button filterButton = root.findViewById(R.id.filterButton);
         LinearLayout filtersLayout = root.findViewById(R.id.filtersLayout);
@@ -61,22 +72,53 @@ public class MatchesPage extends Fragment {
                 filtersLayout.setVisibility(View.GONE);
             }
         });
+
+        root.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    // Check if the touch event is outside of the filtersLayout
+                    if (filtersLayout.getVisibility() == View.VISIBLE) {
+                        Rect outRect = new Rect();
+                        filtersLayout.getGlobalVisibleRect(outRect);
+                        if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                            filtersLayout.setVisibility(View.GONE);
+                            return true; // Return true to indicate the touch event is consumed
+                        }
+                    }
+                }
+                return false; // Return false to let other touch events be handled normally
+            }
+        });
+
+
+        exerciseSpinner = root.findViewById(R.id.exerciseTypeSpinner);
+        locationSpinner = root.findViewById(R.id.locationSpinner);
+        genderSpinner = root.findViewById(R.id.genderSpinner);
+        daySpinner = root.findViewById(R.id.daySpinner);
+
         String[] locations= getResources().getStringArray(R.array.location_array);
-        setUpSpinner(root.findViewById(R.id.locationSpinner), locations);
+        setUpSpinner(locationSpinner, locations);
+
         String[] exercises= getResources().getStringArray(R.array.activity_array);
-        setUpSpinner(root.findViewById(R.id.exerciseTypeSpinner), exercises);
+        setUpSpinner(exerciseSpinner, exercises);
+
         String[] gender= getResources().getStringArray(R.array.gender_array);
-        setUpSpinner(root.findViewById(R.id.genderSpinner), gender);
+        setUpSpinner(genderSpinner, gender);
+
         String[] days= getResources().getStringArray(R.array.day_array);
-        setUpSpinner(root.findViewById(R.id.daySpinner), days);
+        setUpSpinner(daySpinner, days);
 
-//
-//        final TextView textView = binding.textMatches;
-//        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-//        matchesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        Filters = new HashMap<>();
+        initializeDefaultFilters();
+        algorithm = new Algorithm();
+        fetchMatches();
+        // Set up listeners
+        setupSpinnerListener(exerciseSpinner, "exercise");
+        setupSpinnerListener(locationSpinner, "location");
+        setupSpinnerListener(genderSpinner, "gender");
+        setupSpinnerListener(daySpinner, "day");
 
-
-        //Loading the Matches List dynamically after calling the ALgo
         matchesViewModel.getMyListLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<String>>() {
             @Override
             public void onChanged(ArrayList<String> strings) {
@@ -117,53 +159,76 @@ public class MatchesPage extends Fragment {
                 });
 
             }
-
-            ;
-//
         });
 
-
-
-        Algorithm algorithm = new Algorithm();
-//DataPopulator.populateDummyData();
-// Call the method
-        HashMap<String, String> Filters = new HashMap<>();
-        Filters.put("day", "tue");
-        Filters.put("exercise", null);
-        Filters.put("location", null);
-        Filters.put("gender", null);
-// Create an instance of the Algorithm class
-        algorithm = new Algorithm();
-
-
-// Call fetchUserDocumentsAndProcess method for a user
-        FirebaseUser user = auth.getCurrentUser();
-        algorithm.fetchUserDocumentsAndProcess(user.getEmail(), Filters,"Accounts", new Algorithm.OnFetchCompleteListener() {
-            @Override
-            public void onFetchComplete(List<HashMap<String, Object>> matches) {
-
-                for (HashMap<String, Object> match : matches) {
-                    matchedUsers.put(match.get("name").toString(),new String[] {match.get("bio").toString(),match.get("exercise").toString(),match.get("location").toString(),match.get("email").toString()});
-                    //Log.d("Test", "User: " + match.get("name") + ", Score: " + match.get("score"));
-                }
-                ArrayList<String> matchedUsersNames = new ArrayList<String>();
-                matchedUsersNames.addAll(matchedUsers.keySet());
-                matchesViewModel.setList(matchedUsersNames);
-            }
-
-            @Override
-            public void onFetchError(Exception e) {
-                // Handle errors here
-                Log.e("Test", "Error fetching user documents", e);
-            }
-        });
 
         return root;
     }
-    private void setUpSpinner(Spinner spinner, String[] options) {
+
+    public void setUpSpinner(Spinner spinner, String[] options) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelection(1);
+    }
+
+    public void onResume() {
+        super.onResume();
+        fetchMatches();
+    }
+
+    public void fetchMatches() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userEmail = user.getEmail();
+            if (userEmail != null) {
+                algorithm.fetchUserDocumentsAndProcess(userEmail, Filters, "Accounts", new Algorithm.OnFetchCompleteListener() {
+                    @Override
+                    public void onFetchComplete(List<HashMap<String, Object>> matches) {
+                        ArrayList<String> matchNames = new ArrayList<>();
+                        for (HashMap<String, Object> match : matches) {
+                            String name = (String) match.get("name");
+                            matchNames.add(name);
+                            matchedUsers.put(match.get("name").toString(),new String[] {match.get("bio").toString(),match.get("exercise").toString(),match.get("location").toString(),match.get("email").toString()});
+                            //Log.d("Test", "User: " + match.get("name") + ", Score: " + match.get("score"));
+                        }
+                        ArrayList<String> matchedUsersNames = new ArrayList<String>();
+                        matchedUsersNames.addAll(matchedUsers.keySet());
+                        matchesViewModel.setList(matchNames);
+                    }
+                    @Override
+                    public void onFetchError(Exception e) {
+                        Log.e(TAG, "Error fetching matches: ", e);
+                    }
+                });
+            }
+        }
+    }
+
+    public void initializeDefaultFilters() {
+        String selectedDay = daySpinner.getSelectedItem().toString();
+        String selectedExercise = exerciseSpinner.getSelectedItem().toString();
+        String selectedLocation = locationSpinner.getSelectedItem().toString();
+        String selectedGender = genderSpinner.getSelectedItem().toString();
+
+        Filters.put("day", "wed");
+        Filters.put("exercise", selectedExercise);
+        Filters.put("location", selectedLocation);
+        Filters.put("gender", selectedGender);
+    }
+
+    public void setupSpinnerListener(Spinner spinner, final String filterKey) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = parent.getItemAtPosition(position).toString();
+                Filters.put(filterKey, selected);
+                fetchMatches();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
