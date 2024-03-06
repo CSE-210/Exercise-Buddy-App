@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="92dp"
         android:text="@string/active_amigo"
         android:textColor="@color/black"
         android:textSize="33sp"
@@ -23,7 +24,7 @@
         android:id="@+id/editTextEmailLG"
         android:layout_width="305dp"
         android:layout_height="49dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="216dp"
         android:autofillHints=""
         android:background="@drawable/rounded_input_background"
@@ -36,13 +37,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="383dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="288dp"
+        android:layout_width="366dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginEnd="40dp"
         app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:passwordToggleEnabled="true">
@@ -85,29 +87,27 @@
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="64dp"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
         android:layout_marginTop="496dp"
-        android:backgroundTint="@color/black"
         android:padding="10dp"
         android:text="@string/login"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="568dp"
-        android:backgroundTint="@color/black"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="580dp"
         android:padding="10dp"
         android:text="@string/register"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
