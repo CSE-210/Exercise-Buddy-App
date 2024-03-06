@@ -26,20 +26,20 @@ import com.example.activeamigo.R;
 import com.example.activeamigo.databinding.FragmentMatchesBinding;
 
 
-import java.io.File;
-import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
+
 import android.util.Log;
 
 import android.content.Intent;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MatchesPage extends Fragment {
     protected FirebaseAuth auth;
@@ -53,7 +53,7 @@ public class MatchesPage extends Fragment {
     Spinner locationSpinner;
     Spinner genderSpinner;
     Spinner daySpinner;
-
+//    HashMap<String,String> user1 = new HashMap<String, String>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         matchesViewModel = new ViewModelProvider(this).get(MatchesViewModel.class);
@@ -98,21 +98,22 @@ public class MatchesPage extends Fragment {
         daySpinner = root.findViewById(R.id.daySpinner);
 
         String[] locations= getResources().getStringArray(R.array.location_array);
-        setUpSpinner(locationSpinner, locations);
+        setUpSpinner(locationSpinner, locations,null);
 
         String[] exercises= getResources().getStringArray(R.array.activity_array);
-        setUpSpinner(exerciseSpinner, exercises);
+        setUpSpinner(exerciseSpinner, exercises,null);
 
         String[] gender= getResources().getStringArray(R.array.gender_array);
-        setUpSpinner(genderSpinner, gender);
+        setUpSpinner(genderSpinner, gender,null);
 
         String[] days= getResources().getStringArray(R.array.day_array);
-        setUpSpinner(daySpinner, days);
+        setUpSpinner(daySpinner, days,null);
 
         Filters = new HashMap<>();
         initializeDefaultFilters();
         algorithm = new Algorithm();
         fetchMatches();
+//        Log.d("CurrentUserData",user1.toString());
         // Set up listeners
         setupSpinnerListener(exerciseSpinner, "exercise");
         setupSpinnerListener(locationSpinner, "location");
@@ -165,11 +166,23 @@ public class MatchesPage extends Fragment {
         return root;
     }
 
-    public void setUpSpinner(Spinner spinner, String[] options) {
+    public void setUpSpinner(Spinner spinner, String[] options, String user1Data) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setSelection(1);
+        if(user1Data!=null) {
+            Integer i = 0;
+            for (String s : options) {
+                if (s.equals(user1Data))
+                    break;
+                i += 1;
+            }
+            Log.d("index", Integer.toString(i));
+            spinner.setSelection(i);
+        }
+        else{
+            spinner.setSelection(1);
+        }
     }
 
     public void onResume() {
@@ -184,8 +197,29 @@ public class MatchesPage extends Fragment {
             if (userEmail != null) {
                 algorithm.fetchUserDocumentsAndProcess(userEmail, Filters, "Accounts", new Algorithm.OnFetchCompleteListener() {
                     @Override
-                    public void onFetchComplete(List<HashMap<String, Object>> matches) {
+                    public void onFetchComplete(List<HashMap<String, Object>> matches, HashMap<String, String> user1) {
                         ArrayList<String> matchNames = new ArrayList<>();
+//                        user1=currentUserData;
+                        Log.d("Filters",Filters.toString());
+                        if(Filters.get("location")==null) {
+                            String[] locations = getResources().getStringArray(R.array.location_array);
+                            setUpSpinner(locationSpinner, locations, user1.get("location"));
+                        }
+                        if(Filters.get("exercise")==null) {
+                            String[] exercises = getResources().getStringArray(R.array.activity_array);
+                            setUpSpinner(exerciseSpinner, exercises, user1.get("exercise"));
+                        }
+                        if(Filters.get("gender")==null) {
+                            String[] gender = getResources().getStringArray(R.array.gender_array);
+                            setUpSpinner(genderSpinner, gender, user1.get("gender"));
+                        }
+                        if(Filters.get("day")==null){
+                            String[] days= getResources().getStringArray(R.array.day_array);
+                            LocalDate currentDate = LocalDate.now();
+                            DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
+                            String u1Day=dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
+                            setUpSpinner(daySpinner, days,u1Day);
+                        }
                         for (HashMap<String, Object> match : matches) {
                             String name = (String) match.get("name");
                             matchNames.add(name);
@@ -211,10 +245,10 @@ public class MatchesPage extends Fragment {
         String selectedLocation = locationSpinner.getSelectedItem().toString();
         String selectedGender = genderSpinner.getSelectedItem().toString();
 
-        Filters.put("day", "wed");
-        Filters.put("exercise", selectedExercise);
-        Filters.put("location", selectedLocation);
-        Filters.put("gender", selectedGender);
+        Filters.put("day", null);
+        Filters.put("exercise", null);
+        Filters.put("location", null);
+        Filters.put("gender", null);
     }
 
     public void setupSpinnerListener(Spinner spinner, final String filterKey) {
