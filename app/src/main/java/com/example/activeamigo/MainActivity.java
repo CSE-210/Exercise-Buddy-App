@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity implements DAO {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        // Set matches text to be clickable
-        binding.appBarMain.toolbar.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
