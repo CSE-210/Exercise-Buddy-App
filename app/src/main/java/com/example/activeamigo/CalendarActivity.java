@@ -169,7 +169,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resetdayColors((LinearLayout) dayButton.getParent());
-                dayButton.setBackgroundColor(getResources().getColor(R.color.light_blue));
+                dayButton.setBackgroundColor(Color.LTGRAY);
                 globalDay = day;
                 resetTimeColors();
                 displayCalendar(userEmail);
@@ -278,7 +278,7 @@ public class CalendarActivity extends AppCompatActivity {
                 if (globalDay != null) {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
-                        textView.setBackgroundColor(getResources().getColor(R.color.light_blue));
+                        textView.setBackgroundColor(Color.LTGRAY);
                         updateCalendar(true, time, userEmail); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
@@ -369,7 +369,7 @@ public class CalendarActivity extends AppCompatActivity {
                                 if (availabilityList.get(i) == 1) {
                                     Log.d("CalendarEntry", i + ": " + availabilityList.get(i));
                                     int id = timeTextViewIds.get(i);
-                                    findViewById(id).setBackgroundColor(getResources().getColor(R.color.light_blue)); // set the background for textID
+                                    findViewById(id).setBackgroundColor(Color.LTGRAY); // set the background for textID
                                 }
                             }
                         }
