@@ -66,12 +66,13 @@ public class CalendarActivity extends AppCompatActivity {
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
 
-        setDayOfWeek();
+        setInitialDayOfWeek();
         Log.d("CalendarEntry", globalDay);
         displayCalendar(userEmail);
     }
 
-    private void setDayOfWeek() {
+    /** Helper Method to set the initial day of week upon landing on calendar page **/
+    private void setInitialDayOfWeek() {
         String day = LocalDate.now().getDayOfWeek().name();
         int id;
         switch (day) {
@@ -114,7 +115,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     /** Helper Method to set the userEmail based on session **/
-    public void setUserEmail() {
+    private void setUserEmail() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             // User is signed in
