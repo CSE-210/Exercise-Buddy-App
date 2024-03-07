@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+
+import java.time.LocalDate;
 import java.util.*;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -63,6 +65,52 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
+
+        setDayOfWeek();
+        Log.d("CalendarEntry", globalDay);
+        displayCalendar(userEmail);
+    }
+
+    private void setDayOfWeek() {
+        String day = LocalDate.now().getDayOfWeek().name();
+        int id;
+        switch (day) {
+            case "SUNDAY":
+                globalDay = "sun";
+                id = dayButtonIds.get(0);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "MONDAY":
+                globalDay = "mon";
+                id = dayButtonIds.get(1);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "TUESDAY":
+                globalDay = "tue";
+                id = dayButtonIds.get(2);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "WEDNESDAY":
+                globalDay = "wed";
+                id = dayButtonIds.get(3);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "THURSDAY":
+                globalDay = "thu";
+                id = dayButtonIds.get(4);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "FRIDAY":
+                globalDay = "fri";
+                id = dayButtonIds.get(5);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "SATURDAY":
+                globalDay = "sat";
+                id = dayButtonIds.get(6);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+        }
     }
 
     /** Helper Method to set the userEmail based on session **/
