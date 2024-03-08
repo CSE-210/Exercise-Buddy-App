@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements DAO {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
-        //userRedirection(userEmail);
+        userRedirection(userEmail);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
