@@ -45,14 +45,14 @@ public class MatchesPage extends Fragment {
     protected FirebaseAuth auth;
     private FragmentMatchesBinding binding;
     private ListView matchesList;
-    HashMap<String, String[]> matchedUsers = new HashMap<String, String[]>();
-    Algorithm algorithm;
-    MatchesViewModel matchesViewModel;
-    HashMap<String, String> Filters;
-    Spinner exerciseSpinner;
-    Spinner locationSpinner;
-    Spinner genderSpinner;
-    Spinner daySpinner;
+    protected HashMap<String, String[]> matchedUsers = new HashMap<String, String[]>();
+    protected Algorithm algorithm;
+    protected MatchesViewModel matchesViewModel;
+    protected HashMap<String, String> Filters;
+    protected Spinner exerciseSpinner;
+    protected Spinner locationSpinner;
+    protected Spinner genderSpinner;
+    protected Spinner daySpinner;
 //    HashMap<String,String> user1 = new HashMap<String, String>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

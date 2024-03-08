@@ -22,8 +22,8 @@ public class Algorithm {
         void onFetchComplete(List<HashMap<String, Object>> matches, HashMap<String, String> currentUserData);
         void onFetchError(Exception e);
     }
-    // Method to fetch user documents from Firestore and process them
 
+    // Method to fetch user documents from Firestore and process them
     public void fetchUserDocumentsAndProcess(String user1, HashMap<String, String> filters, String collectionPath, OnFetchCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(collectionPath)
@@ -41,29 +41,32 @@ public class Algorithm {
                     }
                 });
     }
-    public HashMap<String,String> getCurrentUserData(){
-        return currentUserData;
-    }
-    private static HashMap<String,String> getUser1Data(String user1, List<DocumentSnapshot> userDocuments){
 
+
+    private static HashMap<String,String> getUser1Data(String user1, List<DocumentSnapshot> userDocuments){
+        // Initialize hashmap and variables to hold the extracted data. Initially set to null.
         HashMap<String,String> user1Data = new HashMap<String ,String>();
-//        Log.d()
         String user1Exercise = null;
         String user1Location = null;
         String user1Gender = null;
+        // Iterate over each document in the list of user documents.
         for (DocumentSnapshot doc: userDocuments){
+            // Check if the current document's ID matches the user ID we're interested in (user1).
             if(doc.getId().equals(user1)){
+                // If it matches, extract the exercise, gender, and location data from the document.
                 user1Exercise = doc.getString("exercise");
                 user1Gender = doc.getString("gender");
                 user1Location = doc.getString("location");
             }
         }
+        // Once all documents have been checked and data extracted (if found), add the data to the HashMap.
         user1Data.put("exercise",user1Exercise);
         user1Data.put("location",user1Location);
         user1Data.put("gender",user1Gender);
         Log.d("User1Data algo",user1Data.toString());
         return user1Data;
     }
+
     // Method to find similar schedules for a given user
     private static List<HashMap<String,Object>> findSimilarSchedulesForUser(String user1, List<DocumentSnapshot> userDocuments,HashMap<String,String> Filters) {
         List<HashMap<String,Object>> similarUsers = new ArrayList<>();
@@ -92,6 +95,8 @@ public class Algorithm {
                 else
                     user1Gender = Filters.get("gender");
                 break;
+            }else {
+                Log.e(TAG, "Not appropraite user info are fetched");
             }
         }
 
