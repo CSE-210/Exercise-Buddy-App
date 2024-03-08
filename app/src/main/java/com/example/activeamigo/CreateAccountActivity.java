@@ -86,6 +86,8 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                             // Adds account to database
                             addAccount(account, this.db, "Accounts");
                             Intent intent = new Intent(this, PreferenceActivity.class);
+                            intent.putExtra("firstTimeUser", true);
+                            intent.putExtra("email",emailAddress);
                             preferenceActivityResultLauncher.launch(intent);
 
 
