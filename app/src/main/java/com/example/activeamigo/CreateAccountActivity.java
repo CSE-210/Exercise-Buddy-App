@@ -85,8 +85,9 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                             HashMap<String, Object> account = makeAccount(name, emailAddress);
                             // Adds account to database
                             addAccount(account, this.db, "Accounts");
-                            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
-                            finish();
+                            Intent intent = new Intent(this, PreferenceActivity.class);
+                            preferenceActivityResultLauncher.launch(intent);
+
 
                         }).addOnFailureListener(task2-> showAlert(this, R.string.accountCreationFailed));
                         }
