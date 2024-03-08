@@ -40,7 +40,7 @@ public class Algorithm {
                 });
     }
     // Method to find similar schedules for a given user
-    private static List<HashMap<String,Object>> findSimilarSchedulesForUser(String user1, List<DocumentSnapshot> userDocuments,HashMap<String,String> Filters) {
+    static List<HashMap<String,Object>> findSimilarSchedulesForUser(String user1, List<DocumentSnapshot> userDocuments, HashMap<String, String> Filters) {
         List<HashMap<String,Object>> similarUsers = new ArrayList<>();
 
         // Retrieve the schedule of user1 from the userDocuments list
