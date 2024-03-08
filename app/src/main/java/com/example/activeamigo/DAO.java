@@ -4,7 +4,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
@@ -14,25 +13,25 @@ public interface DAO{
     // Grabs the account from the dataBase
     default Task<DocumentSnapshot> checkAccount(String emailAddress, String dbName, FirebaseFirestore fs) {
         final TaskCompletionSource<DocumentSnapshot> tcs = new TaskCompletionSource<>();
+
+        String lowercaseEmail = emailAddress.toLowerCase(); // Convert provided email to lowercase for comparison
+
         fs.collection(dbName)
-                .whereEqualTo("email", emailAddress)
+                .document(lowercaseEmail) // Use document ID (email) directly
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        QuerySnapshot querySnapshot = task.getResult();
-                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                            tcs.setResult(document);
-                        }
-                        else {
-                            tcs.setResult(null);
-                        }
-
+                        DocumentSnapshot document = task.getResult();
+                        tcs.setResult(document);
+                    } else {
+                        tcs.setException(Objects.requireNonNull(task.getException()));
                     }
                 });
 
         return tcs.getTask();
     }
+
+
 
 
     // Adds account to database
