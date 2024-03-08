@@ -17,11 +17,12 @@ import java.util.Collections;
 public class Algorithm {
 
     private static final String TAG = "Algorithm";
-
+    private HashMap<String,String> currentUserData = new HashMap<>();
     public interface OnFetchCompleteListener {
-        void onFetchComplete(List<HashMap<String, Object>> matches);
+        void onFetchComplete(List<HashMap<String, Object>> matches, HashMap<String, String> currentUserData);
         void onFetchError(Exception e);
     }
+
     // Method to fetch user documents from Firestore and process them
     public void fetchUserDocumentsAndProcess(String user1, HashMap<String, String> filters, String collectionPath, OnFetchCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -31,14 +32,41 @@ public class Algorithm {
                     if (task.isSuccessful()) {
                         List<DocumentSnapshot> userDocuments = task.getResult().getDocuments();
                         Log.d(TAG, "Retrieval success");
+                        currentUserData = getUser1Data(user1, userDocuments);
                         List<HashMap<String, Object>> matches = findSimilarSchedulesForUser(user1, userDocuments, filters);
-                        listener.onFetchComplete(matches);
+                        listener.onFetchComplete(matches,currentUserData);
                     } else {
                         Log.e(TAG, "Error getting user documents: ", task.getException());
                         listener.onFetchError(task.getException());
                     }
                 });
     }
+
+
+    private static HashMap<String,String> getUser1Data(String user1, List<DocumentSnapshot> userDocuments){
+        // Initialize hashmap and variables to hold the extracted data. Initially set to null.
+        HashMap<String,String> user1Data = new HashMap<String ,String>();
+        String user1Exercise = null;
+        String user1Location = null;
+        String user1Gender = null;
+        // Iterate over each document in the list of user documents.
+        for (DocumentSnapshot doc: userDocuments){
+            // Check if the current document's ID matches the user ID we're interested in (user1).
+            if(doc.getId().equals(user1)){
+                // If it matches, extract the exercise, gender, and location data from the document.
+                user1Exercise = doc.getString("exercise");
+                user1Gender = doc.getString("gender");
+                user1Location = doc.getString("location");
+            }
+        }
+        // Once all documents have been checked and data extracted (if found), add the data to the HashMap.
+        user1Data.put("exercise",user1Exercise);
+        user1Data.put("location",user1Location);
+        user1Data.put("gender",user1Gender);
+        Log.d("User1Data algo",user1Data.toString());
+        return user1Data;
+    }
+
     // Method to find similar schedules for a given user
     private static List<HashMap<String,Object>> findSimilarSchedulesForUser(String user1, List<DocumentSnapshot> userDocuments,HashMap<String,String> Filters) {
         List<HashMap<String,Object>> similarUsers = new ArrayList<>();
@@ -67,8 +95,11 @@ public class Algorithm {
                 else
                     user1Gender = Filters.get("gender");
                 break;
+            }else {
+                Log.e(TAG, "Not appropraite user info are fetched");
             }
         }
+
         if (user1Schedule == null) {
             System.out.println("Warning: No schedule found");
             return similarUsers; // Return an empty list if user1's schedule is not found or incomplete
@@ -89,6 +120,7 @@ public class Algorithm {
             String userGender = document.getString("gender");
 
             if (userId.equals(user1)) continue; // Skip user1
+
             if (user1Gender != null) {
                 if (!user1Gender.equals(userGender))
                     continue;
@@ -101,6 +133,9 @@ public class Algorithm {
                 if (!user1Location.equals(userLocation))
                     continue;
             }
+//            if(user1Day!=null ){
+//                if(!user1Day.equals(user))
+//            }
             HashMap<String, Object> uSchedule = null;
             if (document.contains("calendar")) {
                 uSchedule = (HashMap<String, Object>) document.get("calendar");
@@ -122,7 +157,9 @@ public class Algorithm {
                     userData.put("location",userLocation);
                     userData.put("gender",userGender);
                     userData.put("score",currScore);
-                    similarUsers.add(userData);
+                    if(currScore>0) {
+                        similarUsers.add(userData);
+                    }
                 } else {
                     Log.e(TAG, "Not appropraite data struct in schedule");
                 }
