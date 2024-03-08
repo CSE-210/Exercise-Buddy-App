@@ -4,60 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
-
-    <TextView
-        android:id="@+id/welcomeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="96dp"
-        android:text="@string/active_amigo"
-        android:textColor="@color/black"
-        android:textSize="33sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextEmailLG"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="216dp"
-        android:autofillHints=""
-        android:background="@drawable/rounded_input_background"
-        android:ems="10"
-        android:hint="@string/enter_your_email"
-        android:inputType="textEmailAddress"
-        android:padding="15dp"
-        android:textColorHint="@android:color/system_neutral1_300"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
-
+    tools:context=".LoginActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="-52dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="383dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="8dp"
+        android:id="@+id/textInputLayout"
+        android:layout_width="404dp"
+        android:layout_height="71dp"
         android:layout_marginTop="288dp"
+        android:orientation="vertical"
         app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:passwordToggleEnabled="true">
 
         <EditText
-            android:id="@+id/editTextpasswordLG"
+            android:id="@+id/editTextPasswordLG"
             android:layout_width="305dp"
             android:layout_height="49dp"
-            android:layout_marginStart="56dp"
+            android:layout_marginStart="52dp"
             android:layout_marginTop="5dp"
-
-            android:autofillHints=""
             android:background="@drawable/rounded_input_background"
             android:ems="10"
-            android:hint="@string/enter_your_password"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             android:padding="15dp"
             android:textColorHint="@android:color/system_neutral1_300"
@@ -66,6 +39,36 @@
             tools:ignore="TextContrastCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        android:text="@string/active_amigo"
+        android:textColor="@color/black"
+        android:textSize="33sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextEmailLG"
+        android:layout_width="305dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="220dp"
+        android:autofillHints=""
+        android:background="@drawable/rounded_input_background"
+        android:ems="10"
+        android:hint="@string/enter_your_email"
+        android:inputType="textEmailAddress"
+        android:padding="15dp"
+        android:textColorHint="@android:color/system_neutral1_300"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/forgotPasswordText"
@@ -85,29 +88,31 @@
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="64dp"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
         android:layout_marginTop="496dp"
-        android:backgroundTint="@color/black"
+        android:background="@drawable/light_blue_button"
         android:padding="10dp"
         android:text="@string/login"
         android:textAlignment="center"
         android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="305dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="568dp"
-        android:backgroundTint="@color/black"
+        android:layout_width="295dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="580dp"
+        android:background="@drawable/light_blue_button"
         android:padding="10dp"
         android:text="@string/register"
-        android:textAlignment="center"
         android:textColor="@color/white"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

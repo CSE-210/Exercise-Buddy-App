@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+
+import java.time.LocalDate;
 import java.util.*;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -48,7 +50,8 @@ public class CalendarActivity extends AppCompatActivity {
         // Setting up the action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true); // showing the back button in action bar
-
+        actionBar.setTitle("Calendar");
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
         // Create the main layout (LinearLayout)
         LinearLayout mainLayout = createMainLayout(this);
 
@@ -62,10 +65,57 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Set the main layout as the content view for the activity
         setContentView(mainLayout);
+
+        setInitialDayOfWeek();
+        Log.d("CalendarEntry", globalDay);
+        displayCalendar(userEmail);
+    }
+
+    /** Helper Method to set the initial day of week upon landing on calendar page **/
+    private void setInitialDayOfWeek() {
+        String day = LocalDate.now().getDayOfWeek().name();
+        int id;
+        switch (day) {
+            case "SUNDAY":
+                globalDay = "sun";
+                id = dayButtonIds.get(0);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "MONDAY":
+                globalDay = "mon";
+                id = dayButtonIds.get(1);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "TUESDAY":
+                globalDay = "tue";
+                id = dayButtonIds.get(2);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "WEDNESDAY":
+                globalDay = "wed";
+                id = dayButtonIds.get(3);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "THURSDAY":
+                globalDay = "thu";
+                id = dayButtonIds.get(4);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "FRIDAY":
+                globalDay = "fri";
+                id = dayButtonIds.get(5);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+            case "SATURDAY":
+                globalDay = "sat";
+                id = dayButtonIds.get(6);
+                findViewById(id).setBackgroundColor(Color.LTGRAY);
+                break;
+        }
     }
 
     /** Helper Method to set the userEmail based on session **/
-    public void setUserEmail() {
+    private void setUserEmail() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             // User is signed in
@@ -168,7 +218,7 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 resetdayColors((LinearLayout) dayButton.getParent());
-                dayButton.setBackgroundColor(getResources().getColor(R.color.light_blue));
+                dayButton.setBackgroundColor(Color.LTGRAY);
                 globalDay = day;
                 resetTimeColors();
                 displayCalendar(userEmail);
@@ -277,7 +327,7 @@ public class CalendarActivity extends AppCompatActivity {
                 if (globalDay != null) {
                     // You can use the 'time' variable to get the selected time slot
                     if (((ColorDrawable) textView.getBackground()).getColor() == Color.WHITE) {
-                        textView.setBackgroundColor(getResources().getColor(R.color.light_blue));
+                        textView.setBackgroundColor(Color.LTGRAY);
                         updateCalendar(true, time, userEmail); // add selected time from calendar
                     } else {
                         textView.setBackgroundColor(Color.WHITE);
@@ -368,7 +418,7 @@ public class CalendarActivity extends AppCompatActivity {
                                 if (availabilityList.get(i) == 1) {
                                     Log.d("CalendarEntry", i + ": " + availabilityList.get(i));
                                     int id = timeTextViewIds.get(i);
-                                    findViewById(id).setBackgroundColor(getResources().getColor(R.color.light_blue)); // set the background for textID
+                                    findViewById(id).setBackgroundColor(Color.LTGRAY); // set the background for textID
                                 }
                             }
                         }

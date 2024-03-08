@@ -24,7 +24,7 @@ public class LoginActivity extends Activity implements Alertable, DAO{
         String fsName = "Accounts";
 
         emailView = findViewById(R.id.editTextEmailLG);
-        passwordView = findViewById(R.id.editTextpasswordLG);
+        passwordView = findViewById(R.id.editTextPasswordLG);
 
         findViewById(R.id.buttonLogIn).setOnClickListener(view -> {
             String email = emailView.getText().toString();
