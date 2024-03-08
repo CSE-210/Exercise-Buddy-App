@@ -3,12 +3,14 @@ package com.example.activeamigo;
 import com.example.activeamigo.PreferenceActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import org.junit.Before;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,16 +62,27 @@ public class AlgorithmUnitTest {
     @Before
     public void setUp() {
         openMocks(this);
-        // Mocking the document reference
+
+        // Mocking the Firestore instance
         mockedFirestore = Mockito.mock(FirebaseFirestore.class);
 
-        Mockito.when(mockedFirestore.collection(any(String.class))).thenReturn(mockedCollectionReference);
-        Mockito.when(mockedCollectionReference.whereEqualTo(any(String.class), any(Object.class))).thenReturn(mockedQuery);
-        Mockito.when(mockedCollectionReference.document(any(String.class))).thenReturn(mockedDocumentReference);
-        Mockito.when(mockedDocumentReference.set(any(Map.class), any(SetOptions.class)))
-                .thenReturn(Tasks.forResult(null));
+        // Mocking the CollectionReference
+        mockedCollectionReference = Mockito.mock(CollectionReference.class);
 
-        preferenceActivity = new PreferenceActivity();
+        // Mocking the behavior of Firestore methods
+        when(mockedFirestore.collection(any(String.class))).thenReturn(mockedCollectionReference);
+
+        // Mocking the behavior of get() method to return a non-null Task object
+        Task<QuerySnapshot> mockTask = Mockito.mock(Task.class);
+        when(mockedCollectionReference.get()).thenReturn(mockTask);
+
+        // Mocking the behavior of document() method to return a non-null DocumentReference
+        when(mockedCollectionReference.document(any(String.class))).thenReturn(mockedDocumentReference);
+
+        // Mocking the behavior of set() method to return a successful Task
+        Task<Void> mockSetTask = Mockito.mock(Task.class);
+        when(mockedDocumentReference.set(any(Map.class))).thenReturn(mockSetTask);
+
         // Act
         HashMap<String,Object> data1 = createNewUser("user1@ucsd.edu","user1","Gym");
         mockedFirestore.collection("testCollection").document("user1@ucsd.edu").set(data1);
@@ -89,6 +103,7 @@ public class AlgorithmUnitTest {
         Filters.put("exercise",null);
         Filters.put("location",null);
         Filters.put("gender",null);
+        CountDownLatch latch = new CountDownLatch(1);
         mockedFirestore.collection("testCollection")
                 .get()
                 .addOnCompleteListener(task -> {
