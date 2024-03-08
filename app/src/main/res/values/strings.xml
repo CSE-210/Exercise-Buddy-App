@@ -48,13 +48,16 @@
     <string name="loading_calendar">Calendar Loading</string>
     <string name="sign_out">Sign Out</string>
 
-
     <string-array name="activity_array">
         <item>Select Activity</item>
         <item>Gym</item>
         <item>Basketball</item>
+        <item>Soccer</item>
+        <item>Volleyball</item>
+        <item>Tennis</item>
         <!-- Add more options if needed -->
     </string-array>
+
     <string-array name="location_array">
         <item>Select Location</item>
         <item>Rimac</item>
@@ -65,14 +68,14 @@
     </string-array>
 
     <string-array name="gender_array">
-        <item>Neither</item>
+        <item>Select Gender</item>
         <item>Male</item>
         <item>Female</item>
         <!-- Add more options if needed -->
     </string-array>
 
     <string-array name="day_array">
-        <item>Current Day</item>
+        <item>Select Day</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>

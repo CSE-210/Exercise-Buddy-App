@@ -1,5 +1,6 @@
 package com.example.activeamigo.ui.matches;
 //package com.example.activeamigo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ public class MatchesPage extends Fragment {
         // Filter Button Interactions
         Button filterButton = root.findViewById(R.id.filterButton);
         LinearLayout filtersLayout = root.findViewById(R.id.filtersLayout);
+        filtersLayout.setBackgroundColor(Color.WHITE);
 
         filterButton.setOnClickListener(v -> {
             if (filtersLayout.getVisibility() == View.GONE) {
