@@ -36,7 +36,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements Alertab
                  if(task2.isSuccessful()){
                      DocumentSnapshot ds = task2.getResult();
 
-                     if(ds != null){
+                     if(ds != null && ds.exists()){
                          auth.sendPasswordResetEmail(email);
                          emailText.setText("");
                          showAlert(this, R.string.resetPasswordSuccess);
