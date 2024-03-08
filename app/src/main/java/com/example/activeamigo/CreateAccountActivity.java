@@ -74,7 +74,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
                 checkAccount(emailAddress, fSName, this.db).addOnCompleteListener(task -> {
                    if(task.isSuccessful()) {
                        DocumentSnapshot ds = task.getResult();
-                       if (ds != null) {
+                       if (ds != null && ds.exists()) {
                            // Checks email
                            showAlert(this, R.string.accountCreationEmailExists);
                        }
@@ -150,7 +150,7 @@ public class CreateAccountActivity extends AppCompatActivity implements Alertabl
         HashMap<String, ArrayList<Integer>> calendar = new HashMap<>();
 
         res.put("name", name);
-        res.put("email", emailAddress);
+        res.put("email", emailAddress.toLowerCase());
         res.put("bio", "");
         res.put("dob", "");
         res.put("exercise", "");

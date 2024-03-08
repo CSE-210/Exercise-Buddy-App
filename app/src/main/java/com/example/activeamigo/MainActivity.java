@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements DAO {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
-        userRedirection(userEmail);
+        //userRedirection(userEmail);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -87,21 +87,22 @@ public class MainActivity extends AppCompatActivity implements DAO {
     private void userRedirection(String email){
         Task<DocumentSnapshot> res = checkAccount(email, "Accounts", this.db);
         res.addOnCompleteListener(task->{
-            DocumentSnapshot ds = task.getResult();
-            if(Objects.requireNonNull(ds.getString("location")).isEmpty() || Objects.requireNonNull(ds.getString("exercise")).isEmpty()
-                    || Objects.requireNonNull(ds.getString("gender")).isEmpty() || Objects.requireNonNull(ds.getString("dob")).isEmpty()){
+           DocumentSnapshot ds = task.getResult();
+           if(Objects.requireNonNull(ds.getString("location")).isEmpty() || Objects.requireNonNull(ds.getString("exercise")).isEmpty()
+                   || Objects.requireNonNull(ds.getString("gender")).isEmpty() || Objects.requireNonNull(ds.getString("dob")).isEmpty()){
 
-                Toast.makeText(MainActivity.this, "Set all preferences first", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(MainActivity.this, PreferenceActivity.class));
-                return;
-            }
-           HashMap<Object, ArrayList<Long>> temp = (HashMap<Object,ArrayList<Long> >) ds.get("calendar");
-           if(!nonEmptySchedule(temp)){ // calendar is empty
-               Toast.makeText(MainActivity.this, "Input some time into your schedule first",
-                       Toast.LENGTH_LONG).show();
-               startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+               Toast.makeText(MainActivity.this, "Set all preferences first", Toast.LENGTH_LONG).show();
+               startActivity(new Intent(MainActivity.this, PreferenceActivity.class));
                finish();
+               return;
            }
+          HashMap<Object, ArrayList<Long>> temp = (HashMap<Object,ArrayList<Long> >) ds.get("calendar");
+          if(!nonEmptySchedule(temp)){ // calendar is empty
+              Toast.makeText(MainActivity.this, "Input some time into your schedule first",
+                      Toast.LENGTH_LONG).show();
+              startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+              finish();
+          }
 
         });
     }
