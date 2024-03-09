@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DAO {
 
                Toast.makeText(MainActivity.this, "Set all preferences first", Toast.LENGTH_LONG).show();
                startActivity(new Intent(MainActivity.this, PreferenceActivity.class));
-               finish();
+               //finish();
                return;
            }
           HashMap<Object, ArrayList<Long>> temp = (HashMap<Object,ArrayList<Long> >) ds.get("calendar");

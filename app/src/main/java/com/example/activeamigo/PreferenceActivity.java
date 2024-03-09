@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -159,7 +160,7 @@ public class PreferenceActivity extends AppCompatActivity {
                     // Return true to consume the event and prevent further processing
                     return true;
                 } else {
-                    // Finish the activity and go back to the previous one
+                    startActivity(new Intent(PreferenceActivity.this, MainActivity.class));
                     finish();
                     return true;
                 }
