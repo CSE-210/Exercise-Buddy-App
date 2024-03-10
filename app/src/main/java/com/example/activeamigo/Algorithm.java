@@ -124,18 +124,18 @@ public class Algorithm {
             if (userId.equals(user1)) continue; // Skip user1
             if (user1Gender != null) {
                 if(!user1Gender.equals("Select Gender"))
-                if (!user1Gender.equals(userGender))
-                    continue;
+                    if (!user1Gender.equals(userGender))
+                        continue;
             }
             if (user1Exercise != null) {
                 if(!user1Exercise.equals("Select Activity"))
-                if (!user1Exercise.equals(userExercise))
-                    continue;
+                    if (!user1Exercise.equals(userExercise))
+                        continue;
             }
             if (user1Location != null) {
                 if(!user1Location.equals("Select Location"))
-                if (!user1Location.equals(userLocation))
-                    continue;
+                    if (!user1Location.equals(userLocation))
+                        continue;
             }
 //            if(user1Day!=null ){
 //                if(!user1Day.equals(user))
