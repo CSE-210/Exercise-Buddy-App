@@ -160,7 +160,7 @@ public class PreferenceActivity extends AppCompatActivity {
                     // Return true to consume the event and prevent further processing
                     return true;
                 } else {
-                    startActivity(new Intent(PreferenceActivity.this, MainActivity.class));
+                    //startActivity(new Intent(PreferenceActivity.this, MainActivity.class));
                     finish();
                     return true;
                 }
