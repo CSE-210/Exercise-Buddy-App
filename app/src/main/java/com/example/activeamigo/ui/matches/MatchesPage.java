@@ -174,6 +174,8 @@ public class MatchesPage extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         if(user1Data!=null) {
+            String us = user1Data.substring(0,1).toUpperCase() + user1Data.substring(1);
+            user1Data = us;
             Integer i = 0;
             for (String s : options) {
                 if (s.equals(user1Data))
